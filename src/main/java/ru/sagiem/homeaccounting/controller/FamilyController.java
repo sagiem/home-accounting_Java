@@ -18,7 +18,7 @@ public class FamilyController {
     final FamilyRepository familyRepository;
 
     @GetMapping("/family")
-    public ResponseEntity<Iterable<Family>> FamilyList(){
+    public ResponseEntity<Iterable<Family>> FamilyAllList(){
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(familyRepository.findAll());
