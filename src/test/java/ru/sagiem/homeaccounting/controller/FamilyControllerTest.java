@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sagiem.homeaccounting.model.Family;
 import ru.sagiem.homeaccounting.model.User;
 import ru.sagiem.homeaccounting.repository.FamilyRepository;
@@ -20,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 
+@Sql("/family_controller/test_data.sql")
+@Transactional
 @ExtendWith(MockitoExtension.class)
 public class FamilyControllerTest {
 

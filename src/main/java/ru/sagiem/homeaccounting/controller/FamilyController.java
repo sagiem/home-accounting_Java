@@ -3,6 +3,7 @@ package ru.sagiem.homeaccounting.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sagiem.homeaccounting.model.Family;
@@ -17,6 +18,7 @@ public class FamilyController {
 
     final FamilyRepository familyRepository;
 
+    @Transactional
     @GetMapping("/family")
     public ResponseEntity<Iterable<Family>> FamilyAllList(){
         return ResponseEntity.ok()

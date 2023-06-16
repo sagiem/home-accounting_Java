@@ -13,6 +13,7 @@ public class User {
     @Column(name = "id")
     private long id;
 
+
     @Column(name = "username")
     private String username;
 
