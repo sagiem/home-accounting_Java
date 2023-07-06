@@ -1,6 +1,7 @@
 package ru.sagiem.homeaccounting.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Entity
@@ -20,7 +21,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+
     @Column(name = "email")
+    @Email
     private String email;
 
     @ManyToOne
