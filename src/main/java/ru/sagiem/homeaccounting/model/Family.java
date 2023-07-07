@@ -17,8 +17,8 @@ public class Family {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "family")
-    private List<User> users;
+//    @OneToMany(mappedBy = "family")
+//    private List<User> users;
 
 
 }

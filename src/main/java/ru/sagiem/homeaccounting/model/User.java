@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
+import javax.lang.model.element.Name;
+
 @Entity
 @Data
 @Table(name = "users")
@@ -26,7 +28,7 @@ public class User {
     @Email
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "family_id")
-    private Family family;
+//    @ManyToOne
+//    @JoinColumn(name = "family_id")
+//    private Family family;
 }
