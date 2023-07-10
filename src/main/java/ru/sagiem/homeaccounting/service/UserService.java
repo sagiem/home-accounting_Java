@@ -2,10 +2,9 @@ package ru.sagiem.homeaccounting.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.sagiem.homeaccounting.dtos.RegistrationUserDto;
-import ru.sagiem.homeaccounting.dtos.UserDto;
 import ru.sagiem.homeaccounting.model.User;
 import ru.sagiem.homeaccounting.repository.UserRepository;
 
@@ -15,12 +14,12 @@ public class UserService  {
 
     private final UserRepository userRepository;
 
-    public User createUser(RegistrationUserDto registrationUserDto){
+ public ResponseEntity<?> createUser(RegistrationUserDto registrationUserDto){
         User user = new User();
         user.setUsername(registrationUserDto.getUsername());
         user.setEmail(registrationUserDto.getEmail());
         user.setPassword(registrationUserDto.getPassword());
-        return userRepository.save(user);
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
 }
