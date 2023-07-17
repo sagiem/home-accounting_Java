@@ -1,4 +1,4 @@
-package ru.sagiem.homeaccounting;
+package ru.sagiem.whattobuy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

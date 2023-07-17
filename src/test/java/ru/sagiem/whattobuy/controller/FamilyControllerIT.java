@@ -1,4 +1,4 @@
-package ru.sagiem.homeaccounting.controller;
+package ru.sagiem.whattobuy.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.sagiem</groupId>
-	<artifactId>home-accounting</artifactId>
+	<artifactId>what-to-buy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>home-accounting</name>
 	<description>home accounting</description>

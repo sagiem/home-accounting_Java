@@ -1,12 +1,12 @@
-package ru.sagiem.homeaccounting.service;
+package ru.sagiem.whattobuy.service;
 
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.sagiem.homeaccounting.dtos.RegistrationUserDto;
-import ru.sagiem.homeaccounting.model.User;
-import ru.sagiem.homeaccounting.repository.UserRepository;
+import ru.sagiem.whattobuy.dtos.RegistrationUserDto;
+import ru.sagiem.whattobuy.model.User;
+import ru.sagiem.whattobuy.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

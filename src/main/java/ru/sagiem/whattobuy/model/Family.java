@@ -1,9 +1,7 @@
-package ru.sagiem.homeaccounting.model;
+package ru.sagiem.whattobuy.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
 
 @Entity
 @Data

@@ -1,15 +1,13 @@
-package ru.sagiem.homeaccounting.controller.rest;
+package ru.sagiem.whattobuy.controller.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.sagiem.homeaccounting.dtos.RegistrationUserDto;
-import ru.sagiem.homeaccounting.model.User;
-import ru.sagiem.homeaccounting.service.UserService;
+import ru.sagiem.whattobuy.dtos.RegistrationUserDto;
+import ru.sagiem.whattobuy.service.UserService;
 
 @RestController
 @RequiredArgsConstructor

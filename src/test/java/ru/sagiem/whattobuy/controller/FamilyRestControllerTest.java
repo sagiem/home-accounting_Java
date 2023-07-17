@@ -1,4 +1,4 @@
-package ru.sagiem.homeaccounting.controller;
+package ru.sagiem.whattobuy.controller;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,8 +7,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sagiem.homeaccounting.controller.rest.FamilyRestController;
-import ru.sagiem.homeaccounting.repository.FamilyRepository;
+import ru.sagiem.whattobuy.controller.rest.FamilyRestController;
+import ru.sagiem.whattobuy.repository.FamilyRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

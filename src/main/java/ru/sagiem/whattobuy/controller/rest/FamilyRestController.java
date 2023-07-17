@@ -1,4 +1,4 @@
-package ru.sagiem.homeaccounting.controller.rest;
+package ru.sagiem.whattobuy.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.sagiem.homeaccounting.model.Family;
-import ru.sagiem.homeaccounting.repository.FamilyRepository;
+import ru.sagiem.whattobuy.model.Family;
+import ru.sagiem.whattobuy.repository.FamilyRepository;
 
 @RestController
 @RequiredArgsConstructor

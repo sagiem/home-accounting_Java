@@ -1,8 +1,8 @@
-package ru.sagiem.homeaccounting.repository;
+package ru.sagiem.whattobuy.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ru.sagiem.homeaccounting.model.User;
+import ru.sagiem.whattobuy.model.User;
 
 import java.util.Optional;
 

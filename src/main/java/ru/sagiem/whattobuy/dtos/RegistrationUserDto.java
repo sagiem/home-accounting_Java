@@ -1,4 +1,4 @@
-package ru.sagiem.homeaccounting.dtos;
+package ru.sagiem.whattobuy.dtos;
 import lombok.Data;
 
 @Data

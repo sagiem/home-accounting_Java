@@ -1,10 +1,8 @@
-package ru.sagiem.homeaccounting.model;
+package ru.sagiem.whattobuy.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
-
-import javax.lang.model.element.Name;
 
 @Entity
 @Data
