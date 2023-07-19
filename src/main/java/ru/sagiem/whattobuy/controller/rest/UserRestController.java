@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.sagiem.whattobuy.dtos.RegistrationUserDto;
+import ru.sagiem.whattobuy.dto.RegistrationUserDto;
 import ru.sagiem.whattobuy.service.UserService;
 
 @RestController

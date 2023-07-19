@@ -4,7 +4,7 @@ package ru.sagiem.whattobuy.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dtos.RegistrationUserDto;
+import ru.sagiem.whattobuy.dto.RegistrationUserDto;
 import ru.sagiem.whattobuy.model.User;
 import ru.sagiem.whattobuy.repository.UserRepository;
 
