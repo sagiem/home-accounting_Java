@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.utils;
+package ru.sagiem.whattobuy.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtTokenUtils {
+public class JwtService {
 
     private static final String SECRET_KEY = "Xq1Eosxs/nDQiGhH92bu3gNRgkhgdYcgV0hNn9/rvZMdHBBlvTBNn3Ngnr/mW9eE";
 
