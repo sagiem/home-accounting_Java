@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.token;
+package ru.sagiem.whattobuy.model.token;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

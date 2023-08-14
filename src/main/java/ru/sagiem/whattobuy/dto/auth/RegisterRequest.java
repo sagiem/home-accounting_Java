@@ -11,9 +11,11 @@ import ru.sagiem.whattobuy.model.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    private String username;
-    private String password;
-    private String email;
-    private Role role;
 
+  private String firstname;
+  private String lastname;
+  private String email;
+  private String password;
+  private String confirmPassword;
+  private Role role;
 }

@@ -7,9 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.sagiem.whattobuy.token.Token;
+import ru.sagiem.whattobuy.model.token.Token;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,33 +19,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "table_users")
+@Table(name = "_user")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue
     private Integer id;
-
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "password")
-    private String password;
-
-
-    @Column(name = "email")
-    @Email
+    private String firstname;
+    private String lastname;
     private String email;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,6 +44,11 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override
@@ -77,8 +70,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-//    @ManyToOne
-//    @JoinColumn(name = "family_id")
-//    private Family family;
 }

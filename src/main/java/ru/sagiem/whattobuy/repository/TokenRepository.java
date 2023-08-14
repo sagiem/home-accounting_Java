@@ -2,7 +2,7 @@ package ru.sagiem.whattobuy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.sagiem.whattobuy.token.Token;
+import ru.sagiem.whattobuy.model.token.Token;
 
 import java.util.List;
 import java.util.Optional;
