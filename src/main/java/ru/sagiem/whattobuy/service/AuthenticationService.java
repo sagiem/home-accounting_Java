@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,13 +15,12 @@ import ru.sagiem.whattobuy.dto.auth.AuthenticationRequest;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationResponse;
 import ru.sagiem.whattobuy.dto.auth.RegisterRequest;
 import ru.sagiem.whattobuy.exceptions.AppError;
-import ru.sagiem.whattobuy.model.Role;
-import ru.sagiem.whattobuy.model.User;
-import ru.sagiem.whattobuy.repository.TokenRepository;
-import ru.sagiem.whattobuy.repository.UserRepository;
+import ru.sagiem.whattobuy.model.user.Role;
+import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.model.token.Token;
 import ru.sagiem.whattobuy.model.token.TokenType;
-import org.springframework.http.HttpHeaders;
+import ru.sagiem.whattobuy.repository.TokenRepository;
+import ru.sagiem.whattobuy.repository.UserRepository;
 
 import java.io.IOException;
 
@@ -32,6 +32,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+
+
+
 
     public ResponseEntity<?> register(RegisterRequest request) {
        if (userRepository.findByEmail(request.getEmail()).isPresent()) {

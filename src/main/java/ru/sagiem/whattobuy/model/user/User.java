@@ -1,7 +1,6 @@
-package ru.sagiem.whattobuy.model;
+package ru.sagiem.whattobuy.model.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

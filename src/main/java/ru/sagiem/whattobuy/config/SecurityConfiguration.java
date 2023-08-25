@@ -1,6 +1,5 @@
 package ru.sagiem.whattobuy.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static org.springframework.http.HttpMethod.*;
-import static ru.sagiem.whattobuy.model.Permission.*;
-import static ru.sagiem.whattobuy.model.Role.*;
+import static ru.sagiem.whattobuy.model.user.Permission.*;
+import static ru.sagiem.whattobuy.model.user.Role.*;
 
 @Configuration
 @EnableWebSecurity

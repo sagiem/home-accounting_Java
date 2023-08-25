@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.sagiem.whattobuy.model.Role;
+import ru.sagiem.whattobuy.model.user.Role;
 
 @Data
 @Builder

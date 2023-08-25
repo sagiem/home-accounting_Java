@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.model;
+package ru.sagiem.whattobuy.model.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

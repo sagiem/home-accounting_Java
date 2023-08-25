@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.model;
+package ru.sagiem.whattobuy.model.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.sagiem.whattobuy.model.Permission.*;
+import static ru.sagiem.whattobuy.model.user.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
