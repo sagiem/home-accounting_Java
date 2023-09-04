@@ -24,5 +24,6 @@ public class CategoryProduct {
     private String name;
 
     @OneToMany
+    @JoinColumn(name = "id")
     private List<Product> products = new ArrayList<>();
 }

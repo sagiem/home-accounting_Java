@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_Unit_of_measurement")
+@Table(name = "_unit_of_measurement")
 public class UnitOfMeasurement {
 
     @Id
@@ -23,5 +23,6 @@ public class UnitOfMeasurement {
     private String name;
 
     @OneToMany
+    @JoinColumn(name = "id")
     private List<Product> products = new ArrayList<>();
 }
