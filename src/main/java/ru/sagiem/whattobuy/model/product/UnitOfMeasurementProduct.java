@@ -15,14 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_unit_of_measurement")
-public class UnitOfMeasurement {
+public class UnitOfMeasurementProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "unitOfMeasurement")
+    private List<Product> products;
 }

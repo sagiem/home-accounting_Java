@@ -18,17 +18,17 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private CategoryProduct category;  // многие к одному
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryProduct category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private SubcategoryProduct subcategory;  // многие к одному
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private SubcategoryProduct subcategory;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private UnitOfMeasurement unitOfMeasurement; // многие к одному
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    private UnitOfMeasurementProduct unitOfMeasurement;
 }

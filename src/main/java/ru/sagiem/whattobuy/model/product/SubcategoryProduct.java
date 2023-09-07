@@ -23,7 +23,6 @@ public class SubcategoryProduct {
     private Integer id;
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "subcategory")
+    private List<Product> products;
 }

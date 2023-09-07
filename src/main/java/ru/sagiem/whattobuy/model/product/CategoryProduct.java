@@ -23,7 +23,6 @@ public class CategoryProduct {
     private Integer id;
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }
