@@ -23,6 +23,7 @@ import ru.sagiem.whattobuy.repository.TokenRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +52,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .createDateTime(LocalDateTime.now())
                 .role(Role.MANAGER)
                 .build();
         var savedUser = userRepository.save(user);

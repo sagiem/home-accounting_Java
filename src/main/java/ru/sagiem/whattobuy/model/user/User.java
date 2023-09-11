@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.sagiem.whattobuy.model.token.Token;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private LocalDateTime createDateTime;
 
     @Enumerated(EnumType.STRING)
     private Role role;
