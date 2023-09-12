@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.model.product;
+package ru.sagiem.whattobuy.model.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,27 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_product")
-public class Product {
+@Table(name = "_profile")
+public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private CategoryProduct category;
-
-    @ManyToOne
-    @JoinColumn(name = "subcategory_id")
-    private SubcategoryProduct subcategory;
-
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "unit_id")
-    private UnitOfMeasurementProduct unitOfMeasurement;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "profile")
     private List<Shopping> shoppings;
 }

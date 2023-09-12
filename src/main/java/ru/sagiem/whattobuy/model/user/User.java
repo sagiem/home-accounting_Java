@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.token.Token;
 
 import java.time.LocalDateTime;
@@ -23,13 +24,16 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
     private LocalDateTime createDateTime;
+
+    @OneToMany(mappedBy = "user")
+    private List<Profile> profiles;
 
     @Enumerated(EnumType.STRING)
     private Role role;

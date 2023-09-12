@@ -17,14 +17,14 @@ import static org.mockito.Mockito.doReturn;
 @ExtendWith(MockitoExtension.class)
 public class FamilyRestControllerTest {
 
-    @Mock
-    FamilyRepository familyRepository;
+   // @Mock
+    //FamilyRepository familyRepository;
 
-    @Mock
-    MessageSource messageSource;
+    //@Mock
+   // MessageSource messageSource;
 
-    @InjectMocks
-    FamilyRestController controller;
+    //@InjectMocks
+   // FamilyRestController controller;
 
 //    @Test
 //    @DisplayName("Описание")
