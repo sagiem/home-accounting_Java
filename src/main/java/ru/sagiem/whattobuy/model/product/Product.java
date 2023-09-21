@@ -1,10 +1,7 @@
 package ru.sagiem.whattobuy.model.product;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 
 import java.util.List;
