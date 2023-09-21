@@ -1,19 +1,16 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.ProductAddRequest;
-import ru.sagiem.whattobuy.exceptions.AppError;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
-import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.Product;
-import ru.sagiem.whattobuy.repository.CategoryProductRepository;
-import ru.sagiem.whattobuy.repository.ProductRepository;
-import ru.sagiem.whattobuy.repository.SubcategoryProductRepository;
-import ru.sagiem.whattobuy.repository.UnitOfMeasurementProductRepository;
+import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
+import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
+import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
+import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
 
 @Service
 @RequiredArgsConstructor

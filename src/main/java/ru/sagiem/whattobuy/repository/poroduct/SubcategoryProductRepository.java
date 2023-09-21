@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.repository;
+package ru.sagiem.whattobuy.repository.poroduct;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
