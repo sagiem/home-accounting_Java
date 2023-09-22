@@ -3,6 +3,8 @@ package ru.sagiem.whattobuy.model.product;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
+import ru.sagiem.whattobuy.model.user.Profile;
+import ru.sagiem.whattobuy.model.user.User;
 
 import java.util.List;
 
@@ -34,4 +36,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Shopping> shoppings;
+
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 }

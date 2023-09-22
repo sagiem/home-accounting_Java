@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 
 import java.util.List;
@@ -28,4 +29,7 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile")
     private List<Shopping> shoppings;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Product> products;
 }
