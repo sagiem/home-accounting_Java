@@ -3,6 +3,10 @@ package ru.sagiem.whattobuy.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.ProductAddRequest;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
@@ -21,7 +25,8 @@ public class ProductService {
     private final SubcategoryProductRepository subcategoryProductRepository;
     private final UnitOfMeasurementProductRepository unitOfMeasurementProductRepository;
 
-    public ResponseEntity<?> addProduct(ProductAddRequest request) {
+    public ResponseEntity<?> addProduct(ProductAddRequest request,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
 
         if (request.getName() != null &&
                 request.getCategoryId() != null &&
@@ -36,7 +41,7 @@ public class ProductService {
                     .build();
             var saveProduct = productRepository.save(product);
 
-            return ResponseEntity.ok(saveProduct.getId());
+            return ResponseEntity.ok(userDetails.getUsername());
 
         }
         return new ResponseEntity<>(new ProductAddError(HttpStatus.BAD_REQUEST.value(),
