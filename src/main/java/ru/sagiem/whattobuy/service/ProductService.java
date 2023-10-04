@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.ProductAddRequest;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
+import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
@@ -24,6 +26,8 @@ public class ProductService {
     private final CategoryProductRepository categoryProductRepository;
     private final SubcategoryProductRepository subcategoryProductRepository;
     private final UnitOfMeasurementProductRepository unitOfMeasurementProductRepository;
+    private final UserRepository userRepository;
+    private final FamilyGroupRepository familyGroupRepository;
 
     public ResponseEntity<?> addProduct(ProductAddRequest request,
                                         @AuthenticationPrincipal UserDetails userDetails) {
@@ -38,10 +42,12 @@ public class ProductService {
                     .category(categoryProductRepository.findById(request.getCategoryId()).orElseThrow())
                     .subcategory(subcategoryProductRepository.findById(request.getSubcategoryId()).orElseThrow())
                     .unitOfMeasurement(unitOfMeasurementProductRepository.findById(request.getUnitOfMeasurementId()).orElseThrow())
+                    .user(userRepository.findByEmail(userDetails.getUsername()).orElseThrow())
+                    .familyGroup(familyGroupRepository.findByOwnerUserId_Email(userDetails.getUsername()).orElse(null))
                     .build();
             var saveProduct = productRepository.save(product);
 
-            return ResponseEntity.ok(userDetails.getUsername());
+            return ResponseEntity.ok(saveProduct.getId());
 
         }
         return new ResponseEntity<>(new ProductAddError(HttpStatus.BAD_REQUEST.value(),

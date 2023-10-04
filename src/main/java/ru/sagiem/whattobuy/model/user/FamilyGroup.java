@@ -15,21 +15,27 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_profile")
-public class Profile {
+@Table(name = "_family_group")
+public class FamilyGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    @OneToMany(mappedBy = "profile")
+    @OneToOne
+    private User ownerUserId;
+
+    @OneToMany(mappedBy = "usersFamilyGroup")
+    private List<User> users;
+
+    //participants
+
+    @OneToMany(mappedBy = "familyGroup")
     private List<Shopping> shoppings;
 
-    @OneToMany(mappedBy = "profile")
+    @OneToMany(mappedBy = "familyGroup")
     private List<Product> products;
 }

@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.token.Token;
 
 import java.time.LocalDateTime;
@@ -31,8 +34,19 @@ public class User implements UserDetails {
     private String password;
     private LocalDateTime createDateTime;
 
+    @OneToOne
+    private FamilyGroup ownerFamilyGroup;
+
+    @ManyToOne
+    @JoinColumn(name = "family_group_id")
+    private FamilyGroup usersFamilyGroup;
+
     @OneToMany(mappedBy = "user")
-    private List<Profile> profiles;
+    private List<Shopping> shoppings;
+
+    @OneToMany(mappedBy = "user")
+    private List<Product> products;
+
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.product.UnitOfMeasurementProduct;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
+import ru.sagiem.whattobuy.model.user.User;
 
 @Data
 @Builder
@@ -20,5 +22,4 @@ public class ProductAddRequest {
     private Integer subcategoryId;
     private String name;
     private Integer unitOfMeasurementId;
-
 }

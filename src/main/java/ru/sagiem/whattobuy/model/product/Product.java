@@ -3,7 +3,7 @@ package ru.sagiem.whattobuy.model.product;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
-import ru.sagiem.whattobuy.model.user.Profile;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
 
 import java.util.List;
@@ -38,6 +38,12 @@ public class Product {
     private List<Shopping> shoppings;
 
     @ManyToOne
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+    @JoinColumn(name = "family_group_id")
+    private FamilyGroup familyGroup;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 }
