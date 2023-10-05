@@ -20,6 +20,11 @@ public class ProductController {
 
     private final ProductService service;
 
+    @PostMapping("/show_all")
+    public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails){
+        return service.showAll(userDetails);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody ProductAddRequest request,
                                  @AuthenticationPrincipal UserDetails userDetails){

@@ -11,12 +11,18 @@ import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.ProductAddRequest;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
+import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +59,18 @@ public class ProductService {
         return new ResponseEntity<>(new ProductAddError(HttpStatus.BAD_REQUEST.value(),
                 "Неверные данные"), HttpStatus.BAD_REQUEST);
 
+    }
+
+    public ResponseEntity<?> showAll(UserDetails userDetails) {
+
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+
+        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+
+
+        Optional<Product> products = productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
+
+
+        return ResponseEntity.ok(products);
     }
 }
