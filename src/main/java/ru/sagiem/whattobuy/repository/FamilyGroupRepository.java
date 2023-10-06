@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface FamilyGroupRepository extends JpaRepository<FamilyGroup, Integer> {
     Optional<FamilyGroup> findByOwnerUserId_Email(String name);
+
 }

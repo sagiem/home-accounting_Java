@@ -35,9 +35,13 @@ public class ProductService {
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
 
+
+    public ResponseEntity<?> showAll(UserDetails userDetails) {
+        return ResponseEntity.ok(getAllProductByUserOrfamilyGroup(userDetails));
+    }
+
     public ResponseEntity<?> addProduct(ProductAddRequest request,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-
         if (request.getName() != null &&
                 request.getCategoryId() != null &&
                 request.getSubcategoryId() != null &&
@@ -61,16 +65,12 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> showAll(UserDetails userDetails) {
 
+    // Возвращает список Product созданный пользователем либо группой куда входит данный пользователь
+    private Optional<Product> getAllProductByUserOrfamilyGroup(UserDetails userDetails) {
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-
         FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+        return productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
 
-
-        Optional<Product> products = productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
-
-
-        return ResponseEntity.ok(products);
     }
 }
