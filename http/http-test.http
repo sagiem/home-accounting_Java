@@ -1,0 +1,19 @@
+### Register User
+
+POST http://localhost:8081/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "email": "max1@yandex.ru",
+    "username": "max",
+    "password": "100",
+    "confirmPassword": "100"
+
+}
+
+> {% client.global.set("auth-token", response.body.access_token) %}
+
+### Query the emo endpoint
+GET http://localhost:8081/api/v1/product/show_all
+Authorization: Bearer {{auth-token}}
+

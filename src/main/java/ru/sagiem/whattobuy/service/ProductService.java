@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dto.auth.ProductAddRequest;
+import ru.sagiem.whattobuy.dto.auth.ProductDto;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
@@ -20,8 +18,6 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,21 +33,24 @@ public class ProductService {
 
 
     public ResponseEntity<?> showAll(UserDetails userDetails) {
-        return ResponseEntity.ok(getAllProductByUserOrfamilyGroup(userDetails));
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+        Optional<Product> product = productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
+        return ResponseEntity.ok(product);
     }
 
-    public ResponseEntity<?> addProduct(ProductAddRequest request,
+    public ResponseEntity<?> addProduct(ProductDto productDto,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if (request.getName() != null &&
-                request.getCategoryId() != null &&
-                request.getSubcategoryId() != null &&
-                request.getUnitOfMeasurementId() != null) {
+        if (productDto.getName() != null &&
+                productDto.getCategoryId() != null &&
+                productDto.getSubcategoryId() != null &&
+                productDto.getUnitOfMeasurementId() != null) {
 
             var product = Product.builder()
-                    .name(request.getName())
-                    .category(categoryProductRepository.findById(request.getCategoryId()).orElseThrow())
-                    .subcategory(subcategoryProductRepository.findById(request.getSubcategoryId()).orElseThrow())
-                    .unitOfMeasurement(unitOfMeasurementProductRepository.findById(request.getUnitOfMeasurementId()).orElseThrow())
+                    .name(productDto.getName())
+                    .category(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow())
+                    .subcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow())
+                    .unitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow())
                     .user(userRepository.findByEmail(userDetails.getUsername()).orElseThrow())
                     .familyGroup(familyGroupRepository.findByOwnerUserId_Email(userDetails.getUsername()).orElse(null))
                     .build();
@@ -66,11 +65,37 @@ public class ProductService {
     }
 
 
-    // Возвращает список Product созданный пользователем либо группой куда входит данный пользователь
-    private Optional<Product> getAllProductByUserOrfamilyGroup(UserDetails userDetails) {
+    public ResponseEntity<?> searchName(String name, UserDetails userDetails) {
+
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
         FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
-        return productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
+
+        Optional<Product> product = productRepository.findByNameAndFamilyGroupAndUser(name, familyGroup, user);
+
+        return ResponseEntity.ok(product);
+
+    }
+
+    public ResponseEntity<?> searchId(Integer id, UserDetails userDetails) {
+
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+
+        Optional<Product> product = productRepository.findByIdAndFamilyGroupAndUser(id, familyGroup, user);
+
+        return ResponseEntity.ok(product);
+
+    }
+
+    public void update(Integer id, ProductDto productDto, UserDetails userDetails) {
+
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
+        product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
+        product.setName(productDto.getName());
+        product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
+
+        productRepository.save(product);
 
     }
 }
