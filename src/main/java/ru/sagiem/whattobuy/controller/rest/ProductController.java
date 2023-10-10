@@ -38,20 +38,20 @@ public class ProductController {
 
     }
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<?> searchId(@RequestBody Integer id,
-                                      @AuthenticationPrincipal UserDetails userDetails){
-
-        return service.searchId(id, userDetails);
-    }
+//    @GetMapping("/search/{id}")
+//    public ResponseEntity<?> searchId(@RequestBody Integer id,
+//                                      @AuthenticationPrincipal UserDetails userDetails){
+//
+//        return service.searchId(id, userDetails);
+//    }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") @Min(1) Integer id,
                                     ProductDto productDto,
                                     @AuthenticationPrincipal UserDetails userDetails){
 
-        service.update(id, productDto, userDetails);
-        return ResponseEntity.ok(id);
+
+        return ResponseEntity.ok(service.update(id, productDto, userDetails));
 
     }
 }

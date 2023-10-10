@@ -76,26 +76,34 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> searchId(Integer id, UserDetails userDetails) {
+//    public ResponseEntity<?> searchId(Integer id, UserDetails userDetails) {
+//
+//        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+//        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+//
+//        Optional<Product> product = productRepository.findByIdAndFamilyGroupAndUser(id, familyGroup, user);
+//
+//        return ResponseEntity.ok(product);
+//
+//    }
 
-        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+    public ResponseEntity<?> update(Integer id, ProductDto productDto, UserDetails userDetails) {
 
-        Optional<Product> product = productRepository.findByIdAndFamilyGroupAndUser(id, familyGroup, user);
-
-        return ResponseEntity.ok(product);
-
-    }
-
-    public void update(Integer id, ProductDto productDto, UserDetails userDetails) {
-
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        FamilyGroup familyGroup = user.getUsersFamilyGroup();
         Product product = productRepository.findById(id).orElseThrow();
-        product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
-        product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
-        product.setName(productDto.getName());
-        product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
 
-        productRepository.save(product);
+        if (product.getUser() == user && product.getFamilyGroup() == familyGroup ) {
+            product.setId(id);
+            product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
+            product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
+            product.setName(productDto.getName());
+            product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
+            productRepository.save(product);
 
+            return ResponseEntity.ok(productRepository.findById(id));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }

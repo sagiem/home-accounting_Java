@@ -10,7 +10,7 @@ import ru.sagiem.whattobuy.model.user.Role;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class UserRegisterDto {
 
   private String firstname;
   private String lastname;

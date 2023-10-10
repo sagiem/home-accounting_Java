@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationRequest;
-import ru.sagiem.whattobuy.dto.auth.AuthenticationResponse;
-import ru.sagiem.whattobuy.dto.auth.RegisterRequest;
+import ru.sagiem.whattobuy.dto.auth.UserRegisterDto;
 import ru.sagiem.whattobuy.service.AuthenticationService;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class AuthenticationController {
 
     )
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody UserRegisterDto request) {
 
         return service.register(request);
 

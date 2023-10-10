@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationRequest;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationResponse;
-import ru.sagiem.whattobuy.dto.auth.RegisterRequest;
+import ru.sagiem.whattobuy.dto.auth.UserRegisterDto;
 import ru.sagiem.whattobuy.exceptions.AppError;
 import ru.sagiem.whattobuy.model.user.Role;
 import ru.sagiem.whattobuy.model.user.User;
@@ -38,7 +38,7 @@ public class AuthenticationService {
 
 
 
-    public ResponseEntity<?> register(RegisterRequest request) {
+    public ResponseEntity<?> register(UserRegisterDto request) {
        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
                     "Указанным email уже зарегистрирован"), HttpStatus.BAD_REQUEST);
