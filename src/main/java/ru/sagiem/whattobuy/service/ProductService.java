@@ -18,6 +18,7 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,10 +34,10 @@ public class ProductService {
 
 
     public ResponseEntity<?> showAll(UserDetails userDetails) {
-        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
-        Optional<Product> product = productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup));
-        return ResponseEntity.ok(product);
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        FamilyGroup familyGroup = user.getUsersFamilyGroup();
+        return ResponseEntity.ok(productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup)).orElse(null));
+
     }
 
     public ResponseEntity<?> addProduct(ProductDto productDto,
@@ -93,7 +94,7 @@ public class ProductService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
         Product product = productRepository.findById(id).orElseThrow();
 
-        if (product.getUser() == user && product.getFamilyGroup() == familyGroup ) {
+        if (product.getUser() == user && product.getFamilyGroup() == familyGroup) {
             product.setId(id);
             product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
