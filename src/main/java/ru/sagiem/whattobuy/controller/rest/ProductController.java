@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.dto.auth.ProductDto;
+import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.service.ProductService;
 
 @RestController
@@ -16,25 +17,33 @@ import ru.sagiem.whattobuy.service.ProductService;
 @Tag(name = "Работа с продуктом")
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductService productService;
+    UserRepository userRepository;
 
     @GetMapping ("/show_all")
     public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails){
-        return service.showAll(userDetails);
+        String userName = userDetails.getUsername();
+        var user = userRepository.findByEmail(userName);
+
+//todo решить проблему null с userreposirory
+        if(user.isPresent() && user.orElseGet(null).getUsersFamilyGroup() != null)
+            return productService.showAllFamaly(userDetails);
+
+        return productService.showAllId(userDetails);
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody ProductDto request,
                                  @AuthenticationPrincipal UserDetails userDetails){
 
-        return service.addProduct(request, userDetails);
+        return productService.addProduct(request, userDetails);
     }
 
     @GetMapping("/search/{name}")
     public ResponseEntity<?> searchName(@RequestBody String name,
                                       @AuthenticationPrincipal UserDetails userDetails){
 
-        return service.searchName(name, userDetails);
+        return productService.searchName(name, userDetails);
 
     }
 
@@ -51,7 +60,7 @@ public class ProductController {
                                     @AuthenticationPrincipal UserDetails userDetails){
 
 
-        return ResponseEntity.ok(service.update(id, productDto, userDetails));
+        return ResponseEntity.ok(productService.update(id, productDto, userDetails));
 
     }
 }

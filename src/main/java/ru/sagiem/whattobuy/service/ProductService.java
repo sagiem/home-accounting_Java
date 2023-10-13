@@ -33,10 +33,16 @@ public class ProductService {
     private final FamilyGroupRepository familyGroupRepository;
 
 
-    public ResponseEntity<?> showAll(UserDetails userDetails) {
+    public ResponseEntity<?> showAllFamaly(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
-        return ResponseEntity.ok(productRepository.findAllByNameOrFamilyGroup(userDetails.getUsername(), Optional.ofNullable(familyGroup)).orElse(null));
+        return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
+
+    }
+
+    public ResponseEntity<?> showAllId(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        return ResponseEntity.ok(productRepository.findAllByUser(user));
 
     }
 

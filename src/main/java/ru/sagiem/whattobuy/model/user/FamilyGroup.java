@@ -1,5 +1,7 @@
 package ru.sagiem.whattobuy.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_family_group")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class FamilyGroup {
 
     @Id
