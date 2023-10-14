@@ -2,6 +2,7 @@ package ru.sagiem.whattobuy.controller.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,28 +21,34 @@ public class ProductController {
     private final ProductService productService;
     UserRepository userRepository;
 
-    @GetMapping ("/show_all")
-    public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails){
-        String userName = userDetails.getUsername();
-        var user = userRepository.findByEmail(userName);
+    @GetMapping("/demo")
+    public ResponseEntity<?> demo(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(productService.demo(userDetails));
 
-//todo решить проблему null с userreposirory
-        if(user.isPresent() && user.orElseGet(null).getUsersFamilyGroup() != null)
-            return productService.showAllFamaly(userDetails);
+    }
+
+    @GetMapping("/show_all")
+    public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails) {
+
+//        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+//
+//        if (user.getUsersFamilyGroup() != null)
+//            return productService.showAllFamaly(userDetails);
 
         return productService.showAllId(userDetails);
+
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody ProductDto request,
-                                 @AuthenticationPrincipal UserDetails userDetails){
+                                 @AuthenticationPrincipal UserDetails userDetails) {
 
         return productService.addProduct(request, userDetails);
     }
 
     @GetMapping("/search/{name}")
     public ResponseEntity<?> searchName(@RequestBody String name,
-                                      @AuthenticationPrincipal UserDetails userDetails){
+                                        @AuthenticationPrincipal UserDetails userDetails) {
 
         return productService.searchName(name, userDetails);
 
@@ -57,10 +64,10 @@ public class ProductController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") @Min(1) Integer id,
                                     ProductDto productDto,
-                                    @AuthenticationPrincipal UserDetails userDetails){
+                                    @AuthenticationPrincipal UserDetails userDetails) {
 
 
-        return ResponseEntity.ok(productService.update(id, productDto, userDetails));
+        return productService.update(id, productDto, userDetails);
 
     }
 }

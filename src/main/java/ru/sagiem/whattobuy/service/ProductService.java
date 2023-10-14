@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,23 @@ public class ProductService {
 
 
     public ResponseEntity<?> showAllFamaly(UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
         return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
 
     }
 
     public ResponseEntity<?> showAllId(UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+
+        if (user.getUsersFamilyGroup() != null) {
+            FamilyGroup familyGroup = user.getUsersFamilyGroup();
+            System.out.println("********************************");
+            System.out.println("Отработал family");
+            return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
+        }
+
+
         return ResponseEntity.ok(productRepository.findAllByUser(user));
 
     }
@@ -112,5 +122,19 @@ public class ProductService {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<?> demo(UserDetails userDetails) {
+        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+
+        System.out.println("*****************************************************************");
+
+        System.out.println(userDetails.getUsername());
+        System.out.println(user.getId());
+
+        System.out.println("*****************************************************************");
+
+
+        return ResponseEntity.ok("Все Ok!");
     }
 }

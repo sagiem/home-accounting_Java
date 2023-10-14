@@ -2,9 +2,9 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://92.255.176.96:5432/postgres
     username: postgres
-    password: postgres
+    password: A@8fxojs2d
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
