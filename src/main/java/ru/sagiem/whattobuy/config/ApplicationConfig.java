@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.config;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,8 @@ import ru.sagiem.whattobuy.repository.UserRepository;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
+
+
 
     @Bean
     public UserDetailsService userDetailsService(){

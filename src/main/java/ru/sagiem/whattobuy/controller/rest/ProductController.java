@@ -35,7 +35,7 @@ public class ProductController {
 //        if (user.getUsersFamilyGroup() != null)
 //            return productService.showAllFamaly(userDetails);
 
-        return productService.showAllId(userDetails);
+        return ResponseEntity.ok(productService.showAllId(userDetails));
 
     }
 

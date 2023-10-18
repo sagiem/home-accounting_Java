@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.ProductDto;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
+import ru.sagiem.whattobuy.mapper.ProductMapper;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
@@ -19,6 +20,7 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,7 @@ public class ProductService {
     private final UnitOfMeasurementProductRepository unitOfMeasurementProductRepository;
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
+    private final ProductMapper productMapper;
 
 
     public ResponseEntity<?> showAllFamaly(UserDetails userDetails) {
@@ -41,18 +44,25 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> showAllId(UserDetails userDetails) {
+    public List<ProductDto> showAllId(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
         if (user.getUsersFamilyGroup() != null) {
             FamilyGroup familyGroup = user.getUsersFamilyGroup();
-            System.out.println("********************************");
-            System.out.println("Отработал family");
-            return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
+
+            //List<Product> products = Collections.singletonList(productRepository.findAllByFamilyGroup(familyGroup).orElse(null));
+            List<Product> products = productRepository.findAll();
+            return products.stream()
+                    .map(productMapper::convertToDTO)
+                    .toList();
+
+            //return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
         }
 
-
-        return ResponseEntity.ok(productRepository.findAllByUser(user));
+        List<Product> products = Collections.singletonList(productRepository.findAllByUser(user).orElse(null));
+        return products.stream()
+                .map(productMapper::convertToDTO)
+                .toList();
 
     }
 

@@ -17,10 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_unit_of_measurement")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class UnitOfMeasurementProduct {
 
     @Id
