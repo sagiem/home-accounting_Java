@@ -24,8 +24,6 @@ public class CategoryProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-
     private String name;
 
     @OneToMany(mappedBy = "category")

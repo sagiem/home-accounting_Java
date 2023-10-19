@@ -134,17 +134,5 @@ public class ProductService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<?> demo(UserDetails userDetails) {
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
-        System.out.println("*****************************************************************");
-
-        System.out.println(userDetails.getUsername());
-        System.out.println(user.getId());
-
-        System.out.println("*****************************************************************");
-
-
-        return ResponseEntity.ok("Все Ok!");
-    }
 }

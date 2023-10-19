@@ -21,11 +21,7 @@ public class ProductController {
     private final ProductService productService;
     UserRepository userRepository;
 
-    @GetMapping("/demo")
-    public ResponseEntity<?> demo(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(productService.demo(userDetails));
 
-    }
 
     @GetMapping("/show_all")
     public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails) {

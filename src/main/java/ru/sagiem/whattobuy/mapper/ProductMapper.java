@@ -2,6 +2,7 @@ package ru.sagiem.whattobuy.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import ru.sagiem.whattobuy.dto.auth.ProductDto;
@@ -12,6 +13,8 @@ public interface ProductMapper {
 
     ProductMapper INSTANCE = Mappers.getMapper( ProductMapper.class );
 
-    @Mapping(source = "name", target = "CategoryProduct.id")
+    @Mapping(source = "product.category.id", target = "categoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(source = "product.subcategory.id", target = "subcategoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(source = "product.unitOfMeasurement.id", target = "unitOfMeasurementId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     ProductDto convertToDTO(Product product);
 }
