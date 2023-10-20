@@ -50,16 +50,13 @@ public class ProductService {
         if (user.getUsersFamilyGroup() != null) {
             FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
-            //List<Product> products = Collections.singletonList(productRepository.findAllByFamilyGroup(familyGroup).orElse(null));
-            List<Product> products = productRepository.findAll();
+            List<Product> products = productRepository.findAllByFamilyGroup(familyGroup);
             return products.stream()
                     .map(productMapper::convertToDTO)
                     .toList();
-
-            //return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
         }
 
-        List<Product> products = Collections.singletonList(productRepository.findAllByUser(user).orElse(null));
+        List<Product> products= productRepository.findAllByUser(user);
         return products.stream()
                 .map(productMapper::convertToDTO)
                 .toList();
@@ -97,7 +94,7 @@ public class ProductService {
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
         FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
 
-        Optional<Product> product = productRepository.findByNameAndFamilyGroupAndUser(name, familyGroup, user);
+        Product product = productRepository.findByNameAndFamilyGroupAndUser(name, familyGroup, user);
 
         return ResponseEntity.ok(product);
 
