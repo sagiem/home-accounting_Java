@@ -1,7 +1,5 @@
 package ru.sagiem.whattobuy.model.product;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
@@ -45,7 +43,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userCreator;
 
 
 }

@@ -11,12 +11,14 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Product findByName(String name);
-    Product findByNameAndFamilyGroupAndUser(String name, FamilyGroup familyGroup, Optional<User> user);
-    Product findByIdAndFamilyGroupAndUser(Integer id, FamilyGroup familyGroup, Optional<User> user);
-    List<Product> findAllByNameOrFamilyGroup(String name, Optional<FamilyGroup> familyGroup);
+
 
     List<Product> findAllByFamilyGroup(FamilyGroup familyGroup);
+    List<Product> findAllByUserCreator(User user);
 
-    List<Product> findAllByUser(User user);
+    Product findByIdAndFamilyGroup(Integer id, FamilyGroup familyGroup);
+    Product findByIdAndUserCreator(Integer id, User user);
+
+    List<Product> findByNameAndFamilyGroup(String name, FamilyGroup familyGroup);
+    List<Product> findByNameAndUserCreator(String name, User user);
 }

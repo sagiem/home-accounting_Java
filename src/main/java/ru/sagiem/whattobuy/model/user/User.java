@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.sagiem.whattobuy.model.product.Product;
-import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.token.Token;
 
@@ -50,7 +49,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Shopping> shoppings;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userCreator")
     private List<Product> products;
 
 

@@ -1,6 +1,5 @@
 package ru.sagiem.whattobuy.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,7 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.UnitOfMeasurementProductRepository;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +53,7 @@ public class ProductService {
                     .toList();
         }
 
-        List<Product> products= productRepository.findAllByUser(user);
+        List<Product> products = productRepository.findAllByUserCreator(user);
         return products.stream()
                 .map(productMapper::convertToDTO)
                 .toList();
@@ -75,7 +72,7 @@ public class ProductService {
                     .category(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow())
                     .subcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow())
                     .unitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow())
-                    .user(userRepository.findByEmail(userDetails.getUsername()).orElseThrow())
+                    .userCreator(userRepository.findByEmail(userDetails.getUsername()).orElseThrow())
                     .familyGroup(familyGroupRepository.findByOwnerUserId_Email(userDetails.getUsername()).orElse(null))
                     .build();
             var saveProduct = productRepository.save(product);
@@ -89,27 +86,38 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<?> searchName(String name, UserDetails userDetails) {
+    public List<ProductDto> searchName(String name, UserDetails userDetails) {
 
-        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
+        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
-        Product product = productRepository.findByNameAndFamilyGroupAndUser(name, familyGroup, user);
+        if (user.getUsersFamilyGroup() != null) {
+            FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
-        return ResponseEntity.ok(product);
+            List<Product> products = productRepository.findByNameAndFamilyGroup(name, familyGroup);
+            return products.stream()
+                    .map(productMapper::convertToDTO)
+                    .toList();
+        }
+
+        List<Product> products = productRepository.findByNameAndUserCreator(name, user);
+        return products.stream()
+                .map(productMapper::convertToDTO)
+                .toList();
 
     }
 
-//    public ResponseEntity<?> searchId(Integer id, UserDetails userDetails) {
-//
-//        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-//        FamilyGroup familyGroup = user.orElseThrow().getUsersFamilyGroup();
-//
-//        Optional<Product> product = productRepository.findByIdAndFamilyGroupAndUser(id, familyGroup, user);
-//
-//        return ResponseEntity.ok(product);
-//
-//    }
+    public ProductDto searchId(Integer id, UserDetails userDetails) {
+
+        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+
+        if (user.getUsersFamilyGroup() != null) {
+            FamilyGroup familyGroup = user.getUsersFamilyGroup();
+            return productMapper.convertToDTO(productRepository.findByIdAndFamilyGroup(id, familyGroup));
+        }
+
+        return productMapper.convertToDTO(productRepository.findByIdAndUserCreator(id, user));
+
+    }
 
     public ResponseEntity<?> update(Integer id, ProductDto productDto, UserDetails userDetails) {
 
@@ -117,7 +125,7 @@ public class ProductService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
         Product product = productRepository.findById(id).orElseThrow();
 
-        if (product.getUser() == user && product.getFamilyGroup() == familyGroup) {
+        if (product.getUserCreator() == user && product.getFamilyGroup() == familyGroup) {
             product.setId(id);
             product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());

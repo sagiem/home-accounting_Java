@@ -42,20 +42,16 @@ public class ProductController {
         return productService.addProduct(request, userDetails);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<?> searchName(@RequestBody String name,
+    @GetMapping("/search/{nameOrId}")
+    public ResponseEntity<?> searchName(@RequestBody Object nameOrId,
                                         @AuthenticationPrincipal UserDetails userDetails) {
+        if(String.valueOf(nameOrId).isEmpty())
+            return ResponseEntity.ok(productService.searchName(String.valueOf(nameOrId), userDetails));
 
-        return productService.searchName(name, userDetails);
+        return ResponseEntity.ok(productService.searchId(Integer.valueOf(String.valueOf(nameOrId)), userDetails));
 
     }
 
-//    @GetMapping("/search/{id}")
-//    public ResponseEntity<?> searchId(@RequestBody Integer id,
-//                                      @AuthenticationPrincipal UserDetails userDetails){
-//
-//        return service.searchId(id, userDetails);
-//    }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") @Min(1) Integer id,
