@@ -37,7 +37,6 @@ public class FamilyGroup {
     @OneToMany(mappedBy = "usersFamilyGroup")
     private List<User> users;
 
-    //participants
 
     @OneToMany(mappedBy = "familyGroup")
     private List<Shopping> shoppings;

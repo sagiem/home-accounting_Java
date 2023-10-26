@@ -42,7 +42,7 @@ public class Product {
     private FamilyGroup familyGroup;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_creator_id")
     private User userCreator;
 
 

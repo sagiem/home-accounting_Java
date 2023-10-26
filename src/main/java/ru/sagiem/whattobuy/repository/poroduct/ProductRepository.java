@@ -13,12 +13,12 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
-    List<Product> findAllByFamilyGroup(FamilyGroup familyGroup);
-    List<Product> findAllByUserCreator(User user);
+
+    Optional<List<Product>>findAllByFamilyGroup(FamilyGroup familyGroup);
+    Optional<List<Product>> findAllByUserCreator(User user);
 
     Product findByIdAndFamilyGroup(Integer id, FamilyGroup familyGroup);
     Product findByIdAndUserCreator(Integer id, User user);
 
-    List<Product> findByNameAndFamilyGroup(String name, FamilyGroup familyGroup);
-    List<Product> findByNameAndUserCreator(String name, User user);
+
 }

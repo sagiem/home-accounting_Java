@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,29 +35,32 @@ public class ProductService {
     private final ProductMapper productMapper;
 
 
-    public ResponseEntity<?> showAllFamaly(UserDetails userDetails) {
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
-        return ResponseEntity.ok(productRepository.findAllByFamilyGroup(familyGroup));
 
-    }
-
-    public List<ProductDto> showAllId(UserDetails userDetails) {
+    public List<ProductDto> showAll(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
         if (user.getUsersFamilyGroup() != null) {
             FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
-            List<Product> products = productRepository.findAllByFamilyGroup(familyGroup);
+            List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
+            if(products != null) {
+                return products.stream()
+                        .map(productMapper::convertToDTO)
+                        .toList();
+            }
+
+            return null;
+
+        }
+
+        List<Product> products = productRepository.findAllByUserCreator(user).orElse(null);
+        if(products != null) {
             return products.stream()
                     .map(productMapper::convertToDTO)
                     .toList();
         }
 
-        List<Product> products = productRepository.findAllByUserCreator(user);
-        return products.stream()
-                .map(productMapper::convertToDTO)
-                .toList();
+        return null;
 
     }
 
@@ -86,46 +90,29 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> searchName(String name, UserDetails userDetails) {
-
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-
-        if (user.getUsersFamilyGroup() != null) {
-            FamilyGroup familyGroup = user.getUsersFamilyGroup();
-
-            List<Product> products = productRepository.findByNameAndFamilyGroup(name, familyGroup);
-            return products.stream()
-                    .map(productMapper::convertToDTO)
-                    .toList();
-        }
-
-        List<Product> products = productRepository.findByNameAndUserCreator(name, user);
-        return products.stream()
-                .map(productMapper::convertToDTO)
-                .toList();
-
-    }
 
     public ProductDto searchId(Integer id, UserDetails userDetails) {
 
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        System.out.println(id);
 
         if (user.getUsersFamilyGroup() != null) {
             FamilyGroup familyGroup = user.getUsersFamilyGroup();
+
             return productMapper.convertToDTO(productRepository.findByIdAndFamilyGroup(id, familyGroup));
+
         }
 
         return productMapper.convertToDTO(productRepository.findByIdAndUserCreator(id, user));
-
     }
 
     public ResponseEntity<?> update(Integer id, ProductDto productDto, UserDetails userDetails) {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.getReferenceById(id);
 
-        if (product.getUserCreator() == user && product.getFamilyGroup() == familyGroup) {
+        if (product.getUserCreator() == user || product.getFamilyGroup() == familyGroup) {
             product.setId(id);
             product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
@@ -133,7 +120,7 @@ public class ProductService {
             product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
             productRepository.save(product);
 
-            return ResponseEntity.ok(productRepository.findById(id));
+            return ResponseEntity.ok(productMapper.convertToDTO(productRepository.getReferenceById(id)));
         }
 
         return ResponseEntity.notFound().build();

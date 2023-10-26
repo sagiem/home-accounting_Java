@@ -26,12 +26,7 @@ public class ProductController {
     @GetMapping("/show_all")
     public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails) {
 
-//        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-//
-//        if (user.getUsersFamilyGroup() != null)
-//            return productService.showAllFamaly(userDetails);
-
-        return ResponseEntity.ok(productService.showAllId(userDetails));
+        return ResponseEntity.ok(productService.showAll(userDetails));
 
     }
 
@@ -42,13 +37,12 @@ public class ProductController {
         return productService.addProduct(request, userDetails);
     }
 
-    @GetMapping("/search/{nameOrId}")
-    public ResponseEntity<?> searchName(@RequestBody Object nameOrId,
+    @GetMapping("/search/{id}")
+    public ResponseEntity<ProductDto> searchName(@PathVariable("id") @Min(1) Integer id,
                                         @AuthenticationPrincipal UserDetails userDetails) {
-        if(String.valueOf(nameOrId).isEmpty())
-            return ResponseEntity.ok(productService.searchName(String.valueOf(nameOrId), userDetails));
 
-        return ResponseEntity.ok(productService.searchId(Integer.valueOf(String.valueOf(nameOrId)), userDetails));
+        return ResponseEntity.ok(productService.searchId(id, userDetails));
+
 
     }
 

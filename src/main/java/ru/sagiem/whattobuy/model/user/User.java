@@ -39,8 +39,7 @@ public class User implements UserDetails {
     private String password;
     private LocalDateTime createDateTime;
 
-    @OneToOne
-    private FamilyGroup ownerFamilyGroup;
+
 
     @ManyToOne
     @JoinColumn(name = "family_group_id")
