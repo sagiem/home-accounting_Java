@@ -12,7 +12,7 @@ import ru.sagiem.whattobuy.model.product.Product;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = Product.class)
 public interface ProductMapper {
 
-    ProductMapper INSTANCE = Mappers.getMapper( ProductMapper.class );
+
 
     @Mapping(source = "product.category.id", target = "categoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(source = "product.subcategory.id", target = "subcategoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)

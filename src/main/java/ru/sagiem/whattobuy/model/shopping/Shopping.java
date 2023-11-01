@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.Role;
 import ru.sagiem.whattobuy.model.user.User;
 
 import java.time.LocalDateTime;
+
 
 @Data
 @Builder
@@ -23,7 +25,8 @@ public class Shopping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime dataShoping;
+    private LocalDateTime dataCreatorShoping;
+    private LocalDateTime dataExecutedShoping;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -34,9 +37,6 @@ public class Shopping {
     @ManyToOne
     @JoinColumn(name = "point_id")
     private PointShopping pointShopping;
-
-    private boolean toWork;
-    private boolean executed;
 
     @ManyToOne
     @JoinColumn(name = "family_group_id")

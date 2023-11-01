@@ -11,7 +11,7 @@ import ru.sagiem.whattobuy.model.shopping.PointShopping;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = PointShopping.class)
 public interface PointShoppingMapper {
 
-    PointShoppingMapper INSTANCE = Mappers.getMapper(PointShoppingMapper.class);
+
 
 
     PointShoppingDtoResponse convertToDTO(PointShopping pointShopping);
