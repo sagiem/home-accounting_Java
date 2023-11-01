@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dto.auth.ProductDto;
+import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
+import ru.sagiem.whattobuy.dto.auth.ProductDtoResponse;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
 import ru.sagiem.whattobuy.mapper.ProductMapper;
 import ru.sagiem.whattobuy.model.product.Product;
@@ -36,7 +37,7 @@ public class ProductService {
 
 
 
-    public List<ProductDto> showAll(UserDetails userDetails) {
+    public List<ProductDtoResponse> showAll(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
         if (user.getUsersFamilyGroup() != null) {
@@ -64,7 +65,7 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> addProduct(ProductDto productDto,
+    public ResponseEntity<?> addProduct(ProductDtoRequest productDto,
                                         @AuthenticationPrincipal UserDetails userDetails) {
         if (productDto.getName() != null &&
                 productDto.getCategoryId() != null &&
@@ -91,7 +92,7 @@ public class ProductService {
 
 
 
-    public ProductDto searchId(Integer id, UserDetails userDetails) {
+    public ProductDtoResponse searchId(Integer id, UserDetails userDetails) {
 
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         System.out.println(id);
@@ -106,7 +107,7 @@ public class ProductService {
         return productMapper.convertToDTO(productRepository.findByIdAndUserCreator(id, user));
     }
 
-    public ResponseEntity<?> update(Integer id, ProductDto productDto, UserDetails userDetails) {
+    public ProductDtoResponse update(Integer id, ProductDtoRequest productDto, UserDetails userDetails) {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
@@ -120,10 +121,10 @@ public class ProductService {
             product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
             productRepository.save(product);
 
-            return ResponseEntity.ok(productMapper.convertToDTO(productRepository.getReferenceById(id)));
+            return productMapper.convertToDTO(productRepository.getReferenceById(id));
         }
 
-        return ResponseEntity.notFound().build();
+        return null;
     }
 
 

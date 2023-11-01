@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 
 import java.util.List;
@@ -43,4 +44,7 @@ public class FamilyGroup {
 
     @OneToMany(mappedBy = "familyGroup")
     private List<Product> products;
+
+    @OneToMany(mappedBy = "familyGroup")
+    private List<PointShopping> pointShoppings;
 }

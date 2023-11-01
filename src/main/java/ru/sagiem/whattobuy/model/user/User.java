@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.token.Token;
 
@@ -40,7 +41,6 @@ public class User implements UserDetails {
     private LocalDateTime createDateTime;
 
 
-
     @ManyToOne
     @JoinColumn(name = "family_group_id")
     private FamilyGroup usersFamilyGroup;
@@ -51,12 +51,22 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "userCreator")
     private List<Product> products;
 
+    @OneToMany(mappedBy = "userCreator")
+    private List<PointShopping> pointShoppings;
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "userCreator")
+    private List<Shopping> usersShopingCreator;
+
+    @OneToMany(mappedBy = "userExecutor")
+    private List<Shopping> usersShopingExecutor;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductDtoRequest {
 
     private Integer categoryId;
     private Integer subcategoryId;

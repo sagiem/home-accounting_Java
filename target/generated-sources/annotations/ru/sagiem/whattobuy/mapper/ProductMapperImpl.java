@@ -2,7 +2,7 @@ package ru.sagiem.whattobuy.mapper;
 
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import ru.sagiem.whattobuy.dto.auth.ProductDto;
+import ru.sagiem.whattobuy.dto.auth.ProductDtoResponse;
 import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
@@ -10,26 +10,28 @@ import ru.sagiem.whattobuy.model.product.UnitOfMeasurementProduct;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-19T15:21:14+0600",
+    date = "2023-11-01T11:58:45+0600",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8.1 (BellSoft)"
 )
 @Component
 public class ProductMapperImpl implements ProductMapper {
 
     @Override
-    public ProductDto convertToDTO(Product product) {
+    public ProductDtoResponse convertToDTO(Product product) {
         if ( product == null ) {
             return null;
         }
 
-        ProductDto.ProductDtoBuilder productDto = ProductDto.builder();
+        ProductDtoResponse.ProductDtoResponseBuilder productDtoResponse = ProductDtoResponse.builder();
 
-        productDto.categoryId( productCategoryId( product ) );
-        productDto.subcategoryId( productSubcategoryId( product ) );
-        productDto.unitOfMeasurementId( productUnitOfMeasurementId( product ) );
-        productDto.name( product.getName() );
+        productDtoResponse.categoryId( productCategoryId( product ) );
+        productDtoResponse.subcategoryId( productSubcategoryId( product ) );
+        productDtoResponse.unitOfMeasurementId( productUnitOfMeasurementId( product ) );
+        productDtoResponse.id( product.getId() );
+        productDtoResponse.name( product.getName() );
+        productDtoResponse.userCreator( product.getUserCreator() );
 
-        return productDto.build();
+        return productDtoResponse.build();
     }
 
     private Integer productCategoryId(Product product) {

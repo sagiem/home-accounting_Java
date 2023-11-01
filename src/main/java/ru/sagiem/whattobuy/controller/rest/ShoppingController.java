@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/shopping")
 @RequiredArgsConstructor
-@Tag(name = "Покупки план")
+@Tag(name = "Покупки")
 public class ShoppingController {
 }
