@@ -12,17 +12,11 @@ import ru.sagiem.whattobuy.model.shopping.Shopping;
 public interface ShoppingMapper {
 
 
-
     @Mappings({
-    @Mapping(source = "productId", target = "product.id"),
-    @Mapping(source = "pointShoppingId", target = "pointShopping.id"),
-    @Mapping(source = "familyGroupId", target = "familyGroup.id"),
-    @Mapping(source = "userExecutorId", target = "userExecutor.id")
-            })
-    @InheritInverseConfiguration
-    Shopping convertToModel(ShoppingDtoRequest shoppingDtoRequest);
-
-    @Mappings({
+            @Mapping(source = "dataCreatorShoping", target = "dataCreatorShoping", dateFormat="dd-MM-yyyy HH:mm:ss",
+                    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
+            @Mapping(source = "dataExecutedShoping", target = "dataExecutedShoping", dateFormat="dd-MM-yyyy HH:mm:ss",
+                    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "product.id", target = "productId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "pointShopping.id", target = "pointShoppingId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "familyGroup.id", target = "familyGroupId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),

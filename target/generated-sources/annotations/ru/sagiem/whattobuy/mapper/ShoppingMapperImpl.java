@@ -2,7 +2,6 @@ package ru.sagiem.whattobuy.mapper;
 
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import ru.sagiem.whattobuy.dto.auth.ShoppingDtoRequest;
 import ru.sagiem.whattobuy.dto.auth.ShoppingDtoResponse;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
@@ -12,28 +11,11 @@ import ru.sagiem.whattobuy.model.user.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-02T12:57:58+0600",
+    date = "2023-11-02T17:00:54+0600",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8.1 (BellSoft)"
 )
 @Component
 public class ShoppingMapperImpl implements ShoppingMapper {
-
-    @Override
-    public Shopping convertToModel(ShoppingDtoRequest shoppingDtoRequest) {
-        if ( shoppingDtoRequest == null ) {
-            return null;
-        }
-
-        Shopping.ShoppingBuilder shopping = Shopping.builder();
-
-        shopping.product( shoppingDtoRequestToProduct( shoppingDtoRequest ) );
-        shopping.pointShopping( shoppingDtoRequestToPointShopping( shoppingDtoRequest ) );
-        shopping.familyGroup( shoppingDtoRequestToFamilyGroup( shoppingDtoRequest ) );
-        shopping.userExecutor( shoppingDtoRequestToUser( shoppingDtoRequest ) );
-        shopping.price( shoppingDtoRequest.getPrice() );
-
-        return shopping.build();
-    }
 
     @Override
     public ShoppingDtoResponse convertToDto(Shopping shopping) {
@@ -43,6 +25,8 @@ public class ShoppingMapperImpl implements ShoppingMapper {
 
         ShoppingDtoResponse shoppingDtoResponse = new ShoppingDtoResponse();
 
+        shoppingDtoResponse.setDataCreatorShoping( shopping.getDataCreatorShoping() );
+        shoppingDtoResponse.setDataExecutedShoping( shopping.getDataExecutedShoping() );
         shoppingDtoResponse.setProductId( shoppingProductId( shopping ) );
         shoppingDtoResponse.setPointShoppingId( shoppingPointShoppingId( shopping ) );
         shoppingDtoResponse.setFamilyGroupId( shoppingFamilyGroupId( shopping ) );
@@ -52,60 +36,9 @@ public class ShoppingMapperImpl implements ShoppingMapper {
             shoppingDtoResponse.setShoppingStatus( shopping.getShoppingStatus().name() );
         }
         shoppingDtoResponse.setId( shopping.getId() );
-        shoppingDtoResponse.setDataCreatorShoping( shopping.getDataCreatorShoping() );
-        shoppingDtoResponse.setDataExecutedShoping( shopping.getDataExecutedShoping() );
-        shoppingDtoResponse.setPrice( shopping.getPrice() );
         shoppingDtoResponse.setVolume( shopping.getVolume() );
 
         return shoppingDtoResponse;
-    }
-
-    protected Product shoppingDtoRequestToProduct(ShoppingDtoRequest shoppingDtoRequest) {
-        if ( shoppingDtoRequest == null ) {
-            return null;
-        }
-
-        Product.ProductBuilder product = Product.builder();
-
-        product.id( shoppingDtoRequest.getProductId() );
-
-        return product.build();
-    }
-
-    protected PointShopping shoppingDtoRequestToPointShopping(ShoppingDtoRequest shoppingDtoRequest) {
-        if ( shoppingDtoRequest == null ) {
-            return null;
-        }
-
-        PointShopping.PointShoppingBuilder pointShopping = PointShopping.builder();
-
-        pointShopping.id( shoppingDtoRequest.getPointShoppingId() );
-
-        return pointShopping.build();
-    }
-
-    protected FamilyGroup shoppingDtoRequestToFamilyGroup(ShoppingDtoRequest shoppingDtoRequest) {
-        if ( shoppingDtoRequest == null ) {
-            return null;
-        }
-
-        FamilyGroup.FamilyGroupBuilder familyGroup = FamilyGroup.builder();
-
-        familyGroup.id( shoppingDtoRequest.getFamilyGroupId() );
-
-        return familyGroup.build();
-    }
-
-    protected User shoppingDtoRequestToUser(ShoppingDtoRequest shoppingDtoRequest) {
-        if ( shoppingDtoRequest == null ) {
-            return null;
-        }
-
-        User.UserBuilder user = User.builder();
-
-        user.id( shoppingDtoRequest.getUserExecutorId() );
-
-        return user.build();
     }
 
     private Integer shoppingProductId(Shopping shopping) {

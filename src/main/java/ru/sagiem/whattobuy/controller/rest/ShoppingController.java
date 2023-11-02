@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
 import ru.sagiem.whattobuy.dto.auth.ShoppingDtoRequest;
+import ru.sagiem.whattobuy.dto.auth.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.service.ShoppingService;
 
 @RestController
@@ -23,8 +24,15 @@ public class ShoppingController {
 
     @PostMapping("/add")
     public ResponseEntity<Integer> add(@RequestBody ShoppingDtoRequest shoppingDtoRequest,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
+                                       @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(shoppingService.addShopping(shoppingDtoRequest, userDetails));
+    }
+
+    @PostMapping("/add_set")
+    public ResponseEntity<Integer> addSet(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
+                                          @AuthenticationPrincipal UserDetails userDetails) {
+
+        return ResponseEntity.ok(shoppingService.addSetShopping(shoppingSetDtoRequest, userDetails));
     }
 }

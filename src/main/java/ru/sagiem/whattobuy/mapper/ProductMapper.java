@@ -13,7 +13,6 @@ import ru.sagiem.whattobuy.model.product.Product;
 public interface ProductMapper {
 
 
-
     @Mapping(source = "category.id", target = "categoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(source = "subcategory.id", target = "subcategoryId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(source = "unitOfMeasurement.id", target = "unitOfMeasurementId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)

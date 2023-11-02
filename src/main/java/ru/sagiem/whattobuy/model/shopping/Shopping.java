@@ -31,8 +31,7 @@ public class Shopping {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    private Double price;
-    private Integer Volume;
+    private Integer volume;
 
     @ManyToOne
     @JoinColumn(name = "point_id")
