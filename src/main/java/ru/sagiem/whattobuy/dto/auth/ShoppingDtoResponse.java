@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.dto.auth;
 
+import lombok.Data;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingStatus;
@@ -8,6 +9,7 @@ import ru.sagiem.whattobuy.model.user.User;
 
 import java.time.LocalDateTime;
 
+@Data
 public class ShoppingDtoResponse {
     private Integer id;
     private LocalDateTime dataCreatorShoping;
