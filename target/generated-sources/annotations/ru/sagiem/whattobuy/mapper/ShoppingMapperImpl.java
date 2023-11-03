@@ -11,7 +11,7 @@ import ru.sagiem.whattobuy.model.user.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-02T17:00:54+0600",
+    date = "2023-11-03T12:58:42+0600",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8.1 (BellSoft)"
 )
 @Component
