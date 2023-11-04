@@ -1,11 +1,7 @@
 package ru.sagiem.whattobuy.mapper;
 
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoResponse;
-import ru.sagiem.whattobuy.dto.auth.ShoppingDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ShoppingDtoResponse;
-import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)

@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.dto.auth;
+package ru.sagiem.whattobuy.dto;
 
 import lombok.Data;
 

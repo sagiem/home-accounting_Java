@@ -1,12 +1,10 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ShoppingDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ShoppingSetDtoRequest;
+import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
+import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.mapper.ShoppingMapper;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingStatus;

@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ShoppingDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ShoppingSetDtoRequest;
+import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
+import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.service.ShoppingService;
 
 @RestController

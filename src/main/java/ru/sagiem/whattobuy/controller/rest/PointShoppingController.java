@@ -7,10 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.sagiem.whattobuy.dto.auth.PointShoppingDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.PointShoppingDtoResponse;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoResponse;
+import ru.sagiem.whattobuy.dto.PointShoppingDtoRequest;
+import ru.sagiem.whattobuy.dto.PointShoppingDtoResponse;
 import ru.sagiem.whattobuy.service.PointShoppingService;
 
 import java.util.List;

@@ -1,14 +1,13 @@
 package ru.sagiem.whattobuy.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoRequest;
-import ru.sagiem.whattobuy.dto.auth.ProductDtoResponse;
+import ru.sagiem.whattobuy.dto.ProductDtoRequest;
+import ru.sagiem.whattobuy.dto.ProductDtoResponse;
 import ru.sagiem.whattobuy.exceptions.ProductAddError;
 import ru.sagiem.whattobuy.mapper.ProductMapper;
 import ru.sagiem.whattobuy.model.product.Product;
