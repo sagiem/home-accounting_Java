@@ -41,7 +41,7 @@ public class ShoppingService {
                 .familyGroup(familyGroup)
                 .userCreator(user)
                 .userExecutor(user)
-                .shoppingStatus(ShoppingStatus.ASSIGNED)
+                .shoppingStatus(ShoppingStatus.EXECUTED)
                 .build();
 
         Shopping saveShopping = shoppingRepository.save(shopping);
