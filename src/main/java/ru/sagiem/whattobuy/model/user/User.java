@@ -45,14 +45,18 @@ public class User implements UserDetails {
     @JoinColumn(name = "family_group_id")
     private FamilyGroup usersFamilyGroup;
 
-    @OneToMany(mappedBy = "user")
-    private List<Shopping> shoppings;
 
     @OneToMany(mappedBy = "userCreator")
     private List<Product> products;
 
     @OneToMany(mappedBy = "userCreator")
     private List<PointShopping> pointShoppings;
+
+    @OneToMany(mappedBy = "userCreator")
+    private List<Shopping> userCreatorshoppings;
+
+    @OneToMany(mappedBy = "userExecutor")
+    private List<Shopping> userExecutorShoppings;
 
 
     @Enumerated(EnumType.STRING)
