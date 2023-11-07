@@ -68,4 +68,32 @@ public class ShoppingService {
         Shopping saveShopping = shoppingRepository.save(shopping);
         return saveShopping.getId();
     }
+
+    public Integer executedShopping(Integer id, UserDetails userDetails) {
+
+        Shopping shopping = shoppingRepository.getReferenceById(id);
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        FamilyGroup familyGroup = user.getUsersFamilyGroup();
+
+        if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
+            shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
+            shoppingRepository.save(shopping);
+            return shopping.getId();
+        }
+        return null;
+    }
+
+    public Integer notExecutedShopping(Integer id, UserDetails userDetails) {
+
+        Shopping shopping = shoppingRepository.getReferenceById(id);
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        FamilyGroup familyGroup = user.getUsersFamilyGroup();
+
+        if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
+            shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
+            shoppingRepository.save(shopping);
+            return shopping.getId();
+        }
+        return null;
+    }
 }
