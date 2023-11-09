@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.Role;
@@ -19,14 +22,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "_shopping")
 public class Shopping {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime dataCreatorShoping;
-    private LocalDateTime dataExecutedShoping;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModified;
+
+    private LocalDateTime ExecutorDate;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

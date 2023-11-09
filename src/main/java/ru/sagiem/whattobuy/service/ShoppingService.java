@@ -33,8 +33,7 @@ public class ShoppingService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         Shopping shopping = Shopping.builder()
-                .dataCreatorShoping(LocalDateTime.now())
-                .dataExecutedShoping(LocalDateTime.now())
+                .ExecutorDate(LocalDateTime.now())
                 .product(productRepository.getReferenceById(shoppingDtoRequest.getProductId()))
                 .volume(shoppingDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingDtoRequest.getPointShoppingId()))
@@ -55,7 +54,6 @@ public class ShoppingService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         Shopping shopping = Shopping.builder()
-                .dataCreatorShoping(LocalDateTime.now())
                 .product(productRepository.getReferenceById(shoppingSetDtoRequest.getProductId()))
                 .volume(shoppingSetDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingSetDtoRequest.getPointShoppingId()))
@@ -76,6 +74,7 @@ public class ShoppingService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
+            shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
             shoppingRepository.save(shopping);
             return shopping.getId();
@@ -90,6 +89,7 @@ public class ShoppingService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
+            shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
             shoppingRepository.save(shopping);
             return shopping.getId();
