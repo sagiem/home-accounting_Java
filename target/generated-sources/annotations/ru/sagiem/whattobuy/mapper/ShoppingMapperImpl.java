@@ -11,8 +11,8 @@ import ru.sagiem.whattobuy.model.user.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-04T16:06:10+0600",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.9 (BellSoft)"
+    date = "2023-11-10T11:24:10+0600",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8.1 (BellSoft)"
 )
 @Component
 public class ShoppingMapperImpl implements ShoppingMapper {
@@ -25,8 +25,9 @@ public class ShoppingMapperImpl implements ShoppingMapper {
 
         ShoppingDtoResponse shoppingDtoResponse = new ShoppingDtoResponse();
 
-        shoppingDtoResponse.setDataCreatorShoping( shopping.getDataCreatorShoping() );
-        shoppingDtoResponse.setDataExecutedShoping( shopping.getDataExecutedShoping() );
+        shoppingDtoResponse.setCreateDate( shopping.getCreateDate() );
+        shoppingDtoResponse.setLastModified( shopping.getLastModified() );
+        shoppingDtoResponse.setExecutorDate( shopping.getExecutorDate() );
         shoppingDtoResponse.setProductId( shoppingProductId( shopping ) );
         shoppingDtoResponse.setPointShoppingId( shoppingPointShoppingId( shopping ) );
         shoppingDtoResponse.setFamilyGroupId( shoppingFamilyGroupId( shopping ) );

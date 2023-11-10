@@ -10,8 +10,8 @@ import ru.sagiem.whattobuy.model.product.UnitOfMeasurementProduct;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-04T16:06:10+0600",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.9 (BellSoft)"
+    date = "2023-11-10T11:24:10+0600",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8.1 (BellSoft)"
 )
 @Component
 public class ProductMapperImpl implements ProductMapper {

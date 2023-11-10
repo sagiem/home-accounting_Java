@@ -9,9 +9,11 @@ public interface ShoppingMapper {
 
 
     @Mappings({
-            @Mapping(source = "dataCreatorShoping", target = "dataCreatorShoping", dateFormat="dd-MM-yyyy HH:mm:ss",
+            @Mapping(source = "createDate", target = "createDate", dateFormat = "dd-MM-yyyy HH:mm:ss",
                     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
-            @Mapping(source = "dataExecutedShoping", target = "dataExecutedShoping", dateFormat="dd-MM-yyyy HH:mm:ss",
+            @Mapping(source = "lastModified", target = "lastModified", dateFormat = "dd-MM-yyyy HH:mm:ss",
+                    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
+            @Mapping(source = "executorDate", target = "executorDate", dateFormat = "dd-MM-yyyy HH:mm:ss",
                     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "product.id", target = "productId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "pointShopping.id", target = "pointShoppingId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),

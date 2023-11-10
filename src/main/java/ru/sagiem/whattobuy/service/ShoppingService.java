@@ -33,7 +33,7 @@ public class ShoppingService {
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         Shopping shopping = Shopping.builder()
-                .ExecutorDate(LocalDateTime.now())
+                .executorDate(LocalDateTime.now())
                 .product(productRepository.getReferenceById(shoppingDtoRequest.getProductId()))
                 .volume(shoppingDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingDtoRequest.getPointShoppingId()))

@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Data
 public class ShoppingDtoResponse {
     private Integer id;
-    private LocalDateTime dataCreatorShoping;
-    private LocalDateTime dataExecutedShoping;
+    private LocalDateTime createDate;
+    private LocalDateTime lastModified;
+    private LocalDateTime executorDate;
     private Integer productId;
     private Double price;
     private Integer Volume;

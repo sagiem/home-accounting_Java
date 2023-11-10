@@ -38,7 +38,7 @@ public class Shopping {
     @Column(insertable = false)
     private LocalDateTime lastModified;
 
-    private LocalDateTime ExecutorDate;
+    private LocalDateTime executorDate;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
