@@ -41,9 +41,11 @@ public class User implements UserDetails {
     private LocalDateTime createDateTime;
 
 
-    @ManyToOne
-    @JoinColumn(name = "family_group_id")
-    private FamilyGroup usersFamilyGroup;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "family_users",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"))
+    private List<FamilyGroup> familyGroup;
 
 
     @OneToMany(mappedBy = "userCreator")

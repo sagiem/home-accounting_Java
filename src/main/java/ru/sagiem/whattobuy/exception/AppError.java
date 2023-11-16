@@ -1,6 +1,5 @@
-package ru.sagiem.whattobuy.exceptions;
+package ru.sagiem.whattobuy.exception;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;

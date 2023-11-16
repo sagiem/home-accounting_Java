@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationRequest;
 import ru.sagiem.whattobuy.dto.auth.AuthenticationResponse;
 import ru.sagiem.whattobuy.dto.auth.UserRegisterDto;
-import ru.sagiem.whattobuy.exceptions.AppError;
+import ru.sagiem.whattobuy.exception.AppError;
 import ru.sagiem.whattobuy.model.user.Role;
 import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.model.token.Token;

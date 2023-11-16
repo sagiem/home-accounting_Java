@@ -35,7 +35,7 @@ public class FamilyGroup {
     @OneToOne
     private User ownerUserId;
 
-    @OneToMany(mappedBy = "usersFamilyGroup")
+    @ManyToMany
     private List<User> users;
 
 

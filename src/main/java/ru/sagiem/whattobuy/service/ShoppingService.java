@@ -31,6 +31,31 @@ public class ShoppingService {
     public Integer addShopping(ShoppingDtoRequest shoppingDtoRequest, UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         FamilyGroup familyGroup = user.getUsersFamilyGroup();
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         Shopping shopping = Shopping.builder()
                 .executorDate(LocalDateTime.now())

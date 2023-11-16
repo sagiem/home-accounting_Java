@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.exceptions;
+package ru.sagiem.whattobuy.exception;
 
 import lombok.Data;
 
