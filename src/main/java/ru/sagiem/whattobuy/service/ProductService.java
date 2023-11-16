@@ -106,6 +106,7 @@ public class ProductService {
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
             product.setName(productDto.getName());
             product.setUnitOfMeasurement(unitOfMeasurementProductRepository.findById(productDto.getUnitOfMeasurementId()).orElseThrow());
+            product.setFamilyGroup(familyGroupRepository.getReferenceById(productDto.getFamilyGroupId()));
             productRepository.save(product);
 
             return productMapper.convertToDTO(productRepository.getReferenceById(id));
