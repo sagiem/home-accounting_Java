@@ -87,7 +87,7 @@ public class ProductService {
             List<FamilyGroup> familyGroup = user.getFamilyGroup();
 
 
-            return productMapper.convertToDTO(productRepository.findByIdAndFamilyGroup(id, familyGroup));
+            return productMapper.convertToDTO(productRepository.findByIdAndFamilyGroupIn(id, familyGroup));
 
         }
 
