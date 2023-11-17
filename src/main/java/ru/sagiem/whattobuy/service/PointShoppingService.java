@@ -1,6 +1,7 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,35 +30,24 @@ public class PointShoppingService {
 
     public List<PointShoppingDtoResponse> showAll(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        List<FamilyGroup> familyGroup = user.getFamilyGroup();
 
-        if (user.getUsersFamilyGroup() != null) {
-            FamilyGroup familyGroup = user.getUsersFamilyGroup();
-
-            List<PointShopping> pointShoppings = pointShoppingRepository.findAllByFamilyGroup(familyGroup).orElse(null);
-            if(pointShoppings != null) {
-                return pointShoppings.stream()
-                        .map(pointShoppingMapper::convertToDTO)
-                        .toList();
-            }
-            return null;
-        }
-
-        List<PointShopping> pointShoppings = pointShoppingRepository.findAllByUserCreator(user).orElse(null);
-        if(pointShoppings != null) {
+        List<PointShopping> pointShoppings = pointShoppingRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroup).orElse(null);
+        if (pointShoppings != null) {
             return pointShoppings.stream()
                     .map(pointShoppingMapper::convertToDTO)
                     .toList();
         }
         return null;
+
     }
 
     public void addPointShopping(PointShoppingDtoRequest pointShoppingDtoRequest,
-                                              @AuthenticationPrincipal UserDetails userDetails) {
+                                 @AuthenticationPrincipal UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
         PointShopping pointShopping = pointShoppingMapper.connertToModel(pointShoppingDtoRequest);
         pointShopping.setUserCreator(user);
-        pointShopping.setFamilyGroup(familyGroup);
+        pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
         pointShoppingRepository.save(pointShopping);
     }
 
@@ -65,25 +55,19 @@ public class PointShoppingService {
     public PointShoppingDtoResponse searchId(Integer id, UserDetails userDetails) {
 
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+        List<FamilyGroup> familyGroups = user.getFamilyGroup();
 
-        if (user.getUsersFamilyGroup() != null) {
-            FamilyGroup familyGroup = user.getUsersFamilyGroup();
-
-            return pointShoppingMapper.convertToDTO(pointShoppingRepository.findByIdAndFamilyGroup(id, familyGroup));
-        }
         return pointShoppingMapper.convertToDTO(pointShoppingRepository.findByIdAndUserCreator(id, user));
     }
 
-    public PointShoppingDtoResponse update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
+    public ResponseEntity<?> update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
 
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
         PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
+        pointShopping.setName(pointShoppingDtoRequest.getName());
+        pointShopping.setAddress(pointShoppingDtoRequest.getAddress());
+        pointShopping.setComment(pointShoppingDtoRequest.getComment());
+        pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
 
-        if (pointShopping.getUserCreator() == user || pointShopping.getFamilyGroup() == familyGroup) {
-            pointShoppingRepository.save(pointShopping);
-            return pointShoppingMapper.convertToDTO(pointShopping);
-        }
-        return null;
+        return ResponseEntity.ok().build();
     }
 }

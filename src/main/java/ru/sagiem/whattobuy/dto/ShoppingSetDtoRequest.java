@@ -8,4 +8,5 @@ public class ShoppingSetDtoRequest {
     private Integer Volume;
     private Integer pointShoppingId;
     private Integer userExecutorId;
+    private Integer familyGroup;
 }

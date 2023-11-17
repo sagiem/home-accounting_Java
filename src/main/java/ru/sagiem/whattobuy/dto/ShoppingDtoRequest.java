@@ -8,6 +8,7 @@ import ru.sagiem.whattobuy.model.user.User;
 @Data
 public class ShoppingDtoRequest {
     private Integer productId;
-    private Integer Volume;
+    private Integer volume;
     private Integer pointShoppingId;
+    private Integer familyGroup;
 }

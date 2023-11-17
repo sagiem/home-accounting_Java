@@ -6,6 +6,7 @@ import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +14,9 @@ import java.util.Optional;
 public interface PointShoppingRepository extends JpaRepository<PointShopping, Integer> {
 
 
-    Optional<List<PointShopping>> findAllByFamilyGroup(FamilyGroup familyGroup);
-    Optional<List<PointShopping>> findAllByUserCreator(User user);
+    Optional<List<PointShopping>> findByUserCreatorOrFamilyGroupIn (User userCreator, Collection<FamilyGroup> familyGroup);
+    Optional<List<PointShopping>> findByUserCreator(User user);
 
-    PointShopping findByIdAndFamilyGroup(Integer id, FamilyGroup familyGroup);
+    PointShopping findByIdAndFamilyGroupIn(Integer id, Collection<FamilyGroup> familyGroup);
     PointShopping findByIdAndUserCreator(Integer id, User user);
 }

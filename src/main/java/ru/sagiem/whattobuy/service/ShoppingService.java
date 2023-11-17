@@ -10,6 +10,7 @@ import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingStatus;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
+import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.PointShoppingRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
@@ -26,43 +27,17 @@ public class ShoppingService {
     private final ShoppingMapper shoppingMapper;
     private final ProductRepository productRepository;
     private final PointShoppingRepository pointShoppingRepository;
+    private final FamilyGroupRepository familyGroupRepository;
 
     //пользователь приобрел товар и сам добавляет его.
     public Integer addShopping(ShoppingDtoRequest shoppingDtoRequest, UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
         Shopping shopping = Shopping.builder()
                 .executorDate(LocalDateTime.now())
                 .product(productRepository.getReferenceById(shoppingDtoRequest.getProductId()))
                 .volume(shoppingDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingDtoRequest.getPointShoppingId()))
-                .familyGroup(familyGroup)
+                .familyGroup(familyGroupRepository.getReferenceById(shoppingDtoRequest.getFamilyGroup()))
                 .userCreator(user)
                 .userExecutor(user)
                 .shoppingStatus(ShoppingStatus.EXECUTED)
@@ -76,13 +51,12 @@ public class ShoppingService {
     public Integer addSetShopping(ShoppingSetDtoRequest shoppingSetDtoRequest, UserDetails userDetails) {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
 
         Shopping shopping = Shopping.builder()
                 .product(productRepository.getReferenceById(shoppingSetDtoRequest.getProductId()))
                 .volume(shoppingSetDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingSetDtoRequest.getPointShoppingId()))
-                .familyGroup(familyGroup)
+                .familyGroup(familyGroupRepository.getReferenceById(shoppingSetDtoRequest.getFamilyGroup()))
                 .userCreator(user)
                 .userExecutor(userRepository.getReferenceById(shoppingSetDtoRequest.getUserExecutorId()))
                 .shoppingStatus(ShoppingStatus.ASSIGNED)
@@ -95,30 +69,18 @@ public class ShoppingService {
     public Integer executedShopping(Integer id, UserDetails userDetails) {
 
         Shopping shopping = shoppingRepository.getReferenceById(id);
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
-
-        if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
-            shopping.setExecutorDate(LocalDateTime.now());
-            shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
-            shoppingRepository.save(shopping);
-            return shopping.getId();
-        }
-        return null;
+        shopping.setExecutorDate(LocalDateTime.now());
+        shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
+        shoppingRepository.save(shopping);
+        return shopping.getId();
     }
 
     public Integer notExecutedShopping(Integer id, UserDetails userDetails) {
 
         Shopping shopping = shoppingRepository.getReferenceById(id);
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        FamilyGroup familyGroup = user.getUsersFamilyGroup();
-
-        if (familyGroup == shopping.getFamilyGroup() || user == shopping.getUserCreator()) {
-            shopping.setExecutorDate(LocalDateTime.now());
-            shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
-            shoppingRepository.save(shopping);
-            return shopping.getId();
-        }
-        return null;
+        shopping.setExecutorDate(LocalDateTime.now());
+        shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
+        shoppingRepository.save(shopping);
+        return shopping.getId();
     }
 }
