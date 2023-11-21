@@ -45,9 +45,14 @@ public class PointShoppingService {
     public void addPointShopping(PointShoppingDtoRequest pointShoppingDtoRequest,
                                  @AuthenticationPrincipal UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        PointShopping pointShopping = pointShoppingMapper.connertToModel(pointShoppingDtoRequest);
-        pointShopping.setUserCreator(user);
-        pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
+        PointShopping pointShopping = PointShopping.builder()
+                .name(pointShoppingDtoRequest.getName())
+                .address(pointShoppingDtoRequest.getAddress())
+                .comment(pointShoppingDtoRequest.getComment())
+                .userCreator(user)
+                .familyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()))
+                .build();
+
         pointShoppingRepository.save(pointShopping);
     }
 

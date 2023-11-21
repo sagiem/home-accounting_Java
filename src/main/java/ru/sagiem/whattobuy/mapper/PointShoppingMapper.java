@@ -13,6 +13,6 @@ public interface PointShoppingMapper {
 
 
     PointShoppingDtoResponse convertToDTO(PointShopping pointShopping);
-    PointShopping connertToModel(PointShoppingDtoRequest pointShoppingDtoRequest);
+
 
 }
