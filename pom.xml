@@ -14,7 +14,7 @@
     <name>home-accounting</name>
     <description>home accounting</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <jjwt.version>0.11.5</jjwt.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
@@ -179,13 +179,27 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
                 <configuration>
                     <image>
-                        <name>docker.io/pratikdas/${project.artifactId}:v1</name>
+                        <!-- Имя образа -->
+                        <name>${project.artifactId}</name>
+                        <!-- Список используемых Buildpacks -->
+                        <buildpacks>
+                            <buildpack>paketobuildpacks/ca-certificates:3.6.3</buildpack>
+                            <buildpack>paketobuildpacks/bellsoft-liberica:10.4.0</buildpack>
+                            <buildpack>paketobuildpacks/syft:1.32.1</buildpack>
+                            <buildpack>paketobuildpacks/executable-jar:6.7.4</buildpack>
+                            <buildpack>paketobuildpacks/dist-zip:5.6.4</buildpack>
+                            <buildpack>paketobuildpacks/spring-boot:5.26.1</buildpack>
+                        </buildpacks>
+                        <!-- Список пробрасываемых директорий в Buildpacks -->
+                        <bindings>
+                            <binding>${project.basedir}/platform/bindings:/platform/bindings</binding>
+                        </bindings>
                     </image>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
