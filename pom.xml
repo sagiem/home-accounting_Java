@@ -14,10 +14,11 @@
     <name>home-accounting</name>
     <description>home accounting</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <jjwt.version>0.11.5</jjwt.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -175,65 +176,16 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--                <configuration>-->
-            <!--                    <useIncrementalCompilation>false</useIncrementalCompilation>-->
-            <!--                    <annotationProcessorPaths>-->
-            <!--                        <path>-->
-            <!--                            <groupId>org.projectlombok</groupId>-->
-            <!--                            <artifactId>lombok</artifactId>-->
-            <!--                            <version>${lombok.version}</version>-->
-            <!--                        </path>-->
-            <!--                        <path>-->
-            <!--                            <groupId>org.mapstruct</groupId>-->
-            <!--                            <artifactId>mapstruct-processor</artifactId>-->
-            <!--                            <version>${mapstruct.version}</version>-->
-            <!--                        </path>-->
-            <!--                    </annotationProcessorPaths>-->
-            <!--                    <compilerArgs>-->
-            <!--                        <compilerArg>-->
-            <!--                            -Amapstruct.defaultComponentModel=spring-->
-            <!--                        </compilerArg>-->
-            <!--                    </compilerArgs>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>docker.io/pratikdas/${project.artifactId}:v1</name>
+                    </image>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
-
-    <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-    <!--                <version>3.8.1</version>-->
-    <!--                <configuration>-->
-    <!--                    <source>1.8</source> &lt;!&ndash; depending on your project &ndash;&gt;-->
-    <!--                    <target>1.8</target> &lt;!&ndash; depending on your project &ndash;&gt;-->
-    <!--                    <annotationProcessorPaths>-->
-    <!--                        <path>-->
-    <!--                            <groupId>org.mapstruct</groupId>-->
-    <!--                            <artifactId>mapstruct-processor</artifactId>-->
-    <!--                            <version>${org.mapstruct.version}</version>-->
-    <!--                        </path>-->
-    <!--                        <path>-->
-    <!--                            <groupId>org.projectlombok</groupId>-->
-    <!--                            <artifactId>lombok</artifactId>-->
-    <!--                            <version>1.18.30</version>-->
-    <!--                        </path>-->
-    <!--                        &lt;!&ndash; other annotation processors &ndash;&gt;-->
-    <!--                    </annotationProcessorPaths>-->
-    <!--                    <compilerArgs>-->
-    <!--                        <compilerArg>-->
-    <!--                            -Amapstruct.defaultComponentModel=spring-->
-    <!--                        </compilerArg>-->
-    <!--                    </compilerArgs>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
-
 </project>

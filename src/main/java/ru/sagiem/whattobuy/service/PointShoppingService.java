@@ -62,6 +62,7 @@ public class PointShoppingService {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         List<FamilyGroup> familyGroups = user.getFamilyGroup();
 
+
         return pointShoppingMapper.convertToDTO(pointShoppingRepository.findByIdAndUserCreator(id, user));
     }
 
@@ -73,6 +74,9 @@ public class PointShoppingService {
         pointShopping.setComment(pointShoppingDtoRequest.getComment());
         pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
 
+
         return ResponseEntity.ok().build();
+
+
     }
 }
