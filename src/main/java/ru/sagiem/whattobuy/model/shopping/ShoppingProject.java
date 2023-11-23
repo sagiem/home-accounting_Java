@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.sagiem.whattobuy.model.token.Token;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
 
 import java.time.LocalDateTime;
@@ -45,6 +46,10 @@ public class ShoppingProject {
     @JoinColumn(name = "user_creator_id")
     private User userCreator;
 
+    @ManyToOne
+    @JoinColumn(name = "family_group")
+    private FamilyGroup familyGroup;
+
     @OneToMany(mappedBy = "shoppingProject")
-    private List<Shopping> shopping;
+    private List<Shopping> shoppings;
 }
