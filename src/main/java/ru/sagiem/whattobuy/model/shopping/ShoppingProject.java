@@ -1,21 +1,19 @@
 package ru.sagiem.whattobuy.model.shopping;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import ru.sagiem.whattobuy.model.product.Product;
-import ru.sagiem.whattobuy.model.user.FamilyGroup;
-import ru.sagiem.whattobuy.model.user.Role;
+import ru.sagiem.whattobuy.model.token.Token;
 import ru.sagiem.whattobuy.model.user.User;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Data
 @Builder
@@ -23,12 +21,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "_shopping")
-public class Shopping {
+@Table(name = "_shopping_project")
+public class ShoppingProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -38,35 +37,14 @@ public class Shopping {
     @Column(insertable = false)
     private LocalDateTime lastModified;
 
-    private LocalDateTime executorDate;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    private Integer volume;
-
-    @ManyToOne
-    @JoinColumn(name = "point_id")
-    private PointShopping pointShopping;
-
-    @ManyToOne
-    @JoinColumn(name = "family_group_id")
-    private FamilyGroup familyGroup;
+    private LocalDateTime finishDate;
+    private boolean active;
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "user_creator_id")
     private User userCreator;
 
-    @ManyToOne
-    @JoinColumn(name = "user_executor_id")
-    private User userExecutor;
-
-    @ManyToOne
-    @JoinColumn(name = "shopping_project")
-    private ShoppingProject shoppingProject;
-
-    @Enumerated(EnumType.STRING)
-    private ShoppingStatus shoppingStatus;
-
-
+    @OneToMany(mappedBy = "shoppingProject")
+    private List<Shopping> shopping;
 }

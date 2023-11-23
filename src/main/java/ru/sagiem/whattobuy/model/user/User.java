@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
+import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
 import ru.sagiem.whattobuy.model.token.Token;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "userExecutor")
     private List<Shopping> userExecutorShoppings;
+
+    @OneToMany(mappedBy = "userCreator")
+    private List<ShoppingProject> userCreatorShoppingProject;
 
 
     @Enumerated(EnumType.STRING)
