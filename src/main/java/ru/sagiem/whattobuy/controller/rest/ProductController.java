@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/show_all")
-    public ResponseEntity<?> show(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> showAll(@AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(productService.showAll(userDetails));
     }
