@@ -24,11 +24,11 @@ public class ShoppingProjectService {
     private final ShoppingProjectMapper shoppingProjectMapper;
     private final FamilyGroupRepository familyGroupRepository;
 
-    public List<ShoppingProjectDtoResponse> showAllByFamilyGroupAll(UserDetails userDetails) {
+    public List<ShoppingProjectDtoResponse> showAllUserCreatorOrFamilyGroup(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
         List<FamilyGroup> familyGroups = user.getFamilyGroup();
-        List<ShoppingProject> shoppingProjects = shoppingProjectRepository.findByFamilyGroupIn(familyGroups).orElse(null);
+        List<ShoppingProject> shoppingProjects = shoppingProjectRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElse(null);
 
         if (shoppingProjects != null) {
             return shoppingProjects.stream()
