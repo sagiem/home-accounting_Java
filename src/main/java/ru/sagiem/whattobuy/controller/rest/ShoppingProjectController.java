@@ -14,8 +14,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.dto.*;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
 import ru.sagiem.whattobuy.service.ShoppingProjectService;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -28,7 +31,7 @@ public class ShoppingProjectController {
     private final ShoppingProjectService service;
 
 
-     @Operation(
+    @Operation(
             summary = "Извлекает все проекты покупок для пользователя",
             description = "Извлечет результаты для всех Family group в которых находится пользователь, так и лично созданных проектов",
             tags = "get"
@@ -67,9 +70,30 @@ public class ShoppingProjectController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<Boolean> delete(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(service.delete(id, userDetails));
     }
+
+    @GetMapping("/work_finish/{id}")
+    public ResponseEntity<ShoppingProjectDtoWorkFinish> workFinishShoppingInProgect(@PathVariable("id") @Min(1) Integer id) {
+        return ResponseEntity.ok(service.workFinishShoppingInProgect(id));
+    }
+
+    @GetMapping("/work/{id}")
+    public ResponseEntity<List<Shopping>> workShoppingInProgect(@PathVariable("id") @Min(1) Integer id) {
+        return ResponseEntity.ok(service.workShoppingInProgect(id));
+    }
+
+    @GetMapping("/finish/{id}")
+    public ResponseEntity<List<Shopping>> FinishShoppingInProgect(@PathVariable("id") @Min(1) Integer id) {
+        return ResponseEntity.ok(service.FinishShoppingInProgect(id));
+    }
+
+    @GetMapping("/not_work/{id}")
+    public ResponseEntity<List<Shopping>> notWorkShoppingInProgect(@PathVariable("id") @Min(1) Integer id) {
+        return ResponseEntity.ok(service.notWorkShoppingInProgect(id));
+    }
+
 
 }

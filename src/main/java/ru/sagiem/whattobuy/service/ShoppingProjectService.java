@@ -5,15 +5,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ShoppingProjectDtoRequest;
 import ru.sagiem.whattobuy.dto.ShoppingProjectDtoResponse;
+import ru.sagiem.whattobuy.dto.ShoppingProjectDtoWorkFinish;
 import ru.sagiem.whattobuy.mapper.ShoppingProjectMapper;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingProjectRepository;
+import ru.sagiem.whattobuy.repository.poroduct.ShoppingRepository;
 
 import java.util.List;
+
+import static ru.sagiem.whattobuy.model.shopping.ShoppingStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class ShoppingProjectService {
     private final UserRepository userRepository;
     private final ShoppingProjectMapper shoppingProjectMapper;
     private final FamilyGroupRepository familyGroupRepository;
+    private final ShoppingRepository shoppingRepository;
 
     public List<ShoppingProjectDtoResponse> showAllUserCreatorOrFamilyGroup(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
@@ -87,5 +93,45 @@ public class ShoppingProjectService {
         }
 
         return false;
+    }
+
+    public ShoppingProjectDtoWorkFinish workFinishShoppingInProgect(Integer id) {
+        Integer inWork = 0;
+        Integer finish = 0;
+        Integer notWork = 0;
+
+        List<Shopping> shoppings = shoppingRepository.findByShoppingProject(shoppingProjectRepository.getReferenceById(id)).orElse(null);
+        assert shoppings != null;
+        for (Shopping shopping : shoppings) {
+            if (shopping.getShoppingStatus() == ASSIGNED)
+                inWork++;
+            if (shopping.getShoppingStatus() == EXECUTED)
+                finish++;
+            if (shopping.getShoppingStatus() == NOT_EXECUTED)
+                notWork++;
+        }
+
+        return ShoppingProjectDtoWorkFinish.builder()
+                .inWork(inWork)
+                .finish(finish)
+                .notWork(notWork)
+                .build();
+    }
+
+
+    public List<Shopping> workShoppingInProgect(Integer id) {
+        return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProjectRepository.getReferenceById(id),
+                ASSIGNED).orElse(null);
+    }
+
+    public List<Shopping> FinishShoppingInProgect(Integer id) {
+        return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProjectRepository.getReferenceById(id),
+                EXECUTED).orElse(null);
+    }
+
+    public List<Shopping> notWorkShoppingInProgect(Integer id) {
+        return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProjectRepository.getReferenceById(id),
+                NOT_EXECUTED).orElse(null);
+
     }
 }

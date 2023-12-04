@@ -1,5 +1,7 @@
 package ru.sagiem.whattobuy.handler;
 
+import static ru.sagiem.whattobuy.utils.ResponseUtils.ENTITY_NOT_FOUND_EXCEPTION_MESSAGE;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleException(ShoppingProjectNotFoundException exception) {
         ExceptionResponse response = ResponseUtils.getExceptionResponse(
                 HttpStatus.NOT_FOUND,
-                ResponseUtils.ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
+                ENTITY_NOT_FOUND_EXCEPTION_MESSAGE,
                 exception
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
