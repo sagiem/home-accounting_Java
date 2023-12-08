@@ -13,8 +13,22 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
 #    database: postgresql
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.yandex.ru
+    username: admin@sagiem.ru
+    password: qizbadipiehqrkjl
+    port: 465
+    protocol: smtp
+
+#    test-connection: true
+    properties:
+      "mail.transport.protocol": smtp
+      "mail.smtp.auth": true
+      "mail.smtp.starttls.enable": true
 
 application:
   security:
@@ -23,3 +37,5 @@ application:
       expiration: 10D
       refresh-token:
         expiration: 30D
+
+

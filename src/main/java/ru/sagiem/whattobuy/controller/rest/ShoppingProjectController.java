@@ -32,8 +32,8 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Извлекает все проекты покупок для пользователя",
-            description = "Извлечет результаты для всех Family group в которых находится пользователь, так и лично созданных проектов",
-            tags = "get"
+            description = "Извлечет результаты для всех Family group в которых находится пользователь, так и лично созданных проектов"
+           // tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -48,8 +48,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Добавляет проект покупок",
-            description = "Добавление проекта покупок либо в группу либо только для пользователя.",
-            tags = "get"
+            description = "Добавление проекта покупок либо в группу либо только для пользователя."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -64,8 +63,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Поиск проекта покупок по id",
-            description = "Поиск проекта покупок по id",
-            tags = "get"
+            description = "Поиск проекта покупок по id"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -80,8 +78,8 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Обновление проекта покупок",
-            description = "Обновление проекта покупок, обновить может только создатель проекта",
-            tags = "get"
+            description = "Обновление проекта покупок, обновить может только создатель проекта"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -98,8 +96,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Удалени проекта покупок",
-            description = "Удаление проекта покупо доступно только создателю проекта и если к проекту не привязаны покупки",
-            tags = "get"
+            description = "Удаление проекта покупо доступно только создателю проекта и если к проекту не привязаны покупки"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -113,8 +110,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Статистки проекта покупок",
-            description = "Показывает сколько покупок, привязанных к проекту, в работе, выполенно и не выполнено",
-            tags = "get"
+            description = "Показывает сколько покупок, привязанных к проекту, в работе, выполенно и не выполнено"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -128,8 +124,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Список покупок в работе",
-            description = "выводит список покупок, привязанных к проекту, которые находятся в работе",
-            tags = "get"
+            description = "выводит список покупок, привязанных к проекту, которые находятся в работе"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -143,8 +138,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Список выполненных покупок",
-            description = "выводит список покупок, привязанных к проекту, которые выполнены",
-            tags = "get"
+            description = "выводит список покупок, привязанных к проекту, которые выполнены"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -158,8 +152,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Список не выполненных покупок",
-            description = "выводит список покупок, привязанных к проекту, которые не выполнены",
-            tags = "get"
+            description = "выводит список покупок, привязанных к проекту, которые не выполнены"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
