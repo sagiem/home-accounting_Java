@@ -1,6 +1,7 @@
 package ru.sagiem.whattobuy.controller.rest;
 
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +11,24 @@ import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.service.EmailService;
 
+
 import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("/email")
+@AllArgsConstructor
 public class EmailController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailController.class);
 
-    @Autowired
-    EmailService emailService;
+    private final EmailService service;
+
 
     @GetMapping(value = "/simple-email/{user-email}")
     public ResponseEntity<?> sendSimpleEmail(@PathVariable("user-email") String email) {
 
         try {
-            emailService.sendSimpleEmail(email, "Welcome", "This is a welcome email for your!!");
+            service.sendSimpleEmail(email, "Welcome", "This is a welcome email for your!!");
         } catch (MailException mailException) {
             LOG.error("Error while sending out email..{}", (Object) mailException.getStackTrace());
             return new ResponseEntity<>("Unable to send email", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,7 +41,7 @@ public class EmailController {
     public ResponseEntity<?> sendEmailAttachment(@PathVariable("user-email") String email) {
 
         try {
-            emailService.sendEmailWithAttachment(email, "Order Confirmation", "Thanks for your recent order",
+            service.sendEmailWithAttachment(email, "Order Confirmation", "Thanks for your recent order",
                     "classpath:purchase_order.pdf");
         } catch (MessagingException | FileNotFoundException mailException) {
             LOG.error("Error while sending out email..{}", (Object) mailException.getStackTrace());
