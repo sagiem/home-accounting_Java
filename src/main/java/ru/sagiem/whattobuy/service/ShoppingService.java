@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
+import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
 import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.mapper.ShoppingMapper;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
@@ -17,6 +18,9 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,5 +86,31 @@ public class ShoppingService {
         shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
         shoppingRepository.save(shopping);
         return shopping.getId();
+    }
+
+
+    public List<ShoppingDtoResponse> getByMyPeriod(LocalDateTime dateStart,
+                                                   LocalDateTime dateEnd,
+                                                   List<Integer> productNameId,
+                                                   List<Integer> pointShoppingId,
+                                                   List<Integer> familyGroupId,
+                                                   List<Integer> userCreatorId,
+                                                   List<Integer> userExecutorId,
+                                                   List<Integer> shoppingProjectId,
+                                                   List<String> shoppingStatus,
+                                                   UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+        assert user != null;
+        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<Shopping> shoppings = shoppingRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElseThrow(null);
+        if (dateStart != null || dateEnd != null){
+            if (dateStart != null && dateEnd != null)
+                List<Shopping> shoppings1 = shoppings.stream().filter(x -> x.getCreateDate().isAfter(dateStart)).filter(x -> x.getCreateDate().isBefore(dateEnd)).collect(Collectors.toList() --> new ArrayList<>());
+        }
+
+
+        return shoppings.stream()
+                .map(shoppingMapper::convertToDto)
+                .toList();
     }
 }
