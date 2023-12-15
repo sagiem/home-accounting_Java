@@ -91,7 +91,7 @@ public class ShoppingService {
 
     public List<ShoppingDtoResponse> getByMyPeriod(LocalDateTime dateStart,
                                                    LocalDateTime dateEnd,
-                                                   List<Integer> productNameId,
+                                                   List<Integer> productId,
                                                    List<Integer> pointShoppingId,
                                                    List<Integer> familyGroupId,
                                                    List<Integer> userCreatorId,
@@ -103,10 +103,7 @@ public class ShoppingService {
         assert user != null;
         List<FamilyGroup> familyGroups = user.getFamilyGroup();
         List<Shopping> shoppings = shoppingRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElseThrow(null);
-        if (dateStart != null || dateEnd != null){
-            if (dateStart != null && dateEnd != null)
-                List<Shopping> shoppings1 = shoppings.stream().filter(x -> x.getCreateDate().isAfter(dateStart)).filter(x -> x.getCreateDate().isBefore(dateEnd)).collect(Collectors.toList() --> new ArrayList<>());
-        }
+
 
 
         return shoppings.stream()

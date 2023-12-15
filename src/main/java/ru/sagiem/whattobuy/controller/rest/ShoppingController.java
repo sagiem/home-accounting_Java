@@ -27,7 +27,7 @@ public class ShoppingController {
     @GetMapping()
     public List<ShoppingDtoResponse> getByPeriod(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateStart,
                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateEnd,
-                                                 @RequestParam(required = false) List<Integer> productNameId,
+                                                 @RequestParam(required = false) List<Integer> productId,
                                                  @RequestParam(required = false) List<Integer> pointShoppingId,
                                                  @RequestParam(required = false) List<Integer> familyGroupId,
                                                  @RequestParam(required = false) List<Integer> userCreatorId,
@@ -36,7 +36,7 @@ public class ShoppingController {
                                                  @RequestParam(required = false) List<String> shoppingStatus,
                                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-        return service.getByMyPeriod(dateStart, dateEnd, productNameId, pointShoppingId, familyGroupId, userCreatorId, userExecutorId, shoppingProjectId, shoppingStatus, userDetails);
+        return service.getByMyPeriod(dateStart, dateEnd, productId, pointShoppingId, familyGroupId, userCreatorId, userExecutorId, shoppingProjectId, shoppingStatus, userDetails);
     }
 
     @PostMapping("/add")
