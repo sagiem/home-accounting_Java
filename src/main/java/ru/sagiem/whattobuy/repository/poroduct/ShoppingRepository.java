@@ -16,17 +16,23 @@ import java.util.Optional;
 
 public interface ShoppingRepository extends JpaRepository<Shopping, Integer> {
     Optional<List<Shopping>> findByShoppingProject(ShoppingProject shoppingProject);
+
     Optional<List<Shopping>> findByShoppingProjectAndShoppingStatus(ShoppingProject shoppingProject, ShoppingStatus shoppingStatus);
+
     Optional<List<Shopping>> findByCreateDateBetween(LocalDateTime createDate, LocalDateTime createDate2);
+
     Optional<List<Shopping>> findByCreateDate(LocalDateTime createDate);
+
     Optional<List<Shopping>> findByUserCreatorOrFamilyGroupIn(User userCreator, List<FamilyGroup> familyGroup);
-    Optional<List<Shopping>> findByCreateDateBetweenOrProductInOrPointShoppingInOrFamilyGroupInOrUserCreatorInOrUserExecutorInOrShoppingProjectInOrShoppingStatusIn(LocalDateTime createDate,
-                                                                                                                                                                    LocalDateTime createDate2,
-                                                                                                                                                                    Collection<Product> product,
-                                                                                                                                                                    Collection<PointShopping> pointShopping,
-                                                                                                                                                                    Collection<FamilyGroup> familyGroup,
-                                                                                                                                                                    Collection<User> userCreator,
-                                                                                                                                                                    Collection<User> userExecutor,
-                                                                                                                                                                    Collection<ShoppingProject> shoppingProject,
-                                                                                                                                                                    Collection<ShoppingStatus> shoppingStatus);
+
+    Optional<List<Shopping>> findByCreateDateBetweenAndProductIsNotNullAndPointShoppingIsNotNullAndFamilyGroupIsNotNullAndUserCreatorIsNotNullAndUserExecutorIsNotNullAndShoppingProjectIsNotNullAndShoppingStatusIsNotNull(LocalDateTime createDate,
+                                                                                                                                                                                                                            LocalDateTime createDate2,
+                                                                                                                                                                                                                            Collection<Product> product,
+                                                                                                                                                                                                                            Collection<PointShopping> pointShopping,
+                                                                                                                                                                                                                            Collection<FamilyGroup> familyGroup,
+                                                                                                                                                                                                                            Collection<User> userCreator,
+                                                                                                                                                                                                                            Collection<User> userExecutor,
+                                                                                                                                                                                                                            Collection<ShoppingProject> shoppingProject,
+                                                                                                                                                                                                                            Collection<ShoppingStatus> shoppingStatus);
+
 }

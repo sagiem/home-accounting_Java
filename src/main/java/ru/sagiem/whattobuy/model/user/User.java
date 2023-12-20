@@ -56,7 +56,7 @@ public class User implements UserDetails {
     private List<PointShopping> pointShoppings;
 
     @OneToMany(mappedBy = "userCreator")
-    private List<Shopping> userCreatorshoppings;
+    private List<Shopping> userCreatorShoppings;
 
     @OneToMany(mappedBy = "userExecutor")
     private List<Shopping> userExecutorShoppings;
