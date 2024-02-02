@@ -24,20 +24,20 @@ public class ShoppingController {
 
     private final ShoppingService service;
 
-    @GetMapping()
-    public List<ShoppingDtoResponse> getByPeriod(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateStart,
-                                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateEnd,
-                                                 @RequestParam(required = false) List<Integer> productId,
-                                                 @RequestParam(required = false) List<Integer> pointShoppingId,
-                                                 @RequestParam(required = false) List<Integer> familyGroupId,
-                                                 @RequestParam(required = false) List<Integer> userCreatorId,
-                                                 @RequestParam(required = false) List<Integer> userExecutorId,
-                                                 @RequestParam(required = false) List<Integer> shoppingProjectId,
-                                                 @RequestParam(required = false) List<String> shoppingStatus,
-                                                 @AuthenticationPrincipal UserDetails userDetails) {
-
-        return service.getByMyPeriod(dateStart, dateEnd, productId, pointShoppingId, familyGroupId, userCreatorId, userExecutorId, shoppingProjectId, shoppingStatus, userDetails);
-    }
+//    @GetMapping()
+//    public List<ShoppingDtoResponse> getByPeriod(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateStart,
+//                                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateEnd,
+//                                                 @RequestParam(required = false) List<Integer> productId,
+//                                                 @RequestParam(required = false) List<Integer> pointShoppingId,
+//                                                 @RequestParam(required = false) List<Integer> familyGroupId,
+//                                                 @RequestParam(required = false) List<Integer> userCreatorId,
+//                                                 @RequestParam(required = false) List<Integer> userExecutorId,
+//                                                 @RequestParam(required = false) List<Integer> shoppingProjectId,
+//                                                 @RequestParam(required = false) List<String> shoppingStatus,
+//                                                 @AuthenticationPrincipal UserDetails userDetails) {
+//
+//        return service.getByMyPeriod(dateStart, dateEnd, productId, pointShoppingId, familyGroupId, userCreatorId, userExecutorId, shoppingProjectId, shoppingStatus, userDetails);
+//    }
 
     @PostMapping("/add")
     public ResponseEntity<Integer> add(@RequestBody ShoppingDtoRequest shoppingDtoRequest,
