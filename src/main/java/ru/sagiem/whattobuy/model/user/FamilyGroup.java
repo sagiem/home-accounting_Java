@@ -32,13 +32,11 @@ public class FamilyGroup {
 
     private String name;
 
-
     @OneToOne
     private User ownerUserId;
 
     @ManyToMany
     private List<User> users;
-
 
     @OneToMany(mappedBy = "familyGroup")
     private List<Shopping> shoppings;

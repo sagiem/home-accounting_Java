@@ -24,33 +24,30 @@ public class ShoppingController {
 
     private final ShoppingService service;
 
-//    @GetMapping()
-//    public List<ShoppingDtoResponse> getByPeriod(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateStart,
-//                                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateEnd,
-//                                                 @RequestParam(required = false) List<Integer> productId,
-//                                                 @RequestParam(required = false) List<Integer> pointShoppingId,
-//                                                 @RequestParam(required = false) List<Integer> familyGroupId,
-//                                                 @RequestParam(required = false) List<Integer> userCreatorId,
-//                                                 @RequestParam(required = false) List<Integer> userExecutorId,
-//                                                 @RequestParam(required = false) List<Integer> shoppingProjectId,
-//                                                 @RequestParam(required = false) List<String> shoppingStatus,
-//                                                 @AuthenticationPrincipal UserDetails userDetails) {
-//
-//        return service.getByMyPeriod(dateStart, dateEnd, productId, pointShoppingId, familyGroupId, userCreatorId, userExecutorId, shoppingProjectId, shoppingStatus, userDetails);
-//    }
 
-    @PostMapping("/add")
+    @GetMapping("/show-all-my-creator")
+    public ResponseEntity<List<ShoppingDtoResponse>> showAllMyCreatores(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllMyCreatores(userDetails));
+    }
+
+    @PostMapping("/add-my")
     public ResponseEntity<Integer> add(@RequestBody ShoppingDtoRequest shoppingDtoRequest,
                                        @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(service.addShopping(shoppingDtoRequest, userDetails));
+        return ResponseEntity.ok(service.addMyShopping(shoppingDtoRequest, userDetails));
     }
 
-    @PostMapping("/add_set")
+    @PostMapping("/add-set-user")
     public ResponseEntity<Integer> addSet(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(service.addSetShopping(shoppingSetDtoRequest, userDetails));
+        return ResponseEntity.ok(service.addSetUserShopping(shoppingSetDtoRequest, userDetails));
+    }
+
+    @PostMapping("/add-set-family-group")
+    public ResponseEntity<Integer> addSetFamilyGroup(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
+                                                     @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.addSetFamilyGroupShopping(shoppingSetDtoRequest, userDetails));
     }
 
     @PatchMapping("/executed/{id}")
