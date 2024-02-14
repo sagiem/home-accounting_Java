@@ -19,7 +19,7 @@ public class CheckFamalyGroup {
     public Boolean check(UserDetails userDetails, FamilyGroup familyGroup) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<FamilyGroup> familyGroupList = user.getFamilyGroup();
+        return familyGroupList.contains(familyGroup);
     }
-
 }
