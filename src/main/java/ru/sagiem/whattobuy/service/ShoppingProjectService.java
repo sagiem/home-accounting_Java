@@ -30,7 +30,7 @@ public class ShoppingProjectService {
     private final FamilyGroupRepository familyGroupRepository;
     private final ShoppingRepository shoppingRepository;
 
-    public List<ShoppingProjectDtoResponse> showAllUserCreatorOrFamilyGroup(UserDetails userDetails) {
+    public List<ShoppingProjectDtoResponse> showAllUserCreatorProjects(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
         List<FamilyGroup> familyGroups = user.getFamilyGroup();
@@ -42,7 +42,7 @@ public class ShoppingProjectService {
                     .toList();
         }
 
-        return null;
+        throw new RuntimeException("Нет проэктов созданных пользователем");
 
     }
 

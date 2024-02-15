@@ -16,7 +16,7 @@ public class CheckFamalyGroup {
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
 
-    public Boolean check(UserDetails userDetails, FamilyGroup familyGroup) {
+    public Boolean isUserInFamilyGroup(UserDetails userDetails, FamilyGroup familyGroup) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
         List<FamilyGroup> familyGroupList = user.getFamilyGroup();

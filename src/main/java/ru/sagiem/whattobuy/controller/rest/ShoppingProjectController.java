@@ -31,8 +31,8 @@ public class ShoppingProjectController {
     private final ShoppingProjectService service;
 
     @Operation(
-            summary = "Извлекает все проекты покупок для пользователя",
-            description = "Извлечет результаты для всех Family group в которых находится пользователь, так и лично созданных проектов"
+            summary = "Извлекает все проекты покупок для пользователя которые он создал, является владельцем",
+            description = "Извлечет результаты для всех Family group в которых находится пользователь"
            // tags = "get"
     )
     @ApiResponses({
@@ -42,13 +42,13 @@ public class ShoppingProjectController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
 
     @GetMapping("/show_all")
-    public ResponseEntity<?> showAllByFamilyGroupAll(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.showAllUserCreatorOrFamilyGroup(userDetails));
+    public ResponseEntity<?> showAllUserCreatorProjects(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllUserCreatorProjects(userDetails));
     }
 
     @Operation(
             summary = "Добавляет проект покупок",
-            description = "Добавление проекта покупок либо в группу либо только для пользователя."
+            description = "Добавление проекта покупок в группу."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
