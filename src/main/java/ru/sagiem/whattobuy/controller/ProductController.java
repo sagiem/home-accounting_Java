@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.controller.rest;
+package ru.sagiem.whattobuy.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;

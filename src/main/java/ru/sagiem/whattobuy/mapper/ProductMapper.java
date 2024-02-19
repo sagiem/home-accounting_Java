@@ -6,6 +6,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import ru.sagiem.whattobuy.dto.ProductDtoResponse;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.user.User;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = Product.class)
 public interface ProductMapper {
