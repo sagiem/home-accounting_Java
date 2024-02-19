@@ -1,4 +1,4 @@
-package ru.sagiem.whattobuy.controller.rest;
+package ru.sagiem.whattobuy.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
