@@ -44,11 +44,11 @@ public class ShoppingController {
         return ResponseEntity.ok(service.addSetUserShopping(shoppingSetDtoRequest, userDetails));
     }
 
-    @PostMapping("/add-set-family-group")
-    public ResponseEntity<Integer> addSetFamilyGroup(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
-                                                     @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.addSetFamilyGroupShopping(shoppingSetDtoRequest, userDetails));
-    }
+//    @PostMapping("/add-set-family-group")
+//    public ResponseEntity<Integer> addSetFamilyGroup(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
+//                                                     @AuthenticationPrincipal UserDetails userDetails) {
+//        return ResponseEntity.ok(service.addSetFamilyGroupShopping(shoppingSetDtoRequest, userDetails));
+//    }
 
     @PatchMapping("/executed/{id}")
     public Integer executed(@PathVariable("id") @Min(1) Integer id,

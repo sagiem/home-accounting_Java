@@ -21,6 +21,6 @@ public interface ShoppingRepository extends JpaRepository<Shopping, Integer> {
 
     Optional<List<Shopping>> findByCreateDate(LocalDateTime createDate);
 
-    Optional<List<Shopping>> findByUserCreatorOrFamilyGroupIn(User userCreator, List<FamilyGroup> familyGroup);
+
 
 }
