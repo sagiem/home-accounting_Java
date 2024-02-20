@@ -49,9 +49,9 @@ public class Shopping {
     @JoinColumn(name = "point_id")
     private PointShopping pointShopping;
 
-    @ManyToOne
-    @JoinColumn(name = "family_group_id")
-    private FamilyGroup familyGroup;
+//    @ManyToOne
+//    @JoinColumn(name = "family_group_id")
+//    private FamilyGroup familyGroup;
 
     @ManyToOne
     @JoinColumn(name = "user_creator_id")

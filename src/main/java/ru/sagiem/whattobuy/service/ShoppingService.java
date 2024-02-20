@@ -87,7 +87,7 @@ public class ShoppingService {
                 .volume(shoppingSetDtoRequest.getVolume())
                 .pointShopping(pointShoppingRepository.getReferenceById(shoppingSetDtoRequest.getPointShoppingId()))
                 .userCreator(user)
-                .familyGroup(familyGroup)
+                //.familyGroup(familyGroup)
                 .shoppingStatus(ShoppingStatus.ASSIGNED)
                 .build();
 

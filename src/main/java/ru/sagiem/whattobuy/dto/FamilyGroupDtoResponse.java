@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class FamilyGroupDtoResponse {
+    private Integer id;
     private String name;
-    private Integer ownerUserId;
+    private Integer creatorUserId;
     private String ownerUsername;
 
 }

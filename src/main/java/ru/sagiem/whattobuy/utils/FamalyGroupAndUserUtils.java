@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class CheckFamalyGroup {
+public class FamalyGroupAndUserUtils {
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
 
@@ -21,5 +21,24 @@ public class CheckFamalyGroup {
         assert user != null;
         List<FamilyGroup> familyGroupList = user.getFamilyGroup();
         return familyGroupList.contains(familyGroup);
+    }
+
+        public Boolean isUserInFamilyGroup(UserDetails userDetails, Integer familyGroupId) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+        assert user != null;
+        List<FamilyGroup> familyGroupList = user.getFamilyGroup();
+        return familyGroupList.contains(familyGroup);
+    }
+
+    public User getUser(UserDetails userDetails) {
+        return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+    }
+
+    public List<FamilyGroup> getFamilyGroup(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+        assert user != null;
+        return user.getFamilyGroup();
+
     }
 }
