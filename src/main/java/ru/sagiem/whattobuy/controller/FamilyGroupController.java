@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sagiem.whattobuy.dto.FamilyGroupDtoResponse;
 import ru.sagiem.whattobuy.dto.UserDTOResponse;
-import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.service.FamilyGroupService;
 
 import java.util.List;
@@ -22,21 +21,21 @@ import java.util.List;
 @Tag(name = "Работа с группами")
 public class FamilyGroupController {
 
-    private final FamilyGroupService familyGroupService;
+    private final FamilyGroupService service;
 
 
     @GetMapping("/show-all-my-created-groups")
     public ResponseEntity<List<FamilyGroupDtoResponse>> showAllMyCreated(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(familyGroupService.showAllMyCreated(userDetails));
+        return ResponseEntity.ok(service.showAllMyCreated(userDetails));
     }
 
     @GetMapping("/show-all-my-groups")
     public ResponseEntity<List<FamilyGroupDtoResponse>> showAllMyGroups(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(familyGroupService.showAllMyGroups(userDetails));
+        return ResponseEntity.ok(service.showAllMyGroups(userDetails));
     }
 
     @GetMapping("/show-all-users-in-group")
     public ResponseEntity<List<UserDTOResponse>> showAllUsersInGroup(@AuthenticationPrincipal UserDetails userDetails, Integer familyGroupId) {
-        return ResponseEntity.ok(familyGroupService.showAllUsersInGroup(userDetails, familyGroupId));}
+        return ResponseEntity.ok(service.showAllUsersInGroup(userDetails, familyGroupId));}
 
 }
