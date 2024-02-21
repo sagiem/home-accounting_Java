@@ -3,6 +3,7 @@ package ru.sagiem.whattobuy.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import ru.sagiem.whattobuy.dto.FamilyGroupDtoRequest;
 import ru.sagiem.whattobuy.dto.FamilyGroupDtoResponse;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 
@@ -12,4 +13,6 @@ public interface FamilyGroupMapper {
     @Mapping(source = "creatorUser.id", target = "creatorUserId")
     @Mapping(source = "creatorUser.username", target = "ownerUsername")
     FamilyGroupDtoResponse convertToDto(FamilyGroup familyGroup);
+
+
 }

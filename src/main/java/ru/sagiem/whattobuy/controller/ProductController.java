@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/search/{id}")
-    public ResponseEntity<ProductDtoResponse> searchName(@PathVariable("id") @Min(1) Integer id,
+    public ResponseEntity<ProductDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
                                                          @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(productService.searchId(id, userDetails));

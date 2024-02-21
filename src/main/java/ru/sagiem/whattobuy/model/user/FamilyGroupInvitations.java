@@ -17,8 +17,6 @@ public class FamilyGroupInvitations {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
