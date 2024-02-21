@@ -130,5 +130,6 @@ public class FamilyGroupService {
             }
             return exceptionResponse(404, "User not in group"); //TODO: add error message
         }
+        return exceptionResponse(404, "User not creator of group"); //TODO: add error message
     }
 }
