@@ -127,7 +127,7 @@ public class FamilyGroupService {
         throw new FamilyGroupNotCreatorException();
     }
 
-    public Object deleteUserInGroup(UserDetails userDetails, Integer groupId, Integer userId) {
+    public void deleteUserInGroup(UserDetails userDetails, Integer groupId, Integer userId) {
         if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, groupId)) {
             FamilyGroup familyGroup = familyGroupRepository.findById(groupId).orElse(null);
             assert familyGroup != null;
@@ -137,7 +137,7 @@ public class FamilyGroupService {
             if (userFamilyGroups.contains(familyGroup)) {
                 userFamilyGroups.remove(familyGroup);
                 userRepository.save(user);
-                return ResponseEntity.ok().build();
+
             }
             throw new FamilyGroupNotUserException();
         }

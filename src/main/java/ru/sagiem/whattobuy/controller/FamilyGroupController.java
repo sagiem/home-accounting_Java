@@ -34,8 +34,8 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Возвращает список групп где пользователь является владельцем",
-            description = "Возвращает все группы где пользователь является владельцем",
-            tags = "get"
+            description = "Возвращает все группы где пользователь является владельцем"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -48,8 +48,8 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Возвращает все группы в которых состоит пользователь",
-            description = "Возвращает все группы в которых состоит пользователь",
-            tags = "get"
+            description = "Возвращает все группы в которых состоит пользователь"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -63,8 +63,8 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Возвращает всех пользователей состаящих в группе",
-            description = "Возвращает всех пользователей состаящих в группе",
-            tags = "get"
+            description = "Возвращает всех пользователей состаящих в группе"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = UserDTOResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -77,8 +77,8 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Создает группу",
-            description = "Создает группу и добавляет туда пользователя который создал группу",
-            tags = "post"
+            description = "Создает группу и добавляет туда пользователя который создал группу"
+            //tags = "post"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -92,8 +92,8 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Поиск группы по id",
-            description = "Ищет группу по id и возвращает информацию о ней",
-            tags = "get"
+            description = "Ищет группу по id и возвращает информацию о ней"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -107,8 +107,8 @@ public class FamilyGroupController {
     }
     @Operation(
             summary = "Переименовывает группу",
-            description = "Переименовывает группу, на это имеет право только владелец группы",
-            tags = "get"
+            description = "Переименовывает группу, на это имеет право только владелец группы"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -123,8 +123,8 @@ public class FamilyGroupController {
     }
     @Operation(
             summary = "Отправляет приглашение в группу",
-            description = "Отправляет приглашение в группу, пользователь находится по email",
-            tags = "get"
+            description = "Отправляет приглашение в группу, пользователь находится по email"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -140,8 +140,8 @@ public class FamilyGroupController {
     }
     @Operation(
             summary = "Показывает все приглашения которые отправил пользователь",
-            description = "Показывает все приглашения которые отправил пользователь",
-            tags = "get"
+            description = "Показывает все приглашения которые отправил пользователь"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -156,8 +156,8 @@ public class FamilyGroupController {
     }
     @Operation(
             summary = "Удаляет приглашение",
-            description = "Приглашение может удалить как отправитель так и получатель",
-            tags = "get"
+            description = "Приглашение может удалить как отправитель так и получатель"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -170,9 +170,9 @@ public class FamilyGroupController {
         return ResponseEntity.ok(getSuccessResponse(DELETE_INVITATION, FAMILY_GROUP ));
     }
     @Operation(
-            summary = "Retrieve a all books",
-            description = "Collect all books. The answer is an array of books with identifier, author and title for each of the array element",
-            tags = "get"
+            summary = "Принимает заявку в группу",
+            description = "Принимает зафвку в группу, добавляет пользователя в эту группу и удаляет заявку"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -185,9 +185,9 @@ public class FamilyGroupController {
         return ResponseEntity.ok(getSuccessResponse(ACCEPT_INVITATION, FAMILY_GROUP ));
     }
     @Operation(
-            summary = "Retrieve a all books",
-            description = "Collect all books. The answer is an array of books with identifier, author and title for each of the array element",
-            tags = "get"
+            summary = "Удаляет пользователя из группы",
+            description = "Удаляет пользователя из группы"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
