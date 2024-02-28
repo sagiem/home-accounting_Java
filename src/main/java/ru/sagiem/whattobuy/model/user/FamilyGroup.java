@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
-import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
 
 import java.util.List;
@@ -32,8 +31,9 @@ public class FamilyGroup {
 
     private String name;
 
-    @OneToOne
-    private User creatorUser;
+    @ManyToOne
+    @JoinColumn(name = "user_creator_id")
+    private User userCreator;
 
     @ManyToMany
     private List<User> users;

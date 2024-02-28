@@ -10,8 +10,8 @@ import ru.sagiem.whattobuy.model.user.FamilyGroup;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = FamilyGroup.class)
 public interface FamilyGroupMapper {
 
-    @Mapping(source = "creatorUser.id", target = "creatorUserId")
-    @Mapping(source = "creatorUser.username", target = "ownerUsername")
+    @Mapping(source = "userCreator.id", target = "creatorUserId")
+    @Mapping(source = "userCreator.username", target = "ownerUsername")
     FamilyGroupDtoResponse convertToDto(FamilyGroup familyGroup);
 
 

@@ -29,6 +29,15 @@ public class FamalyGroupAndUserUtils {
         assert user != null;
         List<FamilyGroup> familyGroupList = user.getFamilyGroup();
         return familyGroupList.contains(familyGroup);
+
+    }
+
+    public Boolean isUsercCreatedInFamilyGroup(UserDetails userDetails, Integer familyGroupId) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+        assert user!= null;
+        List<FamilyGroup> familyGroupCreatorList = user.getUserCreatorFamilyGroups();
+        return familyGroupCreatorList.contains(familyGroup);
     }
 
     public User getUser(UserDetails userDetails) {

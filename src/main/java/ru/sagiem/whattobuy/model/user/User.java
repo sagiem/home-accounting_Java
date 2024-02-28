@@ -62,7 +62,12 @@ public class User implements UserDetails {
     private List<Shopping> userExecutorShoppings;
 
     @OneToMany(mappedBy = "userCreator")
-    private List<ShoppingProject> userCreatorShoppingProject;
+    private List<ShoppingProject> userCreatorShoppingProjects;
+
+    @OneToMany(mappedBy = "userCreator")
+    private List<FamilyGroup> userCreatorFamilyGroups;
+
+
 
 
     @Enumerated(EnumType.STRING)
