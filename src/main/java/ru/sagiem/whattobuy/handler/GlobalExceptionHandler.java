@@ -50,41 +50,41 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FamilyGroupAlreadyUserException.class)
     public ResponseEntity<ExceptionResponse> handleException(FamilyGroupAlreadyUserException exception) {
         ExceptionResponse response = ResponseUtils.getExceptionResponse(
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 FAMILY_GROUP_ALREADY_USER_EXCEPTION_MESSAGE,
                 exception
         );
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FamilyGroupNotCreatorException.class)
     public ResponseEntity<ExceptionResponse> handleException(FamilyGroupNotCreatorException exception) {
         ExceptionResponse response = ResponseUtils.getExceptionResponse(
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 FAMILY_GROUP_NOT_CREATOR_EXCEPTION_MESSAGE,
                 exception
         );
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FamilyGroupNotUserException.class)
     public ResponseEntity<ExceptionResponse> handleException(FamilyGroupNotUserException exception) {
         ExceptionResponse response = ResponseUtils.getExceptionResponse(
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 FAMILY_GROUP_NOT_USER_EXCEPTION_MESSAGE,
                 exception
         );
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FamilyGroupInvitationNotCreatorAndUserException.class)
     public ResponseEntity<ExceptionResponse> handleException(FamilyGroupInvitationNotCreatorAndUserException exception) {
         ExceptionResponse response = ResponseUtils.getExceptionResponse(
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 FAMILY_GROUP_INFITATIONS_NOT_CREATOR_AND_USER_EXCEPTION_MESSAGE,
                 exception
         );
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FamilyGroupInvitationNotFoundException.class)

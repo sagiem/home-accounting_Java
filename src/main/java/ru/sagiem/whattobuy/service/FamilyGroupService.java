@@ -1,7 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.sagiem.whattobuy.utils.ResponseUtils.USER_NOT_FOUND_EXCEPTION_MESSAGE;
@@ -70,9 +70,12 @@ public class FamilyGroupService {
 
     public Integer addNewGroup(UserDetails userDetails, FamilyGroupDtoRequest request) {
         User user = famalyGroupAndUserUtils.getUser(userDetails);
+        List<User> users = new ArrayList<>();
+        users.add(user);
         FamilyGroup familyGroup = FamilyGroup.builder()
                 .name(request.getName())
                 .userCreator(user)
+                .users(users)
                 .build();
         FamilyGroup familyGroupEntity = familyGroupRepository.save(familyGroup);
         List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
@@ -94,14 +97,16 @@ public class FamilyGroupService {
     }
 
     public void renameGroup(Integer id, UserDetails userDetails, String newName) {
-        if (famalyGroupAndUserUtils.isUsercCreatedInFamilyGroup(userDetails, id)) {
-            FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
-            if (familyGroup == null)
-                throw new FamilyGroupNotFoundException();
+        FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
+        if (familyGroup == null)
+            throw new FamilyGroupNotFoundException();
+
+        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, id)) {
             familyGroup.setName(newName);
             familyGroupRepository.save(familyGroup);
         }
-        throw new FamilyGroupNotCreatorException();
+        else
+            throw new FamilyGroupNotCreatorException();
     }
 
     public void sendInvitation(UserDetails userDetails, Integer FamilyGroupId, Integer userId) {
@@ -124,7 +129,8 @@ public class FamilyGroupService {
                     .build();
             familyGroupInvitationsRepository.save(familyGroupInvitations);
         }
-        throw new FamilyGroupNotCreatorException();
+        else
+            throw new FamilyGroupNotCreatorException();
     }
 
     public void deleteUserInGroup(UserDetails userDetails, Integer groupId, Integer userId) {
@@ -175,6 +181,14 @@ public class FamilyGroupService {
             List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
             userFamilyGroups.add(familyGroupInvitations.getFamilyGroup());
             user.setFamilyGroup(userFamilyGroups);
+            List<User> users = familyGroupInvitations.getFamilyGroup().getUsers();
+            FamilyGroup familyGroup = familyGroupInvitations.getFamilyGroup();
+            users.add(user);
+            familyGroup.setUsers(users);
+            familyGroupRepository.save(familyGroup);
+            List <FamilyGroup> familyGroupsUser = user.getFamilyGroup();
+            familyGroupsUser.add(familyGroup);
+            user.setFamilyGroup(familyGroupsUser);
             userRepository.save(user);
             familyGroupInvitationsRepository.delete(familyGroupInvitations);
         }

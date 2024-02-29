@@ -32,7 +32,7 @@ public class FamalyGroupAndUserUtils {
 
     }
 
-    public Boolean isUsercCreatedInFamilyGroup(UserDetails userDetails, Integer familyGroupId) {
+    public Boolean isUserCreatedInFamilyGroup(UserDetails userDetails, Integer familyGroupId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user!= null;
