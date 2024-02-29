@@ -45,7 +45,7 @@ public class FamilyGroupService {
 
     public List<FamilyGroupDtoResponse> showAllMyGroups(UserDetails userDetails) {
         User user = famalyGroupAndUserUtils.getUser(userDetails);
-        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<FamilyGroup> familyGroups = user.getFamilyGroups();
         if (familyGroups == null)
             return null;
         return familyGroups.stream()
@@ -78,9 +78,9 @@ public class FamilyGroupService {
                 .users(users)
                 .build();
         FamilyGroup familyGroupEntity = familyGroupRepository.save(familyGroup);
-        List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
+        List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
         userFamilyGroups.add(familyGroupEntity);
-        user.setFamilyGroup(userFamilyGroups);
+        user.setFamilyGroups(userFamilyGroups);
         userRepository.save(user);
 
         return familyGroupEntity.getId();
@@ -118,7 +118,7 @@ public class FamilyGroupService {
         if (user == null)
             throw new UsernameNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE);
 
-        List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
+        List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
         if (userFamilyGroups.contains(familyGroup))
             throw new FamilyGroupAlreadyUserException();
 
@@ -139,7 +139,7 @@ public class FamilyGroupService {
             assert familyGroup != null;
             User user = userRepository.findById(userId).orElse(null);
             assert user != null;
-            List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
+            List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
             if (userFamilyGroups.contains(familyGroup)) {
                 userFamilyGroups.remove(familyGroup);
                 userRepository.save(user);
@@ -178,17 +178,17 @@ public class FamilyGroupService {
 
         User user = famalyGroupAndUserUtils.getUser(userDetails); //todo проверить работает или нет добавление пользователя в FamilyGroup;
         if (user == familyGroupInvitations.getUser()) {
-            List<FamilyGroup> userFamilyGroups = user.getFamilyGroup();
+            List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
             userFamilyGroups.add(familyGroupInvitations.getFamilyGroup());
-            user.setFamilyGroup(userFamilyGroups);
+            user.setFamilyGroups(userFamilyGroups);
             List<User> users = familyGroupInvitations.getFamilyGroup().getUsers();
             FamilyGroup familyGroup = familyGroupInvitations.getFamilyGroup();
             users.add(user);
             familyGroup.setUsers(users);
             familyGroupRepository.save(familyGroup);
-            List <FamilyGroup> familyGroupsUser = user.getFamilyGroup();
+            List <FamilyGroup> familyGroupsUser = user.getFamilyGroups();
             familyGroupsUser.add(familyGroup);
-            user.setFamilyGroup(familyGroupsUser);
+            user.setFamilyGroups(familyGroupsUser);
             userRepository.save(user);
             familyGroupInvitationsRepository.delete(familyGroupInvitations);
         }

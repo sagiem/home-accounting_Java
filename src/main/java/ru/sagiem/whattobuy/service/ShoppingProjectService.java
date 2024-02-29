@@ -33,7 +33,7 @@ public class ShoppingProjectService {
     public List<ShoppingProjectDtoResponse> showAllUserCreatorProjects(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<FamilyGroup> familyGroups = user.getFamilyGroups();
         List<ShoppingProject> shoppingProjects = shoppingProjectRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElse(null);
 
         if (shoppingProjects != null) {

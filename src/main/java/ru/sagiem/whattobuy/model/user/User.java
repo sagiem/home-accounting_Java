@@ -46,7 +46,7 @@ public class User implements UserDetails {
     @JoinTable(name = "family_users",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"))
-    private List<FamilyGroup> familyGroup;
+    private List<FamilyGroup> familyGroups;
 
 
     @OneToMany(mappedBy = "userCreator")

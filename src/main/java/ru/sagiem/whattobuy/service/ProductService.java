@@ -41,7 +41,7 @@ public class ProductService {
     public List<ProductDtoResponse> showAll(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<FamilyGroup> familyGroups = user.getFamilyGroups();
         List<Product> products = productRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElse(null);
 
         if (products != null) {
@@ -83,8 +83,8 @@ public class ProductService {
 
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
-        if (user.getFamilyGroup() != null) {
-            List<FamilyGroup> familyGroup = user.getFamilyGroup();
+        if (user.getFamilyGroups() != null) {
+            List<FamilyGroup> familyGroup = user.getFamilyGroups();
 
 
             return productMapper.convertToDTO(productRepository.findByIdAndFamilyGroupIn(id, familyGroup));
@@ -97,7 +97,7 @@ public class ProductService {
     public ProductDtoResponse update(Integer id, ProductDtoRequest productDto, UserDetails userDetails) {
 
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<FamilyGroup> familyGroup = user.getFamilyGroup();
+        List<FamilyGroup> familyGroup = user.getFamilyGroups();
         Product product = productRepository.getReferenceById(id);
 
         if (product.getUserCreator() == user || familyGroup.contains(product.getFamilyGroup())) {

@@ -30,7 +30,7 @@ public class PointShoppingService {
 
     public List<PointShoppingDtoResponse> showAll(UserDetails userDetails) {
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<FamilyGroup> familyGroup = user.getFamilyGroup();
+        List<FamilyGroup> familyGroup = user.getFamilyGroups();
 
         List<PointShopping> pointShoppings = pointShoppingRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroup).orElse(null);
         if (pointShoppings != null) {
@@ -60,7 +60,7 @@ public class PointShoppingService {
     public PointShoppingDtoResponse searchId(Integer id, UserDetails userDetails) {
 
         var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<FamilyGroup> familyGroups = user.getFamilyGroup();
+        List<FamilyGroup> familyGroups = user.getFamilyGroups();
 
 
         return pointShoppingMapper.convertToDTO(pointShoppingRepository.findByIdAndUserCreator(id, user));

@@ -35,7 +35,7 @@ public class FamilyGroup {
     @JoinColumn(name = "user_creator_id")
     private User userCreator;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "familyGroups")
     private List<User> users;
 
 //    @OneToMany(mappedBy = "familyGroup")

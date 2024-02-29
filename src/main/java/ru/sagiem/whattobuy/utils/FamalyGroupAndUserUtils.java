@@ -19,7 +19,7 @@ public class FamalyGroupAndUserUtils {
     public Boolean isUserInFamilyGroup(UserDetails userDetails, FamilyGroup familyGroup) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        List<FamilyGroup> familyGroupList = user.getFamilyGroup();
+        List<FamilyGroup> familyGroupList = user.getFamilyGroups();
         return familyGroupList.contains(familyGroup);
     }
 
@@ -27,7 +27,7 @@ public class FamalyGroupAndUserUtils {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        List<FamilyGroup> familyGroupList = user.getFamilyGroup();
+        List<FamilyGroup> familyGroupList = user.getFamilyGroups();
         return familyGroupList.contains(familyGroup);
 
     }
@@ -47,7 +47,7 @@ public class FamalyGroupAndUserUtils {
     public List<FamilyGroup> getFamilyGroup(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         assert user != null;
-        return user.getFamilyGroup();
+        return user.getFamilyGroups();
 
     }
 }
