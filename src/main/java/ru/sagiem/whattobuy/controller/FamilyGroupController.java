@@ -115,11 +115,11 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PatchMapping("/rename-group/{id}")
-    public ResponseEntity<SuccessResponse> renameGroup(@PathVariable("id") @Min(1) Integer id,
-                                                       @AuthenticationPrincipal UserDetails userDetails,
+    @PatchMapping("/rename-group")
+    public ResponseEntity<SuccessResponse> renameGroup(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @RequestBody Integer familyGroupId,
                                                        @RequestBody String newName) {
-        service.renameGroup(id, userDetails, newName);
+        service.renameGroup(userDetails, familyGroupId, newName);
         return ResponseEntity.ok(getSuccessResponse(UPDATE_MESSAGE, FAMILY_GROUP));
     }
 
@@ -200,10 +200,10 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("delete-user-in-group")
-    public ResponseEntity<SuccessResponse> deleteUserInGroup(@AuthenticationPrincipal UserDetails userDetails,
-                                                             @RequestBody Integer groupId,
-                                                             @RequestBody Integer userId) {
+    @DeleteMapping("/deleteUserInGroup/{groupId}/{userId}")
+    public ResponseEntity<SuccessResponse> deleteUserInGroup(@PathVariable("groupId") @Min(1) Integer groupId,
+                                                             @PathVariable("userId") @Min(1) Integer userId,
+                                                             @AuthenticationPrincipal UserDetails userDetails) {
         service.deleteUserInGroup(userDetails, groupId, userId);
         return ResponseEntity.ok(getSuccessResponse(DELETE_USER_IN_GROUP, FAMILY_GROUP));
     }

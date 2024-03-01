@@ -97,4 +97,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(FamilyGroupInvitationNotUserException.class)
+    public ResponseEntity<ExceptionResponse> handleException(FamilyGroupInvitationNotUserException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                FAMILY_GROUP_INFITATIONS_NOT_USER_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FamilyGroupNotDeleteCreateUserException.class)
+    public ResponseEntity<ExceptionResponse> handleException(FamilyGroupNotDeleteCreateUserException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                FAMILY_GROUP_NOT_DELETE_CREATED_USER_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }
