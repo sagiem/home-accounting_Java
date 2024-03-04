@@ -75,6 +75,11 @@ public class FamilyGroupController {
         return ResponseEntity.ok(service.showAllUsersInGroup(userDetails, familyGroupId));
     }
 
+    @Operation(
+            summary = "Возвращает все приглашения адресованные пользователю",
+            description = "Возвращает все приглашения адресованные пользователю"
+            //tags = "get"
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupInvitationDtoRequest.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),

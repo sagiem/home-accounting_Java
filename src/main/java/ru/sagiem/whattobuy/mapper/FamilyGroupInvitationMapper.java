@@ -11,6 +11,6 @@ import ru.sagiem.whattobuy.model.user.FamilyGroupInvitations;
 public interface FamilyGroupInvitationMapper {
 
     @Mapping(source = "familyGroup.name", target = "familyGroupName")
-    @Mapping(source = "familyGroup.userCreator", target = "userSender")
+    @Mapping(source = "familyGroup.userCreator.username", target = "userSender")
     FamilyGroupInvitationDtoRequest convertToDto(FamilyGroupInvitations invitations);
 }

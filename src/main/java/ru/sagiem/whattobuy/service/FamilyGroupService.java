@@ -211,6 +211,6 @@ public class FamilyGroupService {
         if (invitations!= null)
             return invitations.stream().map(familyGroupInvitationMapper::convertToDto).toList();
         else
-            throw new FamilyGroupInvitationNotInboxUser();
+            return null;
     }
 }

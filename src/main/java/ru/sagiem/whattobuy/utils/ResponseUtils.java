@@ -20,9 +20,7 @@ public class ResponseUtils {
     public static final String FAMILY_GROUP_INFITATIONS_NOT_CREATOR_AND_USER_EXCEPTION_MESSAGE = "Вы не отсылали либо вам не отправляли это приглашение";
     public static final String FAMILY_GROUP_INFITATIONS_NOT_USER_EXCEPTION_MESSAGE = "Вы не являетесь получателем приглашения";
     public static final String FAMILY_GROUP_INFITATIONS_NOT_FOUND_EXCEPTION_MESSAGE = "Приглашение не найдено";
-    public static final String FAMILY_GROUP_INFITATIONS_NOT_FOUND_INBOX_USER_MESSAGE = "Вам не отправлено ни одного приглашения";
     public static final String DELETE_USER_IN_GROUP = "Пользователь %s успешно удален";
-
     public static final String DELETE_MESSAGE = "Объект %s успешно удален";
     public static final String CHANGE_ROLE_MESSAGE = "Роль из %s была успешно изменена";
     public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "Пользователь не найден";
