@@ -111,15 +111,15 @@ public class FamilyGroupController {
             description = "Переименовывает группу, на это имеет право только владелец группы"
             //tags = "get"
     )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PatchMapping("/rename-group")
-    public ResponseEntity<SuccessResponse> renameGroup(@AuthenticationPrincipal UserDetails userDetails,
-                                                       @RequestBody Integer familyGroupId,
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+//            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+//            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @PatchMapping("/rename-group/{id}")
+    public ResponseEntity<SuccessResponse> renameGroup(@PathVariable("id") @Min(1) Integer id,
+                                                       @AuthenticationPrincipal UserDetails userDetails,
                                                        @RequestBody String newName) {
-        service.renameGroup(userDetails, familyGroupId, newName);
+        service.renameGroup(userDetails, id, newName);
         return ResponseEntity.ok(getSuccessResponse(UPDATE_MESSAGE, FAMILY_GROUP));
     }
 
