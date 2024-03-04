@@ -6,8 +6,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.FamilyGroupDtoRequest;
 import ru.sagiem.whattobuy.dto.FamilyGroupDtoResponse;
+import ru.sagiem.whattobuy.dto.FamilyGroupInvitationDtoRequest;
 import ru.sagiem.whattobuy.dto.UserDTOResponse;
 import ru.sagiem.whattobuy.exception.*;
+import ru.sagiem.whattobuy.mapper.FamilyGroupInvitationMapper;
 import ru.sagiem.whattobuy.mapper.FamilyGroupMapper;
 import ru.sagiem.whattobuy.mapper.UserMapper;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
@@ -32,6 +34,7 @@ public class FamilyGroupService {
     private final UserMapper userMapper;
     private final FamilyGroupInvitationsRepository familyGroupInvitationsRepository;
     private final UserRepository userRepository;
+    private final FamilyGroupInvitationMapper familyGroupInvitationMapper;
 
     public List<FamilyGroupDtoResponse> showAllMyCreatedGroups(UserDetails userDetails) {
         User user = famalyGroupAndUserUtils.getUser(userDetails);
@@ -200,5 +203,14 @@ public class FamilyGroupService {
         }
         else
             throw new FamilyGroupInvitationNotUserException();
+    }
+
+    public List<FamilyGroupInvitationDtoRequest> showAllInboxInvitation(UserDetails userDetails) {
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        List<FamilyGroupInvitations> invitations = familyGroupInvitationsRepository.findByUser(user).orElse(null);
+        if (invitations!= null)
+            return invitations.stream().map(familyGroupInvitationMapper::convertToDto).toList();
+        else
+            throw new FamilyGroupInvitationNotInboxUser();
     }
 }

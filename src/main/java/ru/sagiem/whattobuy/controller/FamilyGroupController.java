@@ -75,6 +75,15 @@ public class FamilyGroupController {
         return ResponseEntity.ok(service.showAllUsersInGroup(userDetails, familyGroupId));
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupInvitationDtoRequest.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show-all-inbox-invitation")
+    public ResponseEntity<List<FamilyGroupInvitationDtoRequest>> showAllInboxInvitation(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllInboxInvitation(userDetails));
+    }
+
     @Operation(
             summary = "Создает группу",
             description = "Создает группу и добавляет туда пользователя который создал группу"

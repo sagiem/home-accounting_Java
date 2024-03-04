@@ -117,4 +117,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(FamilyGroupInvitationNotInboxUser.class)
+    public ResponseEntity<ExceptionResponse> handleException(FamilyGroupInvitationNotInboxUser exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                FAMILY_GROUP_INFITATIONS_NOT_FOUND_INBOX_USER_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }
