@@ -235,8 +235,8 @@ public class FamilyGroupController {
     @DeleteMapping("/deleteGroup/{Id}")
     public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
                                                              @AuthenticationPrincipal UserDetails userDetails){
-        service.deleteGroup(Id, userDetails);
-        return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, FAMILY_GROUP));
+        String familyGroupName = service.deleteGroup(Id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, familyGroupName));
 
     }
 

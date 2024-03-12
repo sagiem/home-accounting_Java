@@ -205,16 +205,19 @@ public class FamilyGroupService {
             return null;
     }
 
-    public void deleteGroup(Integer groupId, UserDetails userDetails) {
+    public String deleteGroup(Integer groupId, UserDetails userDetails) {
         if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
             FamilyGroup familyGroup = familyGroupRepository.findById(groupId).orElse(null);
             if (familyGroup != null) {
+                String familyGroupName = familyGroup.getName();
                 familyGroupRepository.delete(familyGroup);
+                return familyGroupName;
             }
             else
                 throw new FamilyGroupNotFoundException();
         }
         else throw new FamilyGroupNotCreatorException();
+
 
     }
 }
