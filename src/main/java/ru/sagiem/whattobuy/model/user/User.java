@@ -42,11 +42,18 @@ public class User implements UserDetails {
     private LocalDateTime createDateTime;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "family_users",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"))
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "family_users",
+//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"))
+
+    @ManyToMany(mappedBy = "users")
     private List<FamilyGroup> familyGroups;
+
+    public void removeFamilyGroup(FamilyGroup familyGroup) {
+        familyGroups.remove(familyGroup);
+        familyGroup.getUsers().remove(this);
+    }
 
 
     @OneToMany(mappedBy = "userCreator")

@@ -125,10 +125,10 @@ public class FamilyGroupController {
             description = "Переименовывает группу, на это имеет право только владелец группы"
             //tags = "get"
     )
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-//            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-//            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PatchMapping("/rename-group/{id}")
     public ResponseEntity<SuccessResponse> renameGroup(@PathVariable("id") @Min(1) Integer id,
                                                        @AuthenticationPrincipal UserDetails userDetails,
@@ -190,7 +190,7 @@ public class FamilyGroupController {
 
     @Operation(
             summary = "Принимает заявку в группу",
-            description = "Принимает зафвку в группу, добавляет пользователя в эту группу и удаляет заявку"
+            description = "Принимает заявку в группу, добавляет пользователя в эту группу и удаляет заявку"
             //tags = "get"
     )
     @ApiResponses({
@@ -222,5 +222,26 @@ public class FamilyGroupController {
         return ResponseEntity.ok(getSuccessResponse(DELETE_USER_IN_GROUP, FAMILY_GROUP));
     }
 
+    @Operation(
+            summary = "Удаляет группу",
+            description = "Удаляет группу, все точки покупок все товары и все проекты покупок связанные с этой группой"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @DeleteMapping("/deleteGroup/{Id}")
+    public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
+                                                             @AuthenticationPrincipal UserDetails userDetails){
+        service.deleteGroup(Id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, FAMILY_GROUP));
+
+    }
+
+
+
 
 }
+

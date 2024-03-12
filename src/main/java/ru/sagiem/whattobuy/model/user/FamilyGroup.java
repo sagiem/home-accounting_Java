@@ -35,18 +35,33 @@ public class FamilyGroup {
     @JoinColumn(name = "user_creator_id")
     private User userCreator;
 
-    @ManyToMany(mappedBy = "familyGroups")
+//    @ManyToMany(mappedBy = "familyGroups", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "family_users",
+            joinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users;
 
-//    @OneToMany(mappedBy = "familyGroup")
-//    private List<Shopping> shoppings;
+    public void deleteAllUsers() {
+        users.clear();
+    }
 
-    @OneToMany(mappedBy = "familyGroup")
+    @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    @OneToMany(mappedBy = "familyGroup")
+    @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PointShopping> pointShoppings;
 
-    @OneToMany(mappedBy = "familyGroup")
+    @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShoppingProject> shoppingProjects;
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
+
 }

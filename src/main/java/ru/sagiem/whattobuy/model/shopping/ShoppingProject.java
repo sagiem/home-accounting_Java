@@ -50,6 +50,6 @@ public class ShoppingProject {
     @JoinColumn(name = "family_group")
     private FamilyGroup familyGroup;
 
-    @OneToMany(mappedBy = "shoppingProject")
+    @OneToMany(mappedBy = "shoppingProject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shopping> shoppings;
 }

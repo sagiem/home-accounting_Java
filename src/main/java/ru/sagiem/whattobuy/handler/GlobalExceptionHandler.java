@@ -2,7 +2,9 @@ package ru.sagiem.whattobuy.handler;
 
 import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -116,6 +118,12 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+//    @ExceptionHandler(FamilyGroupNotDeleteCreateUserException.class)
+//    public ProblemDetail handleException(FamilyGroupNotDeleteCreateUserException exception) {
+//        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+//                        FAMILY_GROUP_NOT_DELETE_CREATED_USER_EXCEPTION_MESSAGE);
+//    }
 
 
 }

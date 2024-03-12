@@ -71,17 +71,18 @@ public class FamilyGroupService {
 
     public Integer addNewGroup(UserDetails userDetails, FamilyGroupDtoRequest request) {
         User user = famalyGroupAndUserUtils.getUser(userDetails);
-        //List<User> users = new ArrayList<>();
-        //users.add(user);
+        List<User> users = new ArrayList<>();
+        users.add(user);
         FamilyGroup familyGroup = FamilyGroup.builder()
                 .name(request.getName())
                 .userCreator(user)
+                .users(users)
                 .build();
         FamilyGroup familyGroupEntity = familyGroupRepository.save(familyGroup);
-        List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
-        userFamilyGroups.add(familyGroupEntity);
-        user.setFamilyGroups(userFamilyGroups);
-        userRepository.save(user);
+//        List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
+//        userFamilyGroups.add(familyGroupEntity);
+//        user.setFamilyGroups(userFamilyGroups);
+//        userRepository.save(user);
 
         return familyGroupEntity.getId();
     }
@@ -147,9 +148,8 @@ public class FamilyGroupService {
 
             List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
             if (userFamilyGroups.contains(familyGroup)) {
-                userFamilyGroups.remove(familyGroup);
-                user.setFamilyGroups(userFamilyGroups);
-                userRepository.save(user);
+                familyGroup.removeUser(user);
+                familyGroupRepository.save(familyGroup);
 
             }
             else
@@ -187,18 +187,9 @@ public class FamilyGroupService {
 
         User user = famalyGroupAndUserUtils.getUser(userDetails); //todo проверить работает или нет добавление пользователя в FamilyGroup;
         if (user == familyGroupInvitations.getUser()) {
-            List<FamilyGroup> userFamilyGroups = user.getFamilyGroups();
-            userFamilyGroups.add(familyGroupInvitations.getFamilyGroup());
-            user.setFamilyGroups(userFamilyGroups);
-           // List<User> users = familyGroupInvitations.getFamilyGroup().getUsers();
-           // FamilyGroup familyGroup = familyGroupInvitations.getFamilyGroup();
-            //users.add(user);
-            //familyGroup.setUsers(users);
-            //familyGroupRepository.save(familyGroup);
-            //List <FamilyGroup> familyGroupsUser = user.getFamilyGroups();
-            //familyGroupsUser.add(familyGroup);
-            //user.setFamilyGroups(familyGroupsUser);
-            userRepository.save(user);
+            FamilyGroup familyGroup = familyGroupInvitations.getFamilyGroup();
+            familyGroup.addUser(user);
+            familyGroupRepository.save(familyGroup);
             familyGroupInvitationsRepository.delete(familyGroupInvitations);
         }
         else
@@ -212,5 +203,18 @@ public class FamilyGroupService {
             return invitations.stream().map(familyGroupInvitationMapper::convertToDto).toList();
         else
             return null;
+    }
+
+    public void deleteGroup(Integer groupId, UserDetails userDetails) {
+        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
+            FamilyGroup familyGroup = familyGroupRepository.findById(groupId).orElse(null);
+            if (familyGroup != null) {
+                familyGroupRepository.delete(familyGroup);
+            }
+            else
+                throw new FamilyGroupNotFoundException();
+        }
+        else throw new FamilyGroupNotCreatorException();
+
     }
 }
