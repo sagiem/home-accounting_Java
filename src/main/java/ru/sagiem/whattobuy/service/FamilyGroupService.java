@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -97,6 +98,7 @@ public class FamilyGroupService {
         throw new FamilyGroupNotUserException();
     }
 
+    @Transactional
     public void renameGroup(UserDetails userDetails, Integer id, String newName) {
         FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
         if (familyGroup == null)
