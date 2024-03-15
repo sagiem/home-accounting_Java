@@ -60,9 +60,6 @@ public class User implements UserDetails {
     private List<Product> products;
 
     @OneToMany(mappedBy = "userCreator")
-    private List<PointShopping> pointShoppings;
-
-    @OneToMany(mappedBy = "userCreator")
     private List<Shopping> userCreatorShoppings;
 
     @OneToMany(mappedBy = "userExecutor")

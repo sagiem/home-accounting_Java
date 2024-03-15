@@ -28,9 +28,6 @@ public class PointShopping {
     @JoinColumn(name = "family_group_id")
     private FamilyGroup familyGroup;
 
-    @ManyToOne
-    @JoinColumn(name = "user_creator_id")
-    private User userCreator;
 
     @OneToMany(mappedBy = "pointShopping")
     private List<Shopping> shoppings;
