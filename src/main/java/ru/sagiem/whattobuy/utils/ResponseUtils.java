@@ -30,6 +30,7 @@ public class ResponseUtils {
     public static final String FAMILY_GROUP_NOT_USER_EXCEPTION_MESSAGE = "Пользователь не состоит в группе";
     public static final String FAMILY_GROUP_NOT_DELETE_CREATED_USER_EXCEPTION_MESSAGE = "Нельзя удалить владельца группы";
     public static final String FAMILY_GROUP_DELETE_MESSAGE = "Группа %s успешно удалена";
+    public static final String POINT_SHOPING_UPDATE_MESSAGE = "Точка покупки %s успешно обновлена";
 
     public static final String BAD_CREDENTIALS_EXCEPTION_MESSAGE = "Неверное имя пользователя и пароль";
     public static final String METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE = "Переданные данные не прошли проверку";

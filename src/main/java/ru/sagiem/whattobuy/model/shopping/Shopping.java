@@ -34,10 +34,6 @@ public class Shopping {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDate;
 
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime lastModified;
-
     private LocalDateTime executorDate;
 
     @ManyToOne

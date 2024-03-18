@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.PointShoppingDtoRequest;
 import ru.sagiem.whattobuy.dto.PointShoppingDtoResponse;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotFoundException;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
 import ru.sagiem.whattobuy.mapper.PointShoppingMapper;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
@@ -14,69 +16,101 @@ import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.*;
+import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PointShoppingService {
-
-
-    private final UserRepository userRepository;
-    private final FamilyGroupRepository familyGroupRepository;
     private final PointShoppingMapper pointShoppingMapper;
-    private PointShoppingRepository pointShoppingRepository;
+    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final PointShoppingRepository pointShoppingRepository;
+    private final FamilyGroupRepository familyGroupRepository;
+    private final UserRepository userRepository;
 
 
-    public List<PointShoppingDtoResponse> showAll(UserDetails userDetails) {
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<FamilyGroup> familyGroup = user.getFamilyGroups();
+    public List<PointShoppingDtoResponse> showAllForGroup(Integer id, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
+        if (familyGroup == null)
+            throw new FamilyGroupNotFoundException();
 
-        List<PointShopping> pointShoppings = pointShoppingRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroup).orElse(null);
-        if (pointShoppings != null) {
+        if (!famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
+            throw new FamilyGroupNotUserException();
+
+        List<PointShopping> pointShoppings = pointShoppingRepository.findAllByFamilyGroup(familyGroup).orElse(null);
+        if (pointShoppings == null)
+            return null;
+        else {
             return pointShoppings.stream()
                     .map(pointShoppingMapper::convertToDTO)
                     .toList();
         }
-        return null;
-
     }
 
-    public void addPointShopping(PointShoppingDtoRequest pointShoppingDtoRequest,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        PointShopping pointShopping = PointShopping.builder()
-                .name(pointShoppingDtoRequest.getName())
-                .address(pointShoppingDtoRequest.getAddress())
-                .comment(pointShoppingDtoRequest.getComment())
-                .userCreator(user)
-                .familyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()))
-                .build();
+    public List<PointShoppingDtoResponse> showAllMyCreated(UserDetails userDetails) {
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        List<PointShopping> pointShoppings = pointShoppingRepository.findAllByUserCreator(user).orElse(null);
+        if (pointShoppings == null)
+            return null;
+        else {
+            return pointShoppings.stream()
+                    .map(pointShoppingMapper::convertToDTO)
+                    .toList();
+        }
+    }
 
-        pointShoppingRepository.save(pointShopping);
+
+    public Integer addPointShopping(Integer id,
+                                 PointShoppingDtoRequest pointShoppingDtoRequest,
+                                 @AuthenticationPrincipal UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
+        if (familyGroup == null)
+            throw new FamilyGroupNotFoundException();
+
+        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+            PointShopping pointShopping = PointShopping.builder()
+                    .name(pointShoppingDtoRequest.getName())
+                    .address(pointShoppingDtoRequest.getAddress())
+                    .comment(pointShoppingDtoRequest.getComment())
+                    .familyGroup(familyGroup)
+                    .build();
+            PointShopping pointShoppingEntity = pointShoppingRepository.save(pointShopping);
+            return pointShoppingEntity.getId();
+        } else
+            throw new FamilyGroupNotUserException();
     }
 
 
     public PointShoppingDtoResponse searchId(Integer id, UserDetails userDetails) {
 
-        var user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        List<FamilyGroup> familyGroups = user.getFamilyGroups();
 
-
-        return pointShoppingMapper.convertToDTO(pointShoppingRepository.findByIdAndUserCreator(id, user));
+        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
+            return pointShoppingMapper.convertToDTO(pointShoppingRepository.findById(id).orElse(null));
+        else
+            throw new FamilyGroupNotUserException();
     }
 
-    public ResponseEntity<?> update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
+    public String update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
+        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+            PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
+            pointShopping.setName(pointShoppingDtoRequest.getName());
+            pointShopping.setAddress(pointShoppingDtoRequest.getAddress());
+            pointShopping.setComment(pointShoppingDtoRequest.getComment());
+            pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
+            pointShoppingRepository.save(pointShopping);
+            return pointShopping.getName();
+        } else
+            throw new FamilyGroupNotUserException();
 
-        PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
-        pointShopping.setName(pointShoppingDtoRequest.getName());
-        pointShopping.setAddress(pointShoppingDtoRequest.getAddress());
-        pointShopping.setComment(pointShoppingDtoRequest.getComment());
-        pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
+    }
 
-
-        return ResponseEntity.ok().build();
-
-
+    public String delete(Integer id, UserDetails userDetails) {
+        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+            PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
+            pointShoppingRepository.delete(pointShopping);
+            return pointShopping.getName();
+        } else
+            throw new FamilyGroupNotUserException();
     }
 }

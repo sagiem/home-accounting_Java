@@ -240,7 +240,7 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @DeleteMapping("/deleteGroup/{Id}")
+    @DeleteMapping("/{Id}")
     public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
                                                              @AuthenticationPrincipal UserDetails userDetails){
         String familyGroupName = service.deleteGroup(Id, userDetails);

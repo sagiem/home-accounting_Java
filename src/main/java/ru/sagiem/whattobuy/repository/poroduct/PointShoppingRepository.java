@@ -20,4 +20,9 @@ public interface PointShoppingRepository extends JpaRepository<PointShopping, In
     PointShopping findByIdAndFamilyGroupIn(Integer id, Collection<FamilyGroup> familyGroup);
     PointShopping findByIdAndUserCreator(Integer id, User user);
     Optional<List<PointShopping>> findByIdIn(Collection<Integer> id);
+
+    Optional<List<PointShopping>> findAllByFamilyGroup(FamilyGroup familyGroup);
+
+
+    Optional<List<PointShopping>> findAllByUserCreator(User user);
 }
