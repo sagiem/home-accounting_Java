@@ -56,7 +56,7 @@ public class User implements UserDetails {
     }
 
 
-    @OneToMany(mappedBy = "createdUser")
+    @OneToMany(mappedBy = "userCreator")
     private List<PointShopping> pointShoppingsCreater;
 
     @OneToMany(mappedBy = "lastModifiedUser")

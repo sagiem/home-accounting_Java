@@ -125,5 +125,14 @@ public class GlobalExceptionHandler {
 //                        FAMILY_GROUP_NOT_DELETE_CREATED_USER_EXCEPTION_MESSAGE);
 //    }
 
+    @ExceptionHandler(CategoryProductNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(CategoryProductNotFoundException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                CATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
 }

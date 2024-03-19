@@ -11,8 +11,8 @@ public interface ShoppingMapper {
     @Mappings({
             @Mapping(source = "createDate", target = "createDate", dateFormat = "dd-MM-yyyy HH:mm:ss",
                     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
-            @Mapping(source = "lastModified", target = "lastModified", dateFormat = "dd-MM-yyyy HH:mm:ss",
-                    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
+//            @Mapping(source = "lastModified", target = "lastModified", dateFormat = "dd-MM-yyyy HH:mm:ss",
+//                    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "executorDate", target = "executorDate", dateFormat = "dd-MM-yyyy HH:mm:ss",
                     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),
             @Mapping(source = "product.id", target = "productId", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL),

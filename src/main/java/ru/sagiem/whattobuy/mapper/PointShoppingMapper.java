@@ -13,8 +13,8 @@ public interface PointShoppingMapper {
 
 
 
-    @Mapping(source = "userCreator.username", target = "userCreator")
-    @Mapping(source = "familyGroup.name", target = "familyGroup")
+    @Mapping(source = "userCreator.username", target = "userCreator", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(source = "familyGroup.name", target = "familyGroup", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(source = "lastModifiedUser.username", target = "lastModifiedUser", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     PointShoppingDtoResponse convertToDTO(PointShopping pointShopping);
 

@@ -40,15 +40,13 @@ public class PointShopping {
     private LocalDateTime lastModified;
 
     @CreatedBy
-    @Column(nullable = false, updatable = false)
     @ManyToOne
-    @JoinColumn(name = "created_user")
+    @JoinColumn(name = "user_creator", nullable = false, updatable = false)
     private User userCreator;
 
     @LastModifiedBy
-    @Column(insertable = false)
     @ManyToOne
-    @JoinColumn(name = "last_modified_user")
+    @JoinColumn(name = "last_modified_user", insertable = false)
     private User lastModifiedUser;
 
     @ManyToOne

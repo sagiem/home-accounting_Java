@@ -14,7 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.dto.*;
-import ru.sagiem.whattobuy.service.PointShoppingService;
+import ru.sagiem.whattobuy.service.CategoryProductService;
 
 import java.util.List;
 
@@ -22,51 +22,31 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
 @RestController
-@RequestMapping("/api/v1/point_shopping")
+@RequestMapping("/api/v1/category-product")
 @RequiredArgsConstructor
-@Tag(name = "Работа с точками покупок")
-public class PointShoppingController {
-
-    private final PointShoppingService service;
-
+@Tag(name = "Работа с категоирями продуктов")
+public class CategoryProductController {
+    private final CategoryProductService service;
 
     @Operation(
-            summary = "Возвращает все точки покупок для группы",
-            description = "Пользователь должен быть участником группы"
+            summary = "Возвращает все категории продуктов",
+            description = "Возвращает все категории продуктов для группы"
             //tags = "get"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PointShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CategoryProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/show-all-for-group/{id}")
-    public ResponseEntity<List<PointShoppingDtoResponse>> showAllForGroup(@PathVariable("id") @Min(1) Integer id,
-                                                                          @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<CategoryProductDtoResponse>> showAllForGroup(@PathVariable("id") @Min(1) Integer id,
+                                                                            @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.showAllForGroup(id, userDetails));
 
     }
 
     @Operation(
-            summary = "Возвращает все точки покупок для пользователя",
-            description = "Все точки которые пользователь создал"
-            //tags = "get"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PointShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show-all-my-created")
-    public ResponseEntity<List<PointShoppingDtoResponse>> showAllMyCreated(@AuthenticationPrincipal UserDetails userDetails) {
-
-            return ResponseEntity.ok(service.showAllMyCreated(userDetails));
-
-        }
-
-
-    @Operation(
-            summary = "Добавление точки покупки",
+            summary = "Добавление категории",
             description = "Добавление происходит в группу"
             //tags = "get"
     )
@@ -76,36 +56,32 @@ public class PointShoppingController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PostMapping("/add/{id}")
-    public ResponseEntity<Integer> add(@PathVariable("id") @Min(1) Integer id,
-                                @RequestBody PointShoppingDtoRequest request,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.addPointShopping(id, request, userDetails));
+    public ResponseEntity<Integer> add(@PathVariable("id") @Min(1) Integer familyGroupid,
+                                       @RequestBody CategoryProductDtoRequest request,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.create(familyGroupid, request, userDetails));
     }
 
-
     @Operation(
-            summary = "Поиск точки покупки по id",
-            description = "Пользователь должен быть в группе к которой принадлежит точка покупки"
+            summary = "Поиск категории по id",
+            description = "Пользователь должен быть в группе к которой принадлежит категория"
             //tags = "get"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = PointShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CategoryProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/search/{id}")
-    public ResponseEntity<PointShoppingDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
+    public ResponseEntity<CategoryProductDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
                                                                @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(service.searchId(id, userDetails));
-
-
     }
 
-
     @Operation(
-            summary = "Обновление точки покупки",
-            description = "Пользователь должен быть в группе к которой принадлежит точка покупки"
+            summary = "Обновление категории",
+            description = "Пользователь должен быть в группе к которой принадлежит категория"
             //tags = "get"
     )
     @ApiResponses({
@@ -119,14 +95,14 @@ public class PointShoppingController {
                                                   @AuthenticationPrincipal UserDetails userDetails) {
 
 
-        String pointShopingName = service.update(id, pointShoppingDtoRequest, userDetails);
-        return ResponseEntity.ok(getSuccessResponse(POINT_SHOPING_UPDATE_MESSAGE, pointShopingName));
+        String сategoryProductName = service.update(id, pointShoppingDtoRequest, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(CATEGORY_PRODUCT_UPDATE_MESSAGE, сategoryProductName));
 
     }
 
     @Operation(
-            summary = "Удаляет точку покупки",
-            description = "Удаляет точку покупки"
+            summary = "Удаляет категорию",
+            description = "Удаляет категорию"
             //tags = "get"
     )
     @ApiResponses({
@@ -137,9 +113,8 @@ public class PointShoppingController {
     @DeleteMapping("/{Id}")
     public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
                                                        @AuthenticationPrincipal UserDetails userDetails){
-        String familyGroupName = service.delete(Id, userDetails);
-        return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, familyGroupName));
+        String сategoryProductName = service.delete(Id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(CATEGORY_PRODUCT_DELETE_MESSAGE, сategoryProductName));
 
     }
-
 }

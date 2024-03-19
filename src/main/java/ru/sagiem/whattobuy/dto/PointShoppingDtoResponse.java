@@ -1,7 +1,10 @@
 package ru.sagiem.whattobuy.dto;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 public class PointShoppingDtoResponse {
     private Integer id;
     private String name;

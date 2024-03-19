@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +30,8 @@ public class CategoryProduct {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
+
+    @ManyToOne
+    @JoinColumn(name = "family_group_id")
+    private FamilyGroup familyGroup;
 }
