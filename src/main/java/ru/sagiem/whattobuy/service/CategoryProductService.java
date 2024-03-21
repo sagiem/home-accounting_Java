@@ -26,9 +26,12 @@ public class CategoryProductService {
     private final CategoryProductMapper categoryProductMapper;
     private final FamilyGroupRepository familyGroupRepository;
 
-    public List<CategoryProductDtoResponse> showAllForGroup(Integer id, UserDetails userDetails) {
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
-            List<CategoryProduct> categoryProducts = categoryProductRepository.findByFamilyGroupId(id).orElse(null);
+    public List<CategoryProductDtoResponse> showAllForGroup(Integer familyGroupId, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        if (familyGroup == null)
+            throw new FamilyGroupNotUserException();
+        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId)) {
+            List<CategoryProduct> categoryProducts = categoryProductRepository.findAllByFamilyGroupAndFamilyGroupNull(familyGroup).orElse(null);
             if (categoryProducts == null)
                 return null;
             else {

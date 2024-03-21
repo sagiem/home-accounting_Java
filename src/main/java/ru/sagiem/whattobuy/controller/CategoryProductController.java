@@ -39,9 +39,9 @@ public class CategoryProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/show-all-for-group/{id}")
-    public ResponseEntity<List<CategoryProductDtoResponse>> showAllForGroup(@PathVariable("id") @Min(1) Integer id,
+    public ResponseEntity<List<CategoryProductDtoResponse>> showAllForGroup(@PathVariable("id") @Min(1) Integer familyGroupId,
                                                                             @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.showAllForGroup(id, userDetails));
+        return ResponseEntity.ok(service.showAllForGroup(familyGroupId, userDetails));
 
     }
 

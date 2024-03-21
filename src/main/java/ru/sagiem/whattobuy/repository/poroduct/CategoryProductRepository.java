@@ -15,4 +15,5 @@ public interface CategoryProductRepository extends JpaRepository<CategoryProduct
     Optional<List<CategoryProduct>> findAllByFamilyGroup(FamilyGroup familyGroup);
 
     Optional<List<CategoryProduct>> findByFamilyGroupId(Integer id); // TODO: а так работает ?
+    Optional<List<CategoryProduct>> findAllByFamilyGroupAndFamilyGroupNull(FamilyGroup familyGroup);
 }
