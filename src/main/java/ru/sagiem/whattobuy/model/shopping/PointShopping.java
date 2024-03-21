@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "_pointShopping")
+@Table(name = "pointShopping")
 public class PointShopping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,19 +11,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "_unit_of_measurement")
-public class UnitOfMeasurementProduct {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+public enum UnitOfMeasurementProduct {
 
-    @OneToMany(mappedBy = "unitOfMeasurement")
-    private List<Product> products;
+    кг,шт, мл, гр, л
 }
