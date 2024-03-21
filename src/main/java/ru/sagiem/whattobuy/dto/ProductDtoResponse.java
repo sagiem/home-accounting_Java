@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.sagiem.whattobuy.model.user.User;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,9 +15,10 @@ import ru.sagiem.whattobuy.model.user.User;
 public class ProductDtoResponse {
 
     private Integer id;
+    private String name;
     private Integer categoryId;
     private Integer subcategoryId;
-    private String name;
-    private Integer unitOfMeasurementId;
-    private User userCreator;
+    private String unitOfMeasurement;
+    private String userCreator;
+    private LocalDateTime createDate;
 }

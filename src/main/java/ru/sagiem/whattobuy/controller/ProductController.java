@@ -13,13 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.sagiem.whattobuy.dto.CategoryProductDtoResponse;
-import ru.sagiem.whattobuy.dto.ExceptionResponse;
-import ru.sagiem.whattobuy.dto.ProductDtoRequest;
-import ru.sagiem.whattobuy.dto.ProductDtoResponse;
+import ru.sagiem.whattobuy.dto.*;
 import ru.sagiem.whattobuy.service.ProductService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -27,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Tag(name = "Работа с продуктом")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductService service;
 
     @Operation(
             summary = "Возвращает все продукты для группы",
@@ -43,28 +41,78 @@ public class ProductController {
     public ResponseEntity<?> showAll(@PathVariable("id") @Min(1) Integer familyGroupId,
                                      @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(productService.showAll(userDetails, familyGroupId));
+        return ResponseEntity.ok(service.showAll(userDetails, familyGroupId));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody ProductDtoRequest request,
+    @Operation(
+            summary = "Добавление прдукта",
+            description = "Добавление происходит в группу"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @PostMapping("/add/{id}")
+    public ResponseEntity<?> add(@PathVariable("id") @Min(1) Integer familyGroupId,
+                                 @RequestBody ProductDtoRequest request,
                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-        return productService.addProduct(request, userDetails);
+        return service.add(familyGroupId, request, userDetails);
     }
 
+    @Operation(
+            summary = "Поиск продукт по id",
+            description = "Пользователь должен быть в группе к которой принадлежит продукт"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CategoryProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/search/{id}")
     public ResponseEntity<ProductDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
                                                        @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(productService.searchId(id, userDetails));
+        return ResponseEntity.ok(service.searchId(id, userDetails));
     }
 
+    @Operation(
+            summary = "Обновление продукта",
+            description = "Пользователь должен быть владельцем группы либо создателем продукта и участником группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PatchMapping("/update/{id}")
-    public ResponseEntity<ProductDtoResponse> update(@PathVariable("id") @Min(1) Integer id,
-                                                     ProductDtoRequest productDtoRequest,
-                                                     @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<SuccessResponse> update(@PathVariable("id") @Min(1) Integer id,
+                                                  ProductDtoRequest productDtoRequest,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(productService.update(id, productDtoRequest, userDetails));
+        String productName = service.update(id, productDtoRequest, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(PRODUCT_UPDATE_MESSAGE, productName));
+    }
+
+    @Operation(
+            summary = "Удаляет продукт",
+            description = "Пользователь должен быть владельцем группы либо создателем продукта и участником группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @DeleteMapping("/{Id}")
+    public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
+        String productName = service.delete(Id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(PRODUCT_DELETE_MESSAGE, productName));
     }
 }
+

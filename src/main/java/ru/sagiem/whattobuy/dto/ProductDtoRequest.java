@@ -12,9 +12,9 @@ import ru.sagiem.whattobuy.model.user.FamilyGroup;
 @NoArgsConstructor
 public class ProductDtoRequest {
 
+    private String name;
     private Integer categoryId;
     private Integer subcategoryId;
-    private String name;
-    private Integer unitOfMeasurementId;
+    private String unitOfMeasurement;
     private Integer familyGroupId;
 }
