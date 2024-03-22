@@ -28,7 +28,10 @@ public class CategoryProduct {
     private Integer id;
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "categoryProduct", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubcategoryProduct> subcategoryProducts;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
     @ManyToOne

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sagiem.whattobuy.model.user.FamilyGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,14 @@ public class SubcategoryProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "category_product_id")
+    private CategoryProduct categoryProduct;
+
+    @ManyToOne
+    @JoinColumn(name = "family_group_id")
+    private FamilyGroup familyGroup;
 
     @OneToMany(mappedBy = "subcategory")
     private List<Product> products;

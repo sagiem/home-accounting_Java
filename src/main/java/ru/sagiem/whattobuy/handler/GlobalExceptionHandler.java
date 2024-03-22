@@ -145,4 +145,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SubCategoryProductNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(SubCategoryProductNotFoundException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                SUBCATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }

@@ -31,7 +31,7 @@ public class CategoryProductService {
         if (familyGroup == null)
             throw new FamilyGroupNotUserException();
         if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId)) {
-            List<CategoryProduct> categoryProducts = categoryProductRepository.findAllByFamilyGroupAndFamilyGroupNull(familyGroup).orElse(null);
+            List<CategoryProduct> categoryProducts = categoryProductRepository.findAllByFamilyGroup(familyGroup).orElse(null);
             if (categoryProducts == null)
                 return null;
             else {
@@ -70,14 +70,14 @@ public class CategoryProductService {
             throw new FamilyGroupNotUserException();
     }
 
-    public String update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
+    public String update(Integer id, CategoryProductDtoRequest categoryProductDtoRequest, UserDetails userDetails) {
         CategoryProduct categoryProduct = categoryProductRepository.findById(id).orElse(null);
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
         if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
-            categoryProduct.setName(pointShoppingDtoRequest.getName());
+            categoryProduct.setName(categoryProductDtoRequest.getName());
             categoryProductRepository.save(categoryProduct);
-            return pointShoppingDtoRequest.getName();
+            return categoryProductDtoRequest.getName();
         } else
             throw new FamilyGroupNotCreatorException();
     }

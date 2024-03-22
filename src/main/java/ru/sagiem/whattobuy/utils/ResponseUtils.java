@@ -34,6 +34,12 @@ public class ResponseUtils {
     public static final String CATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Категория продукта не найдена";
     public static final String CATEGORY_PRODUCT_UPDATE_MESSAGE = "Категория успешно обновлена, новое имя: %s";
     public static final String CATEGORY_PRODUCT_DELETE_MESSAGE = "Категория %s успешно удалена";
+
+
+    public static final String SUBCATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Подкатегория продукта не найдена";
+    public static final String SUBCATEGORY_PRODUCT_UPDATE_MESSAGE = "Подкатегория успешно обновлена, новое имя: %s";
+    public static final String SUBCATEGORY_PRODUCT_DELETE_MESSAGE = "Подкатегория %s успешно удалена";
+
     public static final String PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Продукт не найден";
     public static final String PRODUCT_UPDATE_MESSAGE = "продукт %s успешно обновлен";
     public static final String PRODUCT_DELETE_MESSAGE = "Продукт %s успешно удален";
