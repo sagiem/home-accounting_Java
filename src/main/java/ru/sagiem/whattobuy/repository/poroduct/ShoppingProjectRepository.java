@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface ShoppingProjectRepository extends JpaRepository<ShoppingProject, Integer> {
+public interface ShoppingProjectRepository  extends JpaRepository<ShoppingProject, Integer> {
 
     Optional<List<ShoppingProject>> findByIdIn(Collection<Integer> id);
     Optional<List<ShoppingProject>> findByFamilyGroupIn(List<FamilyGroup> familyGroups);

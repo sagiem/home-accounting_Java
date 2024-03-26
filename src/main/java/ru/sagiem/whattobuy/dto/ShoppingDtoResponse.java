@@ -19,7 +19,7 @@ public class ShoppingDtoResponse {
     private Double price;
     private Integer Volume;
     private Integer pointShoppingId;
-    private Integer familyGroupId;
+    private Integer shoppingProjectId;
     private Integer userCreatorId;
     private Integer userExecutorId;
     private String shoppingStatus;

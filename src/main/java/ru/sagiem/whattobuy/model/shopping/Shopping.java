@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -45,12 +46,9 @@ public class Shopping {
     @JoinColumn(name = "point_id")
     private PointShopping pointShopping;
 
-//    @ManyToOne
-//    @JoinColumn(name = "family_group_id")
-//    private FamilyGroup familyGroup;
-
+    @CreatedBy
     @ManyToOne
-    @JoinColumn(name = "user_creator_id")
+    @JoinColumn(name = "user_creator_id", nullable = false, updatable = false)
     private User userCreator;
 
     @ManyToOne

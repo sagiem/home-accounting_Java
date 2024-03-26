@@ -1,5 +1,11 @@
 package ru.sagiem.whattobuy.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -8,34 +14,91 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
-import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
-import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
+import ru.sagiem.whattobuy.dto.*;
 import ru.sagiem.whattobuy.service.ShoppingService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/api/v1/shopping")
 @RequiredArgsConstructor
-@Tag(name = "Покупки")
+@Tag(name = "Работа с покупками")
 public class ShoppingController {
 
     private final ShoppingService service;
 
 
-    @GetMapping("/show-all-my-creator")
-    public ResponseEntity<List<ShoppingDtoResponse>> showAllMyCreatores(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.showAllMyCreatores(userDetails));
+    @Operation(
+            summary = "Возвращает все покупки назначенные во всех группах и проектах покупок",
+            description = "Возвращает все продукты для группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show-all-myExecutor")
+    public ResponseEntity<List<ShoppingDtoResponse>> showAllMyExecutor(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllMyExecutor(userDetails));
     }
 
-    @PostMapping("/add-my")
-    public ResponseEntity<Integer> add(@RequestBody ShoppingDtoRequest shoppingDtoRequest,
-                                       @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(service.addMyShopping(shoppingDtoRequest, userDetails));
+
+    @Operation(
+            summary = "Возвращает все покупки назначенные пользователю в проекте покупок",
+            description = "Возвращает все покупки назначенные пользователю в проекте покупок"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show-myExecutorInShoppingProgect/{id}")
+    public ResponseEntity<List<ShoppingDtoResponse>> showShoppingProgectMyExecutor(@PathVariable("id") @Min(1) Integer shoppingProgectId,
+                                                                               @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showMyExecutorinShoppingProgect(shoppingProgectId, userDetails));
     }
+
+    @Operation(
+            summary = "Возвращает все покупки в группе покупок",
+            description = "Пользователь должен быть участником группы к которой принадлежит группа покупок"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show-showAllInShoppingProgect/{id}")
+    public ResponseEntity<List<ShoppingDtoResponse>> showAllInShoppingProgect(@PathVariable("id") @Min(1) Integer shoppingProgectId,
+                                                                                   @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllInShoppingProgect(shoppingProgectId, userDetails));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @PostMapping("/add-set-user")
     public ResponseEntity<Integer> addSet(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
@@ -44,11 +107,6 @@ public class ShoppingController {
         return ResponseEntity.ok(service.addSetUserShopping(shoppingSetDtoRequest, userDetails));
     }
 
-//    @PostMapping("/add-set-family-group")
-//    public ResponseEntity<Integer> addSetFamilyGroup(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
-//                                                     @AuthenticationPrincipal UserDetails userDetails) {
-//        return ResponseEntity.ok(service.addSetFamilyGroupShopping(shoppingSetDtoRequest, userDetails));
-//    }
 
     @PatchMapping("/executed/{id}")
     public Integer executed(@PathVariable("id") @Min(1) Integer id,

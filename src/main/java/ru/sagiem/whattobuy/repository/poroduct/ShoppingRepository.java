@@ -16,11 +16,12 @@ public interface ShoppingRepository extends JpaRepository<Shopping, Integer> {
 
     Optional<List<Shopping>> findByShoppingProjectAndShoppingStatus(ShoppingProject shoppingProject, ShoppingStatus shoppingStatus);
     Optional<List<Shopping>> findByUserCreator(User user);
+    Optional<List<Shopping>> findAllByUserExecutor(User user);
 
     Optional<List<Shopping>> findByCreateDateBetween(LocalDateTime createDate, LocalDateTime createDate2);
 
     Optional<List<Shopping>> findByCreateDate(LocalDateTime createDate);
 
 
-
+    Optional<List<Shopping>> findAllByShoppingProjectAndUserExecutor(ShoppingProject shoppingProject, User userExecutor);
 }

@@ -29,7 +29,7 @@ public class ProductController {
 
     @Operation(
             summary = "Возвращает все продукты для группы",
-            description = "Возвращает все продукты для группы для группы"
+            description = "Возвращает все продукты для группы"
             //tags = "get"
     )
     @ApiResponses({
