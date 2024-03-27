@@ -95,11 +95,11 @@ public class ShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/show-showAllInShoppingProgect/{id}")
     @PostMapping("/add-set-user")
-    public ResponseEntity<SuccessResponse> addSet(@RequestBody ShoppingDtoRequest shoppingSetDtoRequest,
+    public ResponseEntity<Integer> addSet(@RequestBody ShoppingDtoRequest shoppingSetDtoRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        service.addSet(shoppingSetDtoRequest, userDetails);
-        return ResponseEntity.ok(getSuccessResponse(PRODUCT_UPDATE_MESSAGE, productName));
+        return  ResponseEntity.ok(service.addSet(shoppingSetDtoRequest, userDetails));
+
     }
 
 
