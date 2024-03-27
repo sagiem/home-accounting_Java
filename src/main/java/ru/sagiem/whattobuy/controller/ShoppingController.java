@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static ru.sagiem.whattobuy.utils.ResponseUtils.PRODUCT_UPDATE_MESSAGE;
+import static ru.sagiem.whattobuy.utils.ResponseUtils.getSuccessResponse;
 
 @RestController
 @RequestMapping("/api/v1/shopping")
@@ -32,8 +34,8 @@ public class ShoppingController {
 
 
     @Operation(
-            summary = "Возвращает все покупки назначенные во всех группах и проектах покупок",
-            description = "Возвращает все продукты для группы"
+            summary = "Возвращает все покупки назначенные пользователю,во всех группах и проектах покупок",
+            description = "Возвращает все покупки назначенные пользователю,во всех группах и проектах покупок"
             //tags = "get"
     )
     @ApiResponses({
@@ -65,7 +67,7 @@ public class ShoppingController {
     }
 
     @Operation(
-            summary = "Возвращает все покупки в группе покупок",
+            summary = "Возвращает все покупки в проекте покупок",
             description = "Пользователь должен быть участником группы к которой принадлежит группа покупок"
             //tags = "get"
     )
@@ -81,31 +83,28 @@ public class ShoppingController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Operation(
+            summary = "Назначает покупку пользователю",
+            description = "Если не указан проект покупок, то покупка назначается без проекта. Если не указан пользователь, то покупка назначается без пользователя"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show-showAllInShoppingProgect/{id}")
     @PostMapping("/add-set-user")
-    public ResponseEntity<Integer> addSet(@RequestBody ShoppingSetDtoRequest shoppingSetDtoRequest,
+    public ResponseEntity<SuccessResponse> addSet(@RequestBody ShoppingDtoRequest shoppingSetDtoRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(service.addSetUserShopping(shoppingSetDtoRequest, userDetails));
+        service.addSet(shoppingSetDtoRequest, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(PRODUCT_UPDATE_MESSAGE, productName));
     }
+
+
+
+
 
 
     @PatchMapping("/executed/{id}")

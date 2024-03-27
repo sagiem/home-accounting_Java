@@ -10,6 +10,7 @@ public class ShoppingDtoRequest {
     private Integer productId;
     private Integer volume;
     private Integer pointShoppingId;
+    private Integer familyGroupId;
     private Integer shoppingProjectId;
     private Integer userExecutorId;
 }

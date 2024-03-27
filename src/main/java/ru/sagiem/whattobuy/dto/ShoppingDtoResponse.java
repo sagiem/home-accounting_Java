@@ -20,6 +20,7 @@ public class ShoppingDtoResponse {
     private Integer Volume;
     private Integer pointShoppingId;
     private Integer shoppingProjectId;
+    private Integer familyGroupId;
     private Integer userCreatorId;
     private Integer userExecutorId;
     private String shoppingStatus;

@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
 import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.shopping.PointShopping;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
 
 import java.util.List;
@@ -63,6 +65,9 @@ public class FamilyGroup {
 
     @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubcategoryProduct> subcategoryProducts;
+
+    @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Shopping> shoppings;
 
     public void addUser(User user) {
         users.add(user);
