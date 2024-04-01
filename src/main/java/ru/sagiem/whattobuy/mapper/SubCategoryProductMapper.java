@@ -12,6 +12,6 @@ import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = SubcategoryProduct.class)
 public interface SubCategoryProductMapper {
 
-    @Mapping(source = "categoryProduct.name", target = "categoryProduct")
+    @Mapping(source = "categoryProduct.name", target = "categoryProductName")
     SubCategoryProductDtoResponse convertToDto(SubcategoryProduct subcategoryProduct);
 }

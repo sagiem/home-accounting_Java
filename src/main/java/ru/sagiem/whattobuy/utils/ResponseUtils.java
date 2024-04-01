@@ -30,6 +30,7 @@ public class ResponseUtils {
     public static final String FAMILY_GROUP_NOT_USER_EXCEPTION_MESSAGE = "Пользователь не состоит в группе";
     public static final String FAMILY_GROUP_NOT_DELETE_CREATED_USER_EXCEPTION_MESSAGE = "Нельзя удалить владельца группы";
     public static final String FAMILY_GROUP_DELETE_MESSAGE = "Группа %s успешно удалена";
+    public static final String FAMILY_GROUP_NOT_USER_NOT_CREATOR_EXCEPTION_MESSAGE = "Пользоватеь не является учстником группы и не является создателем объекта";
     public static final String POINT_SHOPING_UPDATE_MESSAGE = "Точка покупки %s успешно обновлена";
     public static final String CATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Категория продукта не найдена";
     public static final String CATEGORY_PRODUCT_UPDATE_MESSAGE = "Категория успешно обновлена, новое имя: %s";
@@ -43,6 +44,13 @@ public class ResponseUtils {
     public static final String PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Продукт не найден";
     public static final String PRODUCT_UPDATE_MESSAGE = "продукт %s успешно обновлен";
     public static final String PRODUCT_DELETE_MESSAGE = "Продукт %s успешно удален";
+
+
+    public static final String SHOPPING_NOT_FOUND_EXCEPTION_MESSAGE = "Покупка не найдена";
+    public static final String SHOPPING_UPDATE_MESSAGE = "Покупка успешно обновлена";
+    public static final String SHOPPING_DELETE_MESSAGE = "Покупка %s успешно удалена";
+    public static final String SHOPPING_STATUS_EXECUTED_MESSAGE = "Покупке присвоен статут Выполнено";
+    public static final String SHOPPING_DELETE_NOT_EXECUTED_MESSAGE = "Покупке присвоен статус Не выполено";
 
     public static final String BAD_CREDENTIALS_EXCEPTION_MESSAGE = "Неверное имя пользователя и пароль";
     public static final String METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE = "Переданные данные не прошли проверку";

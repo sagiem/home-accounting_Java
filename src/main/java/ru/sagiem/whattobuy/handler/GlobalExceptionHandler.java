@@ -155,4 +155,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ShoppingNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(ShoppingNotFoundException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                SHOPPING_NOT_FOUND_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FamilyGroupNotUserNotCreatorException.class)
+    public ResponseEntity<ExceptionResponse> handleException(FamilyGroupNotUserNotCreatorException exception) {
+        ExceptionResponse response = ResponseUtils.getExceptionResponse(
+                HttpStatus.NOT_FOUND,
+                FAMILY_GROUP_NOT_USER_NOT_CREATOR_EXCEPTION_MESSAGE,
+                exception
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }

@@ -21,8 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.sagiem.whattobuy.utils.ResponseUtils.PRODUCT_UPDATE_MESSAGE;
-import static ru.sagiem.whattobuy.utils.ResponseUtils.getSuccessResponse;
+import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
 @RestController
 @RequestMapping("/api/v1/shopping")
@@ -76,7 +75,7 @@ public class ShoppingController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show-showAllInShoppingProgect/{id}")
+    @GetMapping("/show-showAllInProject/{id}")
     public ResponseEntity<List<ShoppingDtoResponse>> showAllInShoppingProgect(@PathVariable("id") @Min(1) Integer shoppingProgectId,
                                                                                    @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.showAllInShoppingProgect(shoppingProgectId, userDetails));
@@ -102,20 +101,75 @@ public class ShoppingController {
 
     }
 
+    @Operation(
+            summary = "Обновление покупки",
+            description = "Пользователь должен быть владельцем группы либо создателем покупки и участником группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<SuccessResponse> update(@PathVariable("id") @Min(1) Integer id,
+                                                  ShoppingDtoRequest request,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-
-
-
-
-    @PatchMapping("/executed/{id}")
-    public Integer executed(@PathVariable("id") @Min(1) Integer id,
-                            @AuthenticationPrincipal UserDetails userDetails) {
-        return service.executedShopping(id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(SHOPPING_UPDATE_MESSAGE, null));
     }
 
+
+    @Operation(
+            summary = "Удаляет продукт",
+            description = "Пользователь должен быть владельцем группы либо создателем продукта и участником группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @DeleteMapping("/{Id}")
+    public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
+        service.delete(Id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(SHOPPING_DELETE_MESSAGE, null));
+
+    }
+
+
+    @Operation(
+            summary = "Переводит покупку в статус Выполнено",
+            description = "Пользователь должен быть владельцем покупки либо ее исполнителем"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @PatchMapping("/executed/{id}")
+    public ResponseEntity<SuccessResponse> executed(@PathVariable("id") @Min(1) Integer id,
+                            @AuthenticationPrincipal UserDetails userDetails) {
+        service.executedShopping(id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(SHOPPING_STATUS_EXECUTED_MESSAGE, null));
+    }
+
+    @Operation(
+            summary = "Переводит покупку в статус Не выполнено",
+            description = "Пользователь должен быть владельцем покупки либо ее исполнителем"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PatchMapping("/not_executed/{id}")
-    public Integer notExecuted(@PathVariable("id") @Min(1) Integer id,
+    public ResponseEntity<SuccessResponse> notExecuted(@PathVariable("id") @Min(1) Integer id,
                                @AuthenticationPrincipal UserDetails userDetails) {
-        return service.notExecutedShopping(id, userDetails);
+        service.notExecutedShopping(id, userDetails);
+        return ResponseEntity.ok(getSuccessResponse(SHOPPING_DELETE_NOT_EXECUTED_MESSAGE, null));
     }
 }

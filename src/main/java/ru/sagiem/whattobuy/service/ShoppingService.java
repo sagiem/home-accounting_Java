@@ -8,6 +8,8 @@ import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
 import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
 import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotUserNotCreatorException;
+import ru.sagiem.whattobuy.exception.ShoppingNotFoundException;
 import ru.sagiem.whattobuy.exception.ShoppingProjectNotFoundException;
 import ru.sagiem.whattobuy.mapper.ShoppingMapper;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
@@ -162,23 +164,71 @@ public class ShoppingService {
     }
 
 
-    public Integer executedShopping(Integer id, UserDetails userDetails) {
+    public Void update(Integer id, ShoppingDtoRequest request, UserDetails userDetails) {
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
 
-        Shopping shopping = shoppingRepository.getReferenceById(id);
-        shopping.setExecutorDate(LocalDateTime.now());
-        shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
-        shoppingRepository.save(shopping);
-        return shopping.getId();
+        Shopping shopping = shoppingRepository.findById(id).orElse(null);
+        if (shopping == null)
+            throw new ShoppingNotFoundException();
+        FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
+        assert shoppingFamilyGroup != null;
+        if (shoppingFamilyGroup.getUserCreator() == user || famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId())) {
+            shopping.setProduct(productRepository.findById(request.getProductId()).orElse(null));
+            shopping.setVolume(request.getVolume());
+            shopping.setPointShopping(pointShoppingRepository.findById(request.getPointShoppingId()).orElse(null));
+            shopping.setShoppingProject(shoppingProjectRepository.findById(request.getShoppingProjectId()).orElse(null));
+            shopping.setFamilyGroup(familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null));
+            shopping.setUserExecutor(userRepository.findById(request.getUserExecutorId()).orElse(null));
+            shoppingRepository.save(shopping);
+        }
+        throw new FamilyGroupNotUserNotCreatorException();
     }
 
-    public Integer notExecutedShopping(Integer id, UserDetails userDetails) {
+    public void delete(Integer id, UserDetails userDetails) {
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
 
-        Shopping shopping = shoppingRepository.getReferenceById(id);
-        shopping.setExecutorDate(LocalDateTime.now());
-        shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
-        shoppingRepository.save(shopping);
-        return shopping.getId();
+        Shopping shopping = shoppingRepository.findById(id).orElse(null);
+        if (shopping == null)
+            throw new ShoppingNotFoundException();
+        FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
+        assert shoppingFamilyGroup != null;
+        if (shoppingFamilyGroup.getUserCreator() == user || famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId()))
+            shoppingRepository.deleteById(id);
+        else
+            throw new FamilyGroupNotUserNotCreatorException();
     }
 
+
+
+
+    public void executedShopping(Integer id, UserDetails userDetails) {
+
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        Shopping shopping = shoppingRepository.findById(id).orElse(null);
+        if (shopping == null)
+            throw new ShoppingNotFoundException();
+        if (shopping.getUserExecutor() == user || shopping.getUserCreator() == user) {
+            shopping.setExecutorDate(LocalDateTime.now());
+            shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
+            shoppingRepository.save(shopping);
+        }
+        else
+            throw new FamilyGroupNotUserNotCreatorException();
+    }
+
+    public void notExecutedShopping(Integer id, UserDetails userDetails) {
+
+        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        Shopping shopping = shoppingRepository.findById(id).orElse(null);
+        if (shopping == null)
+            throw new ShoppingNotFoundException();
+        if (shopping.getUserExecutor() == user || shopping.getUserCreator() == user) {
+            shopping.setExecutorDate(LocalDateTime.now());
+            shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
+            shoppingRepository.save(shopping);
+        }
+        else
+            throw new FamilyGroupNotUserNotCreatorException();
+    }
 
 }
