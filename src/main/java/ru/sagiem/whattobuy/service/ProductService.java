@@ -1,7 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +9,6 @@ import ru.sagiem.whattobuy.dto.ProductDtoRequest;
 import ru.sagiem.whattobuy.dto.ProductDtoResponse;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotFoundException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
-import ru.sagiem.whattobuy.exception.ProductAddError;
 import ru.sagiem.whattobuy.exception.ProductNotFoundException;
 import ru.sagiem.whattobuy.mapper.ProductMapper;
 import ru.sagiem.whattobuy.model.product.Product;
@@ -22,7 +20,7 @@ import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.List;
 
@@ -36,14 +34,14 @@ public class ProductService {
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
     private final ProductMapper productMapper;
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
 
     public List<ProductDtoResponse> showAll(UserDetails userDetails, Integer familyGroupId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         if (familyGroup != null)
             throw new FamilyGroupNotFoundException();
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
             if (products == null)
                 return null;
@@ -64,7 +62,7 @@ public class ProductService {
         if (familyGroup != null)
             throw new FamilyGroupNotFoundException();
 
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             var product = Product.builder()
                     .name(productDto.getName())
                     .category(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow())
@@ -85,7 +83,7 @@ public class ProductService {
         if (product == null)
             return null;
 
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup()))
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup()))
             return productMapper.convertToDTO(product);
 
         else
@@ -98,9 +96,9 @@ public class ProductService {
         if (product == null)
             throw new ProductNotFoundException();
 
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
-                || (product.getUserCreator().equals(user)) && famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
+        User user = familyGroupAndUserUtils.getUser(userDetails);
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
+                || (product.getUserCreator().equals(user)) && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
             product.setName(productDto.getName());
             product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
@@ -120,9 +118,9 @@ public class ProductService {
         if (product == null)
             throw new ProductNotFoundException();
 
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
-                || (product.getUserCreator().equals(user)) && famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
+        User user = familyGroupAndUserUtils.getUser(userDetails);
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
+                || (product.getUserCreator().equals(user)) && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
             productRepository.deleteById(id);
             return product.getName();
         }

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ShoppingProjectDtoRequest;
 import ru.sagiem.whattobuy.dto.ShoppingProjectDtoResponse;
 import ru.sagiem.whattobuy.dto.ShoppingProjectDtoWorkFinish;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotFoundException;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
 import ru.sagiem.whattobuy.mapper.ShoppingProjectMapper;
 import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.model.shopping.ShoppingProject;
@@ -15,6 +17,7 @@ import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingProjectRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingRepository;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.List;
 
@@ -29,22 +32,44 @@ public class ShoppingProjectService {
     private final ShoppingProjectMapper shoppingProjectMapper;
     private final FamilyGroupRepository familyGroupRepository;
     private final ShoppingRepository shoppingRepository;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
     public List<ShoppingProjectDtoResponse> showAllUserCreatorProjects(UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
-        assert user != null;
-        List<FamilyGroup> familyGroups = user.getFamilyGroups();
+        List<FamilyGroup> familyGroups = familyGroupAndUserUtils.getFamilyGroup(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<ShoppingProject> shoppingProjects = shoppingProjectRepository.findByUserCreatorOrFamilyGroupIn(user, familyGroups).orElse(null);
-
         if (shoppingProjects != null) {
             return shoppingProjects.stream()
                     .map(shoppingProjectMapper::convertToDto)
                     .toList();
         }
-
-        throw new RuntimeException("Нет проэктов созданных пользователем");
-
+        return null;
     }
+
+        public List<ShoppingProjectDtoResponse> showAllGroupProjects(Integer familyGroupId, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        if (familyGroup!= null)
+            throw new FamilyGroupNotFoundException();
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+            List<ShoppingProject> shoppingProjects = shoppingProjectRepository.findByFamilyGroup(familyGroup).orElse(null);
+            if (shoppingProjects != null) {
+                return shoppingProjects.stream()
+                        .map(shoppingProjectMapper::convertToDto)
+                        .toList();
+            }
+            else
+                return null;
+        }
+        else
+            throw new FamilyGroupNotUserException();
+    }
+
+
+
+
+
+
+
 
     public Integer add(ShoppingProjectDtoRequest request, UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
@@ -134,4 +159,6 @@ public class ShoppingProjectService {
                 NOT_EXECUTED).orElse(null);
 
     }
+
+
 }

@@ -1,7 +1,6 @@
 package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.*;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PointShoppingService {
     private final PointShoppingMapper pointShoppingMapper;
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
     private final PointShoppingRepository pointShoppingRepository;
     private final FamilyGroupRepository familyGroupRepository;
     private final UserRepository userRepository;
@@ -35,7 +34,7 @@ public class PointShoppingService {
         if (familyGroup == null)
             throw new FamilyGroupNotFoundException();
 
-        if (!famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
+        if (!familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
             throw new FamilyGroupNotUserException();
 
         List<PointShopping> pointShoppings = pointShoppingRepository.findAllByFamilyGroup(familyGroup).orElse(null);
@@ -49,7 +48,7 @@ public class PointShoppingService {
     }
 
     public List<PointShoppingDtoResponse> showAllMyCreated(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<PointShopping> pointShoppings = pointShoppingRepository.findAllByUserCreator(user).orElse(null);
         if (pointShoppings == null)
             return null;
@@ -68,7 +67,7 @@ public class PointShoppingService {
         if (familyGroup == null)
             throw new FamilyGroupNotFoundException();
 
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
             PointShopping pointShopping = PointShopping.builder()
                     .name(pointShoppingDtoRequest.getName())
                     .address(pointShoppingDtoRequest.getAddress())
@@ -85,14 +84,14 @@ public class PointShoppingService {
     public PointShoppingDtoResponse searchId(Integer id, UserDetails userDetails) {
 
 
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
             return pointShoppingMapper.convertToDTO(pointShoppingRepository.findById(id).orElse(null));
         else
             throw new FamilyGroupNotUserException();
     }
 
     public String update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
             PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
             pointShopping.setName(pointShoppingDtoRequest.getName());
             pointShopping.setAddress(pointShoppingDtoRequest.getAddress());
@@ -106,7 +105,7 @@ public class PointShoppingService {
     }
 
     public String delete(Integer id, UserDetails userDetails) {
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
             PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
             pointShoppingRepository.delete(pointShopping);
             return pointShopping.getName();

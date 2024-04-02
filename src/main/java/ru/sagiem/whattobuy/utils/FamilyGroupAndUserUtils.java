@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class FamalyGroupAndUserUtils {
+public class FamilyGroupAndUserUtils {
     private final UserRepository userRepository;
     private final FamilyGroupRepository familyGroupRepository;
 

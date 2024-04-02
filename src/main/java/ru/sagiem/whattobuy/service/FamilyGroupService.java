@@ -19,7 +19,7 @@ import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupInvitationsRepository;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import static ru.sagiem.whattobuy.utils.ResponseUtils.USER_NOT_FOUND_EXCEPTION_M
 @RequiredArgsConstructor
 public class FamilyGroupService {
     private final FamilyGroupRepository familyGroupRepository;
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
     private final FamilyGroupMapper familyGroupMapper;
     private final UserMapper userMapper;
     private final FamilyGroupInvitationsRepository familyGroupInvitationsRepository;
@@ -38,7 +38,7 @@ public class FamilyGroupService {
     private final FamilyGroupInvitationMapper familyGroupInvitationMapper;
 
     public List<FamilyGroupDtoResponse> showAllMyCreatedGroups(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroup> familyGroups = familyGroupRepository.findByUserCreator(user).orElse(null);
         if (familyGroups == null)
             return null;
@@ -48,7 +48,7 @@ public class FamilyGroupService {
     }
 
     public List<FamilyGroupDtoResponse> showAllMyGroups(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroup> familyGroups = user.getFamilyGroups();
         if (familyGroups == null)
             return null;
@@ -60,7 +60,7 @@ public class FamilyGroupService {
 
     public List<UserDTOResponse> showAllUsersInGroup(UserDetails userDetails, Integer familyGroupId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId) && familyGroup!= null) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId) && familyGroup!= null) {
                 List<User> users = familyGroup.getUsers();
                 return users.stream()
                         .map(userMapper::convertToDTO)
@@ -71,7 +71,7 @@ public class FamilyGroupService {
     }
 
     public Integer addNewGroup(UserDetails userDetails, FamilyGroupDtoRequest request) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<User> users = new ArrayList<>();
         users.add(user);
         FamilyGroup familyGroup = FamilyGroup.builder()
@@ -89,7 +89,7 @@ public class FamilyGroupService {
     }
 
     public FamilyGroupDtoResponse search(Integer FamilyGroupid, UserDetails userDetails) {
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, FamilyGroupid)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, FamilyGroupid)) {
             FamilyGroup familyGroup = familyGroupRepository.findById(FamilyGroupid).orElse(null);
             if (familyGroup == null)
                 throw new FamilyGroupNotFoundException();
@@ -104,7 +104,7 @@ public class FamilyGroupService {
         if (familyGroup == null)
             throw new FamilyGroupNotFoundException();
 
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, id)) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, id)) {
             familyGroup.setName(newName);
             familyGroupRepository.save(familyGroup);
         }
@@ -125,7 +125,7 @@ public class FamilyGroupService {
         if (userFamilyGroups.contains(familyGroup))
             throw new FamilyGroupAlreadyUserException();
 
-        if (familyGroup.getUserCreator().equals(famalyGroupAndUserUtils.getUser(userDetails))) {
+        if (familyGroup.getUserCreator().equals(familyGroupAndUserUtils.getUser(userDetails))) {
             FamilyGroupInvitations familyGroupInvitations = FamilyGroupInvitations.builder()
                     .user(user)
                     .familyGroup(familyGroup)
@@ -144,7 +144,7 @@ public class FamilyGroupService {
         if (user == null)
             throw new UsernameNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE);
 
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
             if(familyGroup.getUserCreator() == user)
                 throw new FamilyGroupNotDeleteCreateUserException();
 
@@ -162,7 +162,7 @@ public class FamilyGroupService {
     }
 
     public List<Integer> showAllMyCreatedInvitation(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroup> familyGroups = user.getUserCreatorFamilyGroups();
         List<FamilyGroupInvitations> invitations = familyGroupInvitationsRepository.findByFamilyGroupIn(familyGroups).orElse(null);
         if (invitations != null)
@@ -174,7 +174,7 @@ public class FamilyGroupService {
     public void deleteInvitation(Integer familyGroupInvitationId, UserDetails userDetails) {
         FamilyGroupInvitations familyGroupInvitations = familyGroupInvitationsRepository.findById(familyGroupInvitationId).orElse(null);
         assert familyGroupInvitations!= null;
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroup> userCreatorFamilyGroups = user.getUserCreatorFamilyGroups();
         if (userCreatorFamilyGroups.contains(familyGroupInvitations.getFamilyGroup()) || user == familyGroupInvitations.getUser()) {
             familyGroupInvitationsRepository.delete(familyGroupInvitations);
@@ -187,7 +187,7 @@ public class FamilyGroupService {
         if (familyGroupInvitations== null)
             throw new FamilyGroupInvitationNotFoundException();
 
-        User user = famalyGroupAndUserUtils.getUser(userDetails); //todo проверить работает или нет добавление пользователя в FamilyGroup;
+        User user = familyGroupAndUserUtils.getUser(userDetails); //todo проверить работает или нет добавление пользователя в FamilyGroup;
         if (user == familyGroupInvitations.getUser()) {
             FamilyGroup familyGroup = familyGroupInvitations.getFamilyGroup();
             familyGroup.addUser(user);
@@ -199,7 +199,7 @@ public class FamilyGroupService {
     }
 
     public List<FamilyGroupInvitationDtoRequest> showAllInboxInvitation(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroupInvitations> invitations = familyGroupInvitationsRepository.findByUser(user).orElse(null);
         if (invitations!= null)
             return invitations.stream().map(familyGroupInvitationMapper::convertToDto).toList();
@@ -208,7 +208,7 @@ public class FamilyGroupService {
     }
 
     public String deleteGroup(Integer groupId, UserDetails userDetails) {
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, groupId)) {
             FamilyGroup familyGroup = familyGroupRepository.findById(groupId).orElse(null);
             if (familyGroup != null) {
                 String familyGroupName = familyGroup.getName();

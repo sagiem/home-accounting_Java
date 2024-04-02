@@ -33,7 +33,7 @@ public class ShoppingProjectController {
     @Operation(
             summary = "Извлекает все проекты покупок для пользователя которые он создал, является владельцем",
             description = "Извлечет результаты для всех Family group в которых находится пользователь"
-           // tags = "get"
+            // tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -41,10 +41,38 @@ public class ShoppingProjectController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
 
-    @GetMapping("/show_all")
-    public ResponseEntity<?> showAllUserCreatorProjects(@AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/show-all-my-creator")
+    public ResponseEntity<List<ShoppingProjectDtoResponse>> showAllUserCreatorProjects(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.showAllUserCreatorProjects(userDetails));
     }
+
+    @Operation(
+            summary = "Извлекает все проекты покупок для пользователя которые он создал, является владельцем",
+            description = "Извлечет результаты для всех Family group в которых находится пользователь"
+            // tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+
+    @GetMapping("/show-all-group/{id}")
+    public ResponseEntity<List<ShoppingProjectDtoResponse>> showAllGroupProjects(@PathVariable("id") @Min(1) Integer familyGroupId,
+                                                                                 @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.showAllGroupProjects(familyGroupId, userDetails));
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     @Operation(
             summary = "Добавляет проект покупок",

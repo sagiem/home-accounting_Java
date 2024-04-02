@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.CategoryProductDtoRequest;
 import ru.sagiem.whattobuy.dto.CategoryProductDtoResponse;
-import ru.sagiem.whattobuy.dto.PointShoppingDtoRequest;
 import ru.sagiem.whattobuy.exception.CategoryProductNotFoundException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotCreatorException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
@@ -14,7 +13,7 @@ import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryProductService {
     private final CategoryProductRepository categoryProductRepository;
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
     private final CategoryProductMapper categoryProductMapper;
     private final FamilyGroupRepository familyGroupRepository;
 
@@ -30,7 +29,7 @@ public class CategoryProductService {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         if (familyGroup == null)
             throw new FamilyGroupNotUserException();
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId)) {
             List<CategoryProduct> categoryProducts = categoryProductRepository.findAllByFamilyGroup(familyGroup).orElse(null);
             if (categoryProducts == null)
                 return null;
@@ -49,7 +48,7 @@ public class CategoryProductService {
         if (familyGroup == null)
             throw new FamilyGroupNotUserException();
 
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, familyGroupid)) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, familyGroupid)) {
             CategoryProduct categoryProduct = CategoryProduct.builder()
                     .name(request.getName())
                     .familyGroup(familyGroup)
@@ -64,7 +63,7 @@ public class CategoryProductService {
         CategoryProduct categoryProduct = categoryProductRepository.findById(id).orElse(null);
         if (categoryProduct == null)
             return null;
-        if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId()))
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId()))
             return categoryProductMapper.convertToDto(categoryProduct);
         else
             throw new FamilyGroupNotUserException();
@@ -74,7 +73,7 @@ public class CategoryProductService {
         CategoryProduct categoryProduct = categoryProductRepository.findById(id).orElse(null);
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
             categoryProduct.setName(categoryProductDtoRequest.getName());
             categoryProductRepository.save(categoryProduct);
             return categoryProductDtoRequest.getName();
@@ -86,7 +85,7 @@ public class CategoryProductService {
         CategoryProduct categoryProduct = categoryProductRepository.findById(id).orElse(null);
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
-        if (famalyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
             categoryProductRepository.delete(categoryProduct);
             return categoryProduct.getName();
         } else

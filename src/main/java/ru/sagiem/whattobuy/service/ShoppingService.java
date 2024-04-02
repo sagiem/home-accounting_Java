@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ShoppingDtoRequest;
 import ru.sagiem.whattobuy.dto.ShoppingDtoResponse;
-import ru.sagiem.whattobuy.dto.ShoppingSetDtoRequest;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserNotCreatorException;
 import ru.sagiem.whattobuy.exception.ShoppingNotFoundException;
@@ -23,7 +22,7 @@ import ru.sagiem.whattobuy.repository.poroduct.PointShoppingRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingProjectRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingRepository;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,13 +37,13 @@ public class ShoppingService {
     private final PointShoppingRepository pointShoppingRepository;
     private final FamilyGroupRepository familyGroupRepository;
     private final ShoppingMapper shoppingMapper;
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
     private final ShoppingProjectRepository shoppingProjectRepository;
 
 
     // получить все покупки пользователя из всех групп и всех проектов
     public List<ShoppingDtoResponse> showAllMyExecutor(UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         List<Shopping> shoppings = shoppingRepository.findByUserCreator(user).orElse(null);
         if (shoppings != null) {
             return shoppings.stream()
@@ -56,7 +55,7 @@ public class ShoppingService {
 
     // получить все покупки из проекта покупок для пользователя
     public List<ShoppingDtoResponse> showMyExecutorinShoppingProgect(Integer shoppingProjectId, UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(shoppingProjectId).orElse(null);
         if (shoppingProject == null)
             throw new ShoppingProjectNotFoundException();
@@ -72,12 +71,12 @@ public class ShoppingService {
 
     //Возвращает все покупки в проекте покупок
     public List<ShoppingDtoResponse> showAllInShoppingProgect(Integer shoppingProgectId, UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(shoppingProgectId).orElse(null);
         if (shoppingProject == null)
             throw new ShoppingProjectNotFoundException();
 
-        if (!famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId()))
+        if (!familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId()))
             throw new FamilyGroupNotUserException();
 
         List<Shopping> shoppings = shoppingRepository.findAllByShoppingProjectAndUserExecutor(shoppingProject, user).orElse(null);
@@ -103,7 +102,7 @@ public class ShoppingService {
 
         if (shoppingProject != null) {
             FamilyGroup shopingProjectFamilyGroup = shoppingProject.getFamilyGroup();
-            if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor != null &&
+            if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor != null &&
                     userExecutor.getFamilyGroups() == shopingProjectFamilyGroup) {
                 Shopping shopping = Shopping.builder()
                         .product(productRepository.findById(shoppingSetDtoRequest.getProductId()).orElse(null))
@@ -117,7 +116,7 @@ public class ShoppingService {
                 Shopping entityShopping = shoppingRepository.save(shopping);
                 return entityShopping.getId();
             }
-            if (famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor == null) {
+            if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor == null) {
                 Shopping shopping = Shopping.builder()
                         .product(productRepository.findById(shoppingSetDtoRequest.getProductId()).orElse(null))
                         .volume(shoppingSetDtoRequest.getVolume())
@@ -133,7 +132,7 @@ public class ShoppingService {
                 throw new FamilyGroupNotUserException();
         }
 
-        if (userExecutor != null && familyGroup != null && famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
+        if (userExecutor != null && familyGroup != null && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
             Shopping shopping = Shopping.builder()
                     .product(productRepository.findById(shoppingSetDtoRequest.getProductId()).orElse(null))
                     .volume(shoppingSetDtoRequest.getVolume())
@@ -146,7 +145,7 @@ public class ShoppingService {
             Shopping entityShopping = shoppingRepository.save(shopping);
             return entityShopping.getId();
         }
-        if (userExecutor == null && familyGroup != null && famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
+        if (userExecutor == null && familyGroup != null && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
             Shopping shopping = Shopping.builder()
                     .product(productRepository.findById(shoppingSetDtoRequest.getProductId()).orElse(null))
                     .volume(shoppingSetDtoRequest.getVolume())
@@ -165,14 +164,14 @@ public class ShoppingService {
 
 
     public Void update(Integer id, ShoppingDtoRequest request, UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
 
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();
         FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
         assert shoppingFamilyGroup != null;
-        if (shoppingFamilyGroup.getUserCreator() == user || famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId())) {
+        if (shoppingFamilyGroup.getUserCreator() == user || familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId())) {
             shopping.setProduct(productRepository.findById(request.getProductId()).orElse(null));
             shopping.setVolume(request.getVolume());
             shopping.setPointShopping(pointShoppingRepository.findById(request.getPointShoppingId()).orElse(null));
@@ -185,14 +184,14 @@ public class ShoppingService {
     }
 
     public void delete(Integer id, UserDetails userDetails) {
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
 
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();
         FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
         assert shoppingFamilyGroup != null;
-        if (shoppingFamilyGroup.getUserCreator() == user || famalyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId()))
+        if (shoppingFamilyGroup.getUserCreator() == user || familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId()))
             shoppingRepository.deleteById(id);
         else
             throw new FamilyGroupNotUserNotCreatorException();
@@ -203,7 +202,7 @@ public class ShoppingService {
 
     public void executedShopping(Integer id, UserDetails userDetails) {
 
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();
@@ -218,7 +217,7 @@ public class ShoppingService {
 
     public void notExecutedShopping(Integer id, UserDetails userDetails) {
 
-        User user = famalyGroupAndUserUtils.getUser(userDetails);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();

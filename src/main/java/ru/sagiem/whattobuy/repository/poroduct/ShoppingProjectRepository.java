@@ -14,4 +14,6 @@ public interface ShoppingProjectRepository  extends JpaRepository<ShoppingProjec
     Optional<List<ShoppingProject>> findByIdIn(Collection<Integer> id);
     Optional<List<ShoppingProject>> findByFamilyGroupIn(List<FamilyGroup> familyGroups);
     Optional<List<ShoppingProject>> findByUserCreatorOrFamilyGroupIn(User userCreator, List<FamilyGroup> familyGroup);
+
+    Optional<List<ShoppingProject>> findByFamilyGroup(FamilyGroup familyGroup);
 }

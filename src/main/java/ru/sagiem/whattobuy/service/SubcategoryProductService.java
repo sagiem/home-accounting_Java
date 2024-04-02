@@ -3,7 +3,6 @@ package ru.sagiem.whattobuy.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.sagiem.whattobuy.dto.CategoryProductDtoResponse;
 import ru.sagiem.whattobuy.dto.SubCategoryProductDtoRequest;
 import ru.sagiem.whattobuy.dto.SubCategoryProductDtoResponse;
 import ru.sagiem.whattobuy.exception.CategoryProductNotFoundException;
@@ -15,14 +14,14 @@ import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
-import ru.sagiem.whattobuy.utils.FamalyGroupAndUserUtils;
+import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SubcategoryProductService {
-    private final FamalyGroupAndUserUtils famalyGroupAndUserUtils;
+    private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
    private final SubcategoryProductRepository subcategoryProductRepository;
    private final CategoryProductRepository categoryProductRepository;
    private final SubCategoryProductMapper subCategoryProductMapper;
@@ -34,7 +33,7 @@ public class SubcategoryProductService {
             return null;
         CategoryProduct categoryProduct = categoryProductRepository.findById(CategoryProductId).orElse(null);
         FamilyGroup categoryProductFamilyGroup = categoryProduct.getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = famalyGroupAndUserUtils.getFamilyGroup(userDetails);
+        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
         if (userFamilyGroup.equals(categoryProductFamilyGroup)){
             return subcategoryProducts.stream()
                     .map(subCategoryProductMapper::convertToDto)
@@ -49,7 +48,7 @@ public class SubcategoryProductService {
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
         FamilyGroup categoryProductFamilyGroup = categoryProduct.getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = famalyGroupAndUserUtils.getFamilyGroup(userDetails);
+        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
         if (userFamilyGroup.equals(categoryProductFamilyGroup)){
             SubcategoryProduct subcategoryProduct = SubcategoryProduct.builder()
                     .name(request.getName())
@@ -66,7 +65,7 @@ public class SubcategoryProductService {
         if (subcategoryProduct == null)
             throw new SubCategoryProductNotFoundException();
         FamilyGroup categoryProductFamilyGroup = subcategoryProduct.getCategoryProduct().getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = famalyGroupAndUserUtils.getFamilyGroup(userDetails);
+        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
         if (userFamilyGroup.equals(categoryProductFamilyGroup)){
             return subCategoryProductMapper.convertToDto(subcategoryProduct);
         }
@@ -79,7 +78,7 @@ public class SubcategoryProductService {
             throw new SubCategoryProductNotFoundException();
 
         FamilyGroup categoryProductFamilyGroup = subcategoryProduct.getCategoryProduct().getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = famalyGroupAndUserUtils.getFamilyGroup(userDetails);
+        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
 
         if (userFamilyGroup.equals(categoryProductFamilyGroup)){
             subcategoryProduct.setName(request.getName());
@@ -94,7 +93,7 @@ public class SubcategoryProductService {
         if (subcategoryProduct == null)
             throw new SubCategoryProductNotFoundException();
         FamilyGroup categoryProductFamilyGroup = subcategoryProduct.getCategoryProduct().getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = famalyGroupAndUserUtils.getFamilyGroup(userDetails);
+        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
         if (userFamilyGroup.equals(categoryProductFamilyGroup)){
             subcategoryProductRepository.delete(subcategoryProduct);
             return subcategoryProduct.getName();
