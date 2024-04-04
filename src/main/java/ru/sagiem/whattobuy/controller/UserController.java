@@ -34,8 +34,8 @@ public class UserController {
 
     @Operation(
             summary = "Поиск пользователя по email",
-            description = "Ищет пользователя по email и возвращает его id и информацию о нем",
-            tags = "get"
+            description = "Ищет пользователя по email и возвращает его id и информацию о нем"
+            //tags = "get"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = UserDTOResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
