@@ -18,10 +18,10 @@ public class FamilyGroupInvitations {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 }

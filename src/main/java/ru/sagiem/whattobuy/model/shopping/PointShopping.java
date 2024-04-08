@@ -50,7 +50,7 @@ public class PointShopping {
     private User lastModifiedUser;
 
     @ManyToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 
 

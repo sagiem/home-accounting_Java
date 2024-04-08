@@ -42,7 +42,7 @@ public class Product {
     private List<Shopping> shoppings;
 
     @ManyToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 
     @CreatedDate
