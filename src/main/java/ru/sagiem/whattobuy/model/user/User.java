@@ -25,11 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -42,11 +38,6 @@ public class User implements UserDetails {
     private LocalDateTime createDateTime;
 
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "family_users",
-//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"))
-
     @ManyToMany(mappedBy = "users")
     private List<FamilyGroup> familyGroups;
 
@@ -54,7 +45,6 @@ public class User implements UserDetails {
         familyGroups.remove(familyGroup);
         familyGroup.getUsers().remove(this);
     }
-
 
     @OneToMany(mappedBy = "userCreator")
     private List<PointShopping> pointShoppingsCreater;
@@ -73,9 +63,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "userCreator")
     private List<FamilyGroup> userCreatorFamilyGroups;
-
-
-
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "_shopping")
+@Table(name = "shopping")
 public class Shopping {
 
     @Id
@@ -47,7 +47,7 @@ public class Shopping {
     private PointShopping pointShopping;
 
     @ManyToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 
     @CreatedBy

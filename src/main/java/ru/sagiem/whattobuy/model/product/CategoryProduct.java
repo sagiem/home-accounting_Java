@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_category_product")
+@Table(name = "category_product")
 public class CategoryProduct {
 
     @Id
@@ -35,6 +35,6 @@ public class CategoryProduct {
     private List<Product> products;
 
     @ManyToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -22,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "_shopping_project")
+@Table(name = "shopping_project")
 public class ShoppingProject {
 
     @Id
@@ -42,12 +43,13 @@ public class ShoppingProject {
     private boolean active;
     private String comment;
 
+    @CreatedBy
     @ManyToOne
-    @JoinColumn(name = "user_creator_id")
+    @JoinColumn(name = "user_creator_id", nullable = false, updatable = false)
     private User userCreator;
 
     @ManyToOne
-    @JoinColumn(name = "family_group")
+    @JoinColumn(name = "family_group", nullable = false)
     private FamilyGroup familyGroup;
 
     @OneToMany(mappedBy = "shoppingProject", cascade = CascadeType.ALL, orphanRemoval = true)

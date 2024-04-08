@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_subcategory_product")
+@Table(name = "subcategory_product")
 public class SubcategoryProduct {
 
     @Id
@@ -27,11 +27,11 @@ public class SubcategoryProduct {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "category_product_id")
+    @JoinColumn(name = "category_product_id", nullable = false)
     private CategoryProduct categoryProduct;
 
     @ManyToOne
-    @JoinColumn(name = "family_group_id")
+    @JoinColumn(name = "family_group_id", nullable = false)
     private FamilyGroup familyGroup;
 
     @OneToMany(mappedBy = "subcategory")

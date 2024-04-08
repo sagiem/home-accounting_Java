@@ -36,20 +36,15 @@ public class FamilyGroup {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_creator_id")
+    @JoinColumn(name = "user_creator_id", nullable = false)
     private User userCreator;
 
-//    @ManyToMany(mappedBy = "familyGroups", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "family_users",
             joinColumns = @JoinColumn(name = "family_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> users;
-
-    public void deleteAllUsers() {
-        users.clear();
-    }
 
     @OneToMany(mappedBy = "familyGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
