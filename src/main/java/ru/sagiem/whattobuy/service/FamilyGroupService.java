@@ -136,7 +136,7 @@ public class FamilyGroupService {
             throw new FamilyGroupNotCreatorException();
     }
 
-    public void deleteUserInGroup(UserDetails userDetails, Integer groupId, Integer userId) {
+    public String deleteUserInGroup(UserDetails userDetails, Integer groupId, Integer userId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(groupId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
         if (familyGroup == null)
@@ -152,6 +152,7 @@ public class FamilyGroupService {
             if (userFamilyGroups.contains(familyGroup)) {
                 familyGroup.removeUser(user);
                 familyGroupRepository.save(familyGroup);
+                return user.getUsername();
 
             }
             else
@@ -161,13 +162,14 @@ public class FamilyGroupService {
             throw new FamilyGroupNotCreatorException();
     }
 
-    public List<Integer> showAllMyCreatedInvitation(UserDetails userDetails) {
+    public List<FamilyGroupInvitationDtoRequest> showAllMyCreatedInvitation(UserDetails userDetails) {
         User user = familyGroupAndUserUtils.getUser(userDetails);
         List<FamilyGroup> familyGroups = user.getUserCreatorFamilyGroups();
         List<FamilyGroupInvitations> invitations = familyGroupInvitationsRepository.findByFamilyGroupIn(familyGroups).orElse(null);
         if (invitations != null)
-            return invitations.stream().map(FamilyGroupInvitations::getId).toList();
+            return invitations.stream().map(familyGroupInvitationMapper::convertToDto).toList();
         else return null;
+
     }
 
 

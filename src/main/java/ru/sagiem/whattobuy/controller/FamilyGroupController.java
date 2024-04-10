@@ -64,7 +64,7 @@ public class FamilyGroupController {
     }
 
     @Operation(
-            summary = "Возвращает всех пользователей состаящих в группе",
+            summary = "Возвращает всех пользователей состоящих в группе",
             description = "Возвращает всех пользователей состаящих в группе"
             //tags = "get"
     )
@@ -73,8 +73,9 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show-all-users-in-group")
-    public ResponseEntity<List<UserDTOResponse>> showAllUsersInGroup(@AuthenticationPrincipal UserDetails userDetails, Integer familyGroupId) {
+    @GetMapping("/show-all-users-in-group/{id}")
+    public ResponseEntity<List<UserDTOResponse>> showAllUsersInGroup(@PathVariable("id") @Min(1) Integer familyGroupId,
+                                                                     @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.showAllUsersInGroup(userDetails, familyGroupId));
     }
 
@@ -169,13 +170,13 @@ public class FamilyGroupController {
             //tags = "get"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = FamilyGroupInvitationDtoRequest.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
 
     @GetMapping("/show-all-my-created-invitation")
-    public ResponseEntity<List<Integer>> showAllMyCreatedInvitation(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<FamilyGroupInvitationDtoRequest>> showAllMyCreatedInvitation(@AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(service.showAllMyCreatedInvitation(userDetails));
     }
@@ -206,8 +207,9 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("/accept-invitation")
-    public ResponseEntity<SuccessResponse> acceptInvitation(@AuthenticationPrincipal UserDetails userDetails, Integer familyGroupInvitationId) {
+    @PostMapping("/accept-invitation/{Id}")
+    public ResponseEntity<SuccessResponse> acceptInvitation(@PathVariable("Id") @Min(1) Integer familyGroupInvitationId,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
         service.acceptInvitation(userDetails, familyGroupInvitationId);
         return ResponseEntity.ok(getSuccessResponse(ACCEPT_INVITATION, FAMILY_GROUP));
     }
@@ -226,8 +228,8 @@ public class FamilyGroupController {
     public ResponseEntity<SuccessResponse> deleteUserInGroup(@PathVariable("groupId") @Min(1) Integer groupId,
                                                              @PathVariable("userId") @Min(1) Integer userId,
                                                              @AuthenticationPrincipal UserDetails userDetails) {
-        service.deleteUserInGroup(userDetails, groupId, userId);
-        return ResponseEntity.ok(getSuccessResponse(DELETE_USER_IN_GROUP, FAMILY_GROUP));
+        String username = service.deleteUserInGroup(userDetails, groupId, userId);
+        return ResponseEntity.ok(getSuccessResponse(DELETE_USER_IN_GROUP, username));
     }
 
     @Operation(
@@ -242,13 +244,11 @@ public class FamilyGroupController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @DeleteMapping("/{Id}")
     public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
-                                                             @AuthenticationPrincipal UserDetails userDetails){
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
         String familyGroupName = service.deleteGroup(Id, userDetails);
         return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, familyGroupName));
 
     }
-
-
 
 
 }
