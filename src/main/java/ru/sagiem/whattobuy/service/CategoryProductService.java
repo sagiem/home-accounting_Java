@@ -43,12 +43,12 @@ public class CategoryProductService {
     }
 
 
-    public Integer create(Integer familyGroupid, CategoryProductDtoRequest request, UserDetails userDetails) {
-        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupid).orElse(null);
+    public Integer create(CategoryProductDtoRequest request, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
         if (familyGroup == null)
             throw new FamilyGroupNotUserException();
 
-        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, familyGroupid)) {
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, request.getFamilyGroupId())) {
             CategoryProduct categoryProduct = CategoryProduct.builder()
                     .name(request.getName())
                     .familyGroup(familyGroup)
@@ -69,14 +69,14 @@ public class CategoryProductService {
             throw new FamilyGroupNotUserException();
     }
 
-    public String update(Integer id, CategoryProductDtoRequest categoryProductDtoRequest, UserDetails userDetails) {
-        CategoryProduct categoryProduct = categoryProductRepository.findById(id).orElse(null);
+    public String update(CategoryProductDtoRequest request, UserDetails userDetails) {
+        CategoryProduct categoryProduct = categoryProductRepository.findById(request.getFamilyGroupId()).orElse(null);
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProduct.getFamilyGroup().getId())) {
-            categoryProduct.setName(categoryProductDtoRequest.getName());
+            categoryProduct.setName(request.getName());
             categoryProductRepository.save(categoryProduct);
-            return categoryProductDtoRequest.getName();
+            return request.getName();
         } else
             throw new FamilyGroupNotCreatorException();
     }

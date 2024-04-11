@@ -14,20 +14,6 @@ spring:
       hibernate:
         format_sql: true
 
-
-  mail:
-    host: smtp.yandex.ru
-    username: sagiem
-    password: ullgduypnebgwucx
-#    qizbadipiehqrkjl
-    port: 465
-#    test-connection: true
-    properties:
-      "mail.transport.protocol": smtp
-      "mail.smtp.auth": true
-      "mail.smtp.starttls.enable": true
-
-
 application:
   security:
     jwt:
@@ -35,5 +21,6 @@ application:
       expiration: 10D
       refresh-token:
         expiration: 30D
+
 
 

@@ -60,18 +60,16 @@ public class PointShoppingService {
     }
 
 
-    public Integer addPointShopping(Integer id,
-                                 PointShoppingDtoRequest pointShoppingDtoRequest,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        FamilyGroup familyGroup = familyGroupRepository.findById(id).orElse(null);
+    public Integer add(PointShoppingDtoRequest request, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
         if (familyGroup == null)
             throw new FamilyGroupNotFoundException();
 
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
             PointShopping pointShopping = PointShopping.builder()
-                    .name(pointShoppingDtoRequest.getName())
-                    .address(pointShoppingDtoRequest.getAddress())
-                    .comment(pointShoppingDtoRequest.getComment())
+                    .name(request.getName())
+                    .address(request.getAddress())
+                    .comment(request.getComment())
                     .familyGroup(familyGroup)
                     .build();
             PointShopping pointShoppingEntity = pointShoppingRepository.save(pointShopping);
@@ -90,13 +88,16 @@ public class PointShoppingService {
             throw new FamilyGroupNotUserException();
     }
 
-    public String update(Integer id, PointShoppingDtoRequest pointShoppingDtoRequest, UserDetails userDetails) {
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
-            PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
-            pointShopping.setName(pointShoppingDtoRequest.getName());
-            pointShopping.setAddress(pointShoppingDtoRequest.getAddress());
-            pointShopping.setComment(pointShoppingDtoRequest.getComment());
-            pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(pointShoppingDtoRequest.getFamilyGroup()));
+    public String update(Integer id, PointShoppingDtoRequest request, UserDetails userDetails) {
+        User user = familyGroupAndUserUtils.getUser(userDetails);
+        PointShopping pointShopping = pointShoppingRepository.findById(id).orElse(null);
+        assert pointShopping != null;//TODO сделать исключение
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, pointShopping.getFamilyGroup().getId()) ||
+                pointShopping.getUserCreator() == user) {
+            pointShopping.setName(request.getName());
+            pointShopping.setAddress(request.getAddress());
+            pointShopping.setComment(request.getComment());
+            pointShopping.setFamilyGroup(familyGroupRepository.getReferenceById(request.getFamilyGroupId()));
             pointShoppingRepository.save(pointShopping);
             return pointShopping.getName();
         } else
@@ -105,8 +106,11 @@ public class PointShoppingService {
     }
 
     public String delete(Integer id, UserDetails userDetails) {
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id)) {
-            PointShopping pointShopping = pointShoppingRepository.getReferenceById(id);
+        PointShopping pointShopping = pointShoppingRepository.findById(id).orElse(null);
+        assert pointShopping!= null;//TODO сделать исключение
+        User user = familyGroupAndUserUtils.getUser(userDetails);
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, pointShopping.getFamilyGroup().getId()) ||
+                pointShopping.getUserCreator() == user) {
             pointShoppingRepository.delete(pointShopping);
             return pointShopping.getName();
         } else

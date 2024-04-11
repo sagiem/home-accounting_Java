@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     @Operation(
-            summary = "Добавление прдукта",
+            summary = "Добавление продукта",
             description = "Добавление происходит в группу"
             //tags = "get"
     )
@@ -54,12 +54,11 @@ public class ProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("/add/{id}")
-    public ResponseEntity<?> add(@PathVariable("id") @Min(1) Integer familyGroupId,
-                                 @RequestBody ProductDtoRequest request,
+    @PostMapping("/add")
+    public ResponseEntity<?> add(@RequestBody ProductDtoRequest request,
                                  @AuthenticationPrincipal UserDetails userDetails) {
 
-        return service.add(familyGroupId, request, userDetails);
+        return service.add(request, userDetails);
     }
 
     @Operation(
@@ -68,7 +67,7 @@ public class ProductController {
             //tags = "get"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CategoryProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})

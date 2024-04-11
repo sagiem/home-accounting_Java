@@ -32,6 +32,7 @@ public class ResponseUtils {
     public static final String FAMILY_GROUP_DELETE_MESSAGE = "Группа %s успешно удалена";
     public static final String FAMILY_GROUP_NOT_USER_NOT_CREATOR_EXCEPTION_MESSAGE = "Пользоватеь не является участником группы и не является создателем объекта";
     public static final String POINT_SHOPING_UPDATE_MESSAGE = "Точка покупки %s успешно обновлена";
+    public static final String POINT_SHOPPING_DELETE_MESSAGE = "Точка покупки %s успешно удалена";
     public static final String CATEGORY_PRODUCT_NOT_FOUND_EXCEPTION_MESSAGE = "Категория продукта не найдена";
     public static final String CATEGORY_PRODUCT_UPDATE_MESSAGE = "Категория успешно обновлена, новое имя: %s";
     public static final String CATEGORY_PRODUCT_DELETE_MESSAGE = "Категория %s успешно удалена";

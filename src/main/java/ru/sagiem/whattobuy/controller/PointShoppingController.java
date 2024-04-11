@@ -60,9 +60,9 @@ public class PointShoppingController {
     @GetMapping("/show-all-my-created")
     public ResponseEntity<List<PointShoppingDtoResponse>> showAllMyCreated(@AuthenticationPrincipal UserDetails userDetails) {
 
-            return ResponseEntity.ok(service.showAllMyCreated(userDetails));
+        return ResponseEntity.ok(service.showAllMyCreated(userDetails));
 
-        }
+    }
 
 
     @Operation(
@@ -75,11 +75,10 @@ public class PointShoppingController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("/add/{id}")
-    public ResponseEntity<Integer> add(@PathVariable("id") @Min(1) Integer id,
-                                @RequestBody PointShoppingDtoRequest request,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.addPointShopping(id, request, userDetails));
+    @PostMapping("/add")
+    public ResponseEntity<Integer> add(@RequestBody PointShoppingDtoRequest request,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.add(request, userDetails));
     }
 
 
@@ -95,7 +94,7 @@ public class PointShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/search/{id}")
     public ResponseEntity<PointShoppingDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
-                                                               @AuthenticationPrincipal UserDetails userDetails) {
+                                                             @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(service.searchId(id, userDetails));
 
@@ -136,9 +135,9 @@ public class PointShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @DeleteMapping("/{Id}")
     public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
-                                                       @AuthenticationPrincipal UserDetails userDetails){
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
         String familyGroupName = service.delete(Id, userDetails);
-        return ResponseEntity.ok(getSuccessResponse(FAMILY_GROUP_DELETE_MESSAGE, familyGroupName));
+        return ResponseEntity.ok(getSuccessResponse(POINT_SHOPPING_DELETE_MESSAGE, familyGroupName));
 
     }
 

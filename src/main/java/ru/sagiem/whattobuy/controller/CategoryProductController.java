@@ -55,11 +55,10 @@ public class CategoryProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("/add/{id}")
-    public ResponseEntity<Integer> add(@PathVariable("id") @Min(1) Integer familyGroupid,
-                                       @RequestBody CategoryProductDtoRequest request,
+    @PostMapping("/add/")
+    public ResponseEntity<Integer> add(@RequestBody CategoryProductDtoRequest request,
                                        @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.create(familyGroupid, request, userDetails));
+        return ResponseEntity.ok(service.create(request, userDetails));
     }
 
     @Operation(
@@ -89,13 +88,10 @@ public class CategoryProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<SuccessResponse> update(@PathVariable("id") @Min(1) Integer id,
-                                                  CategoryProductDtoRequest categoryProductDtoRequest,
+    @PatchMapping("/update")
+    public ResponseEntity<SuccessResponse> update(CategoryProductDtoRequest categoryProductDtoRequest,
                                                   @AuthenticationPrincipal UserDetails userDetails) {
-
-
-        String сategoryProductName = service.update(id, categoryProductDtoRequest, userDetails);
+        String сategoryProductName = service.update(categoryProductDtoRequest, userDetails);
         return ResponseEntity.ok(getSuccessResponse(CATEGORY_PRODUCT_UPDATE_MESSAGE, сategoryProductName));
 
     }
@@ -112,7 +108,7 @@ public class CategoryProductController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @DeleteMapping("/{Id}")
     public ResponseEntity<SuccessResponse> delete(@PathVariable("Id") @Min(1) Integer Id,
-                                                       @AuthenticationPrincipal UserDetails userDetails){
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
         String сategoryProductName = service.delete(Id, userDetails);
         return ResponseEntity.ok(getSuccessResponse(CATEGORY_PRODUCT_DELETE_MESSAGE, сategoryProductName));
 

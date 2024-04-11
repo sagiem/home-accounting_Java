@@ -55,19 +55,17 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> add(Integer familyGroupId,
-                                 ProductDtoRequest productDto,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+    public ResponseEntity<?> add(ProductDtoRequest request, UserDetails userDetails) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
         if (familyGroup != null)
             throw new FamilyGroupNotFoundException();
 
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             var product = Product.builder()
-                    .name(productDto.getName())
-                    .category(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow())
-                    .subcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow())
-                    .unitOfMeasurement(UnitOfMeasurementProduct.valueOf(productDto.getUnitOfMeasurement()))
+                    .name(request.getName())
+                    .category(categoryProductRepository.findById(request.getCategoryId()).orElseThrow())
+                    .subcategory(subcategoryProductRepository.findById(request.getSubcategoryId()).orElseThrow())
+                    .unitOfMeasurement(UnitOfMeasurementProduct.valueOf(request.getUnitOfMeasurement()))
                     .familyGroup(familyGroup)
                     .build();
             var saveProduct = productRepository.save(product);
@@ -98,7 +96,7 @@ public class ProductService {
 
         User user = familyGroupAndUserUtils.getUser(userDetails);
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
-                || (product.getUserCreator().equals(user)) && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
+                || (product.getUserCreator().equals(user))) {
             product.setName(productDto.getName());
             product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
             product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
@@ -120,7 +118,7 @@ public class ProductService {
 
         User user = familyGroupAndUserUtils.getUser(userDetails);
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
-                || (product.getUserCreator().equals(user)) && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
+                || (product.getUserCreator().equals(user))) {
             productRepository.deleteById(id);
             return product.getName();
         }

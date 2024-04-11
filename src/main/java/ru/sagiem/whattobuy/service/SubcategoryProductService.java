@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.SubCategoryProductDtoRequest;
 import ru.sagiem.whattobuy.dto.SubCategoryProductDtoResponse;
 import ru.sagiem.whattobuy.exception.CategoryProductNotFoundException;
+import ru.sagiem.whattobuy.exception.FamilyGroupNotCreatorException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
 import ru.sagiem.whattobuy.exception.SubCategoryProductNotFoundException;
 import ru.sagiem.whattobuy.mapper.SubCategoryProductMapper;
@@ -43,13 +44,12 @@ public class SubcategoryProductService {
 
     }
 
-    public Integer create(Integer categoryProductId, SubCategoryProductDtoRequest request, UserDetails userDetails) {
-        CategoryProduct categoryProduct = categoryProductRepository.findById(categoryProductId).orElse(null);
+    public Integer create(SubCategoryProductDtoRequest request, UserDetails userDetails) {
+        CategoryProduct categoryProduct = categoryProductRepository.findById(request.getCategoryProductId()).orElse(null);
         if (categoryProduct == null)
             throw new CategoryProductNotFoundException();
         FamilyGroup categoryProductFamilyGroup = categoryProduct.getFamilyGroup();
-        List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
-        if (userFamilyGroup.equals(categoryProductFamilyGroup)){
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProductFamilyGroup.getId())){
             SubcategoryProduct subcategoryProduct = SubcategoryProduct.builder()
                     .name(request.getName())
                     .familyGroup(categoryProductFamilyGroup)
@@ -57,7 +57,8 @@ public class SubcategoryProductService {
                     .build();
             return subcategoryProductRepository.save(subcategoryProduct).getId();
         }
-        throw new FamilyGroupNotUserException();
+        else
+            throw new FamilyGroupNotCreatorException();
     }
 
     public SubCategoryProductDtoResponse searchId(Integer id, UserDetails userDetails) {
@@ -72,7 +73,7 @@ public class SubcategoryProductService {
         throw new FamilyGroupNotUserException();
     }
 
-    public String update(Integer id, SubCategoryProductDtoRequest request, UserDetails userDetails) {
+    public String update(Integer id, String name, UserDetails userDetails) {
         SubcategoryProduct subcategoryProduct = subcategoryProductRepository.findById(id).orElse(null);
         if (subcategoryProduct == null)
             throw new SubCategoryProductNotFoundException();
@@ -80,12 +81,13 @@ public class SubcategoryProductService {
         FamilyGroup categoryProductFamilyGroup = subcategoryProduct.getCategoryProduct().getFamilyGroup();
         List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
 
-        if (userFamilyGroup.equals(categoryProductFamilyGroup)){
-            subcategoryProduct.setName(request.getName());
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProductFamilyGroup.getId())){
+            subcategoryProduct.setName(name);
             subcategoryProductRepository.save(subcategoryProduct);
-            return request.getName();
+            return name;
         }
-        throw new FamilyGroupNotUserException();
+        else
+            throw new FamilyGroupNotCreatorException();
     }
 
     public String delete(Integer id, UserDetails userDetails) {
@@ -94,10 +96,11 @@ public class SubcategoryProductService {
             throw new SubCategoryProductNotFoundException();
         FamilyGroup categoryProductFamilyGroup = subcategoryProduct.getCategoryProduct().getFamilyGroup();
         List<FamilyGroup> userFamilyGroup = familyGroupAndUserUtils.getFamilyGroup(userDetails);
-        if (userFamilyGroup.equals(categoryProductFamilyGroup)){
+        if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, categoryProductFamilyGroup.getId())){
             subcategoryProductRepository.delete(subcategoryProduct);
             return subcategoryProduct.getName();
         }
-        throw new FamilyGroupNotUserException();
+        else
+            throw new FamilyGroupNotCreatorException();
     }
 }

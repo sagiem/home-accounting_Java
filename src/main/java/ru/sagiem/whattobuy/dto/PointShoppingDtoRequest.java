@@ -6,7 +6,7 @@ import lombok.Data;
 public class PointShoppingDtoRequest {
     private String name;
     private String address;
-    private Integer familyGroup;
+    private Integer familyGroupId;
     private String comment;
 
 }
