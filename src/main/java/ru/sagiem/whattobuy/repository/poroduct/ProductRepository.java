@@ -22,8 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Product findByIdAndUserCreator(Integer id, User user);
     Optional<List<Product>> findByIdIn(Collection<Integer> id);
     Optional<List<Product>> findAllByFamilyGroup(FamilyGroup familyGroup);
-    Optional<List<Product>> findAllByFamilyGroupAndCategoryAndSubcategory(FamilyGroup familyGroup,
-                                                                          Category category,
-
-                                                                              );
+//    Optional<List<Product>> findAllByFamilyGroupAndCategoryAndSubcategory(FamilyGroup familyGroup,
+//                                                                          Category category,
+//
+//                                                                              );
 }
