@@ -84,15 +84,15 @@ public class ShoppingController {
 
     @Operation(
             summary = "Назначает покупку пользователю",
-            description = "Если не указан проект покупок, то покупка назначается без проекта. Если не указан пользователь, то покупка назначается без пользователя"
+            description = "Если не указан проект покупок, то покупка назначается без проекта. Если не указан пользователь, то покупка назначается без пользователя в группу"
             //tags = "get"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show-showAllInShoppingProgect/{id}")
+    @GetMapping("/add-shopping")
     @PostMapping("/add-set-user")
     public ResponseEntity<Integer> addSet(@RequestBody ShoppingDtoRequest shoppingSetDtoRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
