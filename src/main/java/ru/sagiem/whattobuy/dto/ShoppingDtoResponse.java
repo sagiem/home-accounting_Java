@@ -16,7 +16,6 @@ public class ShoppingDtoResponse {
     private LocalDateTime lastModified;
     private LocalDateTime executorDate;
     private Integer productId;
-    private Double price;
     private Integer Volume;
     private Integer pointShoppingId;
     private Integer shoppingProjectId;

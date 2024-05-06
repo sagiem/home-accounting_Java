@@ -55,7 +55,7 @@ public class ResponseUtils {
     public static final String SHOPPING_PROJECT_UPDATE_MESSAGE = "Проект покупок успешно обновлен";
     public static final String SHOPPING_PROJECT_DELETE_MESSAGE = "Проект покупок успешно удален";
     public static final String SHOPPING_STATUS_EXECUTED_MESSAGE = "Покупке присвоен статут Выполнено";
-    public static final String SHOPPING_DELETE_NOT_EXECUTED_MESSAGE = "Покупке присвоен статус Не выполено";
+    public static final String SHOPPING_DELETE_NOT_EXECUTED_MESSAGE = "Покупке присвоен статус Не выполнено";
 
     public static final String BAD_CREDENTIALS_EXCEPTION_MESSAGE = "Неверное имя пользователя и пароль";
     public static final String METHOD_ARGUMENT_NOT_VALID_EXCEPTION_MESSAGE = "Переданные данные не прошли проверку";

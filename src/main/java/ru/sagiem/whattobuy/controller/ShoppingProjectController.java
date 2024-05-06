@@ -72,11 +72,10 @@ public class ShoppingProjectController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @PostMapping("/add-in-group/{id}")
-    public ResponseEntity<Integer> addInFamilyGroup(@PathVariable("id") @Min(1) Integer familyGroupId,
-                                 @RequestBody ShoppingProjectDtoRequest request,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.addInFamilyGroup(familyGroupId, request, userDetails));
+    @PostMapping("/add-in-group")
+    public ResponseEntity<Integer> addInFamilyGroup(@AuthenticationPrincipal UserDetails userDetails,
+                                                    @RequestBody ShoppingProjectDtoRequest request) {
+        return ResponseEntity.ok(service.addInFamilyGroup(userDetails, request));
     }
 
 
@@ -91,13 +90,13 @@ public class ShoppingProjectController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/search/{id}")
     public ResponseEntity<ShoppingProjectDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
-                                                             @AuthenticationPrincipal UserDetails userDetails) {
+                                                               @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(service.searchId(id, userDetails));
     }
 
     @Operation(
             summary = "Обновление проекта покупок",
-            description = "Обновление проекта покупок, обновить может только создатель проекта"
+            description = "Обновление проекта покупок, обновить может создатель проекта либо владелец группы"
             //tags = "get"
     )
     @ApiResponses({
@@ -116,7 +115,7 @@ public class ShoppingProjectController {
 
     @Operation(
             summary = "Удаление проекта покупок",
-            description = "Удаление проекта покупо доступно только создателю проекта и если к проекту не привязаны покупки"
+            description = "Удаление проекта покупо доступно создателю проекта и владельцу группы"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
@@ -130,13 +129,12 @@ public class ShoppingProjectController {
     }
 
 
-
     @Operation(
             summary = "Статистка проекта покупок",
-            description = "Показывает сколько покупок, привязанных к проекту, в работе, выполенно и не выполнено"
+            description = "Показывает сколько покупок, привязанных к проекту, в работе, выполнено и не выполнено"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoWorkFinish.class)), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
@@ -145,46 +143,6 @@ public class ShoppingProjectController {
         return ResponseEntity.ok(service.workFinishShoppingInProgect(id, userDetails));
     }
 
-    @Operation(
-            summary = "Список покупок в работе, внутри проекта",
-            description = "выводит список покупок, привязанных к проекту, которые находятся в работе"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/work/{id}")
-    public ResponseEntity<List<Shopping>> workShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.workShoppingInProgect(id, userDetails));
-    }
 
-    @Operation(
-            summary = "Список выполненных покупок, внутри проекта",
-            description = "выводит список покупок, привязанных к проекту, которые выполнены"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/finish/{id}")
-    public ResponseEntity<List<Shopping>> FinishShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.FinishShoppingInProgect(id, userDetails));
-    }
-
-    @Operation(
-            summary = "Список не выполненных покупок, внутри проекта",
-            description = "выводит список покупок, привязанных к проекту, которые не выполнены"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingProjectDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
-            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/not_work/{id}")
-    public ResponseEntity<List<Shopping>> notWorkShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.notWorkShoppingInProgect(id, userDetails));
-    }
 
 }

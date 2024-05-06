@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.dto.*;
+import ru.sagiem.whattobuy.model.shopping.Shopping;
 import ru.sagiem.whattobuy.service.ShoppingService;
 
 import java.time.LocalDateTime;
@@ -121,8 +122,8 @@ public class ShoppingController {
 
 
     @Operation(
-            summary = "Удаляет продукт",
-            description = "Пользователь должен быть владельцем группы либо создателем продукта и участником группы"
+            summary = "Удаление покупки",
+            description = "Пользователь должен быть владельцем группы либо создателем покупки и участником группы"
             //tags = "get"
     )
     @ApiResponses({
@@ -141,7 +142,7 @@ public class ShoppingController {
 
     @Operation(
             summary = "Переводит покупку в статус Выполнено",
-            description = "Пользователь должен быть владельцем покупки либо ее исполнителем"
+            description = "Пользователь должен быть участником группы к которой принадлежит покупка"
             //tags = "get"
     )
     @ApiResponses({
@@ -158,7 +159,7 @@ public class ShoppingController {
 
     @Operation(
             summary = "Переводит покупку в статус Не выполнено",
-            description = "Пользователь должен быть владельцем покупки либо ее исполнителем"
+            description = "Пользователь должен быть участником группы к которой принадлежит покупка"
             //tags = "get"
     )
     @ApiResponses({
@@ -171,5 +172,47 @@ public class ShoppingController {
                                @AuthenticationPrincipal UserDetails userDetails) {
         service.notExecutedShopping(id, userDetails);
         return ResponseEntity.ok(getSuccessResponse(SHOPPING_DELETE_NOT_EXECUTED_MESSAGE, null));
+    }
+
+     @Operation(
+            summary = "Список покупок в работе, внутри проекта",
+            description = "выводит список покупок, привязанных к проекту, которые находятся в работе"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/work/{id}")
+    public ResponseEntity<List<ShoppingDtoResponse>> workShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.workShoppingInProgect(id, userDetails));
+    }
+
+    @Operation(
+            summary = "Список выполненных покупок, внутри проекта",
+            description = "выводит список покупок, привязанных к проекту, которые выполнены"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/finish/{id}")
+    public ResponseEntity<List<ShoppingDtoResponse>> FinishShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.FinishShoppingInProgect(id, userDetails));
+    }
+
+    @Operation(
+            summary = "Список не выполненных покупок, внутри проекта",
+            description = "выводит список покупок, привязанных к проекту, которые не выполнены"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ShoppingDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/not_work/{id}")
+    public ResponseEntity<List<ShoppingDtoResponse>> notWorkShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(service.notWorkShoppingInProgect(id, userDetails));
     }
 }

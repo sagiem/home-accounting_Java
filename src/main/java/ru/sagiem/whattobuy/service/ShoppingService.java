@@ -27,6 +27,8 @@ import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.sagiem.whattobuy.model.shopping.ShoppingStatus.*;
+
 @Service
 @RequiredArgsConstructor
 public class ShoppingService {
@@ -206,7 +208,7 @@ public class ShoppingService {
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();
-        if (shopping.getUserExecutor() == user || shopping.getUserCreator() == user) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopping.getFamilyGroup().getId())) {
             shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
             shoppingRepository.save(shopping);
@@ -221,7 +223,7 @@ public class ShoppingService {
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
         if (shopping == null)
             throw new ShoppingNotFoundException();
-        if (shopping.getUserExecutor() == user || shopping.getUserCreator() == user) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopping.getFamilyGroup().getId())) {
             shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
             shoppingRepository.save(shopping);
@@ -230,4 +232,67 @@ public class ShoppingService {
             throw new FamilyGroupNotUserNotCreatorException();
     }
 
+     public List<ShoppingDtoResponse> workShoppingInProgect(Integer id, UserDetails userDetails) {
+
+        ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
+
+        if (shoppingProject == null)
+            throw new ShoppingProjectNotFoundException();
+
+        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, ASSIGNED).orElse(null);
+
+        if (shoppings == null)
+            throw new ShoppingNotFoundException();
+
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
+            return shoppings.stream()
+                    .map(shoppingMapper::convertToDto)
+                    .toList();
+        }
+        else
+            throw new FamilyGroupNotUserException();
+    }
+
+    public List<ShoppingDtoResponse> FinishShoppingInProgect(Integer id, UserDetails userDetails) {
+
+         ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
+
+        if (shoppingProject == null)
+            throw new ShoppingProjectNotFoundException();
+
+        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, EXECUTED).orElse(null);
+
+        if (shoppings == null)
+            throw new ShoppingNotFoundException();
+
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
+            return shoppings.stream()
+                    .map(shoppingMapper::convertToDto)
+                    .toList();
+        }
+        else
+            throw new FamilyGroupNotUserException();
+
+    }
+
+    public List<ShoppingDtoResponse> notWorkShoppingInProgect(Integer id, UserDetails userDetails) {
+
+         ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
+
+        if (shoppingProject == null)
+            throw new ShoppingProjectNotFoundException();
+
+        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, NOT_EXECUTED).orElse(null);
+
+        if (shoppings == null)
+            throw new ShoppingNotFoundException();
+
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
+            return shoppings.stream()
+                    .map(shoppingMapper::convertToDto)
+                    .toList();
+        }
+        else
+            throw new FamilyGroupNotUserException();
+    }
 }

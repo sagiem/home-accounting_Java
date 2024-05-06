@@ -64,9 +64,9 @@ public class ShoppingProjectService {
             throw new FamilyGroupNotUserException();
     }
 
-    public Integer addInFamilyGroup(Integer familyGroupId, ShoppingProjectDtoRequest request, UserDetails userDetails) {
+    public Integer addInFamilyGroup(UserDetails userDetails, ShoppingProjectDtoRequest request) {
         User user = familyGroupAndUserUtils.getUser(userDetails);
-        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
         if (familyGroup == null)
             throw new FamilyGroupNotFoundException();
 
@@ -153,38 +153,4 @@ public class ShoppingProjectService {
         else return null;
     }
 
-
-    public List<Shopping> workShoppingInProgect(Integer id, UserDetails userDetails) {
-
-         User user = familyGroupAndUserUtils.getUser(userDetails);
-        ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
-
-        if (shoppingProject != null && (user == shoppingProject.getUserCreator() || user == shoppingProject.getFamilyGroup().getUserCreator())) {
-            return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, ASSIGNED).orElse(null);
-        }
-        else
-            return null;
-    }
-
-    public List<Shopping> FinishShoppingInProgect(Integer id, UserDetails userDetails) {
-
-          User user = familyGroupAndUserUtils.getUser(userDetails);
-        ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
-
-        if (shoppingProject != null && (user == shoppingProject.getUserCreator() || user == shoppingProject.getFamilyGroup().getUserCreator()))
-            return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, EXECUTED).orElse(null);
-        else
-            return null;
-    }
-
-    public List<Shopping> notWorkShoppingInProgect(Integer id, UserDetails userDetails) {
-
-          User user = familyGroupAndUserUtils.getUser(userDetails);
-        ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
-
-        if (shoppingProject != null && (user == shoppingProject.getUserCreator() || user == shoppingProject.getFamilyGroup().getUserCreator()))
-         return shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, NOT_EXECUTED).orElse(null);
-        else
-            return null;
-    }
 }
