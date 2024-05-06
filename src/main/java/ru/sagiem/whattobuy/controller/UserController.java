@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import ru.sagiem.whattobuy.service.UserService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Builder
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
