@@ -11,7 +11,9 @@ import ru.sagiem.whattobuy.exception.FamilyGroupNotFoundException;
 import ru.sagiem.whattobuy.exception.FamilyGroupNotUserException;
 import ru.sagiem.whattobuy.exception.ProductNotFoundException;
 import ru.sagiem.whattobuy.mapper.ProductMapper;
+import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.Product;
+import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.product.UnitOfMeasurementProduct;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
 import ru.sagiem.whattobuy.model.user.User;
@@ -53,6 +55,42 @@ public class ProductService {
         } else
             throw new FamilyGroupNotUserException();
 
+    }
+
+        public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        CategoryProduct category = categoryProductRepository.findById(categoryId).orElse(null);
+        if (familyGroup != null && category!= null)
+            throw new FamilyGroupNotFoundException();
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+            List<Product> products = productRepository.findAllByFamilyGroupAndCategory(familyGroup, category).orElse(null);
+            if (products == null)
+                return null;
+            else {
+                return products.stream()
+                        .map(productMapper::convertToDTO)
+                        .toList();
+            }
+        } else
+            throw new FamilyGroupNotUserException();
+    }
+
+    public List<ProductDtoResponse> showAllInSubcategory(UserDetails userDetails, Integer familyGroupId, Integer subcategoryId) {
+        FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
+        SubcategoryProduct subcategory = subcategoryProductRepository.findById(subcategoryId).orElse(null);
+        if (familyGroup != null && subcategory!= null)
+            throw new FamilyGroupNotFoundException();
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+            List<Product> products = productRepository.findAllByFamilyGroupAndSubcategory(familyGroup, subcategory).orElse(null);
+            if (products == null)
+                return null;
+            else {
+                return products.stream()
+                        .map(productMapper::convertToDTO)
+                        .toList();
+            }
+        } else
+            throw new FamilyGroupNotUserException();
     }
 
     public ResponseEntity<?> add(ProductDtoRequest request, UserDetails userDetails) {
@@ -125,4 +163,7 @@ public class ProductService {
         else
             throw new FamilyGroupNotUserException();
     }
+
+
+
 }

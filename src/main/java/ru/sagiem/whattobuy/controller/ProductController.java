@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.sagiem.whattobuy.dto.*;
 import ru.sagiem.whattobuy.service.ProductService;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
@@ -38,11 +40,49 @@ public class ProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/show_all/{id}")
-    public ResponseEntity<?> showAll(@PathVariable("id") @Min(1) Integer familyGroupId,
-                                     @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<ProductDtoResponse>> showAll(@PathVariable("id") @Min(1) Integer familyGroupId,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
 
         return ResponseEntity.ok(service.showAll(userDetails, familyGroupId));
     }
+
+    @Operation(
+            summary = "Возвращает все продукты в категории для группы",
+            description = "Возвращает все продукты в категории для группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show_all/{idGroup}/{idCategory}")
+    public ResponseEntity<List<ProductDtoResponse>> showAllInCategory(@PathVariable("idGroup") @Min(1) Integer familyGroupId,
+                                               @PathVariable("idCategory") @Min(1) Integer categoryId,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
+
+        return ResponseEntity.ok(service.showAllInCategory(userDetails, familyGroupId, categoryId));
+    }
+
+        @Operation(
+            summary = "Возвращает все продукты в подкатегории для группы",
+            description = "Возвращает все продукты в подкатегории для группы"
+            //tags = "get"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = ProductDtoResponse.class)), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
+    @GetMapping("/show_all/{idGroup}/{idSubcategory}")
+    public ResponseEntity<List<ProductDtoResponse>> showAllInSubcategory(@PathVariable("idGroup") @Min(1) Integer familyGroupId,
+                                                  @PathVariable("idSubcategory") @Min(1) Integer subcategoryId,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
+
+        return ResponseEntity.ok(service.showAllInSubcategory(userDetails, familyGroupId, subcategoryId));
+    }
+
+
 
     @Operation(
             summary = "Добавление продукта",
