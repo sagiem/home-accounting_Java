@@ -1,68 +1,103 @@
 package ru.sagiem.whattobuy.controller;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.sagiem.whattobuy.dto.UserDTOResponse;
-import ru.sagiem.whattobuy.dto.auth.UserRegisterDto;
+import ru.sagiem.whattobuy.mapper.UserMapper;
 import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.service.UserService;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.sagiem.whattobuy.utils.ResponseUtils.USER_NOT_FOUND_EXCEPTION_MESSAGE;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Модульные тесты для UserController")
 class UserControllerTest {
 
     @Mock
-    UserRepository userRepository;
+    private UserService userService;
 
     @Mock
-    AuthenticationController authenticationController;
+    private UserRepository userRepository;
 
     @Mock
-    UserService userService;
+    private UserMapper userMapper;
 
     @InjectMocks
-    UserController userController;
+    private UserController userController;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+       // MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+    }
 
     @Test
     @DisplayName("Отправляем email существующего пользователя и получаем в ответ его id")
-    void searchUserByEmail_RequestIsValid_shouldReturnUser() {
+    void searchUserByEmail_RequestIsValid_shouldReturnUser() throws Exception {
 
-        // given
-        String email = "test@email.ru";
-        String Password = "12345678";
-        User user = new User();
-        user.setId(1);
+        String userEmail = "max@yandex.ru";
 
-        UserRegisterDto userRegisterDto = new UserRegisterDto();
-        userRegisterDto.setEmail(email);
-        userRegisterDto.setPassword(Password);
-        userRegisterDto.setConfirmPassword(Password);
+        UserDTOResponse userDTOResponse = new UserDTOResponse();
+        userDTOResponse.setId(1);
+        userDTOResponse.setEmail(userEmail);
 
-        authenticationController.register(userRegisterDto);
+        User user = User.builder()
+                .id(1)
+                .email(userEmail).build();
 
 
-        // when
-        ResponseEntity<UserDTOResponse> response = userController.searchUserByEmail(email);
+        when(userService.searchUserByEmail(userEmail)).thenReturn(userDTOResponse);
 
-        // then
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCode().value());
-        assertEquals(user.getEmail(), (response.getBody()).getEmail());
+        mockMvc.perform(get("/api/v1/user/search/{email}", userEmail))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(userService, times(1)).searchUserByEmail(userEmail);
+
     }
 
+    @Test
+    @DisplayName("Отправляем email не существующего пользователя и получаем в ответ ошибку")
+    void searchUserByEmail_RequestIsNotValid_shouldReturnUser() throws Exception {
+//        var exp = assertThrows(UsernameNotFoundException.class, () -> userController.searchUserByEmail("max@yandex.ru"));
+//        assertEquals(USER_NOT_FOUND_EXCEPTION_MESSAGE, exp.getMessage());
+
+         String userEmail = "max@yandex.ru";
+        String testEmail = "test@yandex.ru";
+
+        UserDTOResponse userDTOResponse = new UserDTOResponse();
+        userDTOResponse.setId(1);
+        userDTOResponse.setEmail(userEmail);
+
+        User user = User.builder()
+                .id(1)
+                .email(userEmail).build();
+
+
+        when(userService.searchUserByEmail(userEmail)).thenReturn(userDTOResponse);
+
+        mockMvc.perform(get("/api/v1/user/search/{email}", testEmail))
+                .andExpect(status().isNotFound());
+    }
 
 }
 
