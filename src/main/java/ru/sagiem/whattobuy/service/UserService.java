@@ -16,11 +16,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-
     public UserDTOResponse searchUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null)
+        if (user == null) {
             throw new UsernameNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE);
+        }
 
         return userMapper.convertToDTO(user);
     }
