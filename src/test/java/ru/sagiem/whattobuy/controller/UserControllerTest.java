@@ -1,5 +1,6 @@
 package ru.sagiem.whattobuy.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,11 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.sagiem.whattobuy.dto.UserDTOResponse;
+import ru.sagiem.whattobuy.dto.auth.UserRegisterDto;
 import ru.sagiem.whattobuy.mapper.UserMapper;
 import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.UserRepository;
@@ -28,49 +32,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Модульные тесты для UserController")
 class UserControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private UserService userService;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
+    @Autowired
     private UserMapper userMapper;
 
-    @InjectMocks
-    private UserController userController;
-
-    private MockMvc mockMvc;
+    private User user;
+    private UserDTOResponse userDTOResponse;
+    private UserRegisterDto userRegisterDto;
 
     @BeforeEach
     void setUp() {
-       // MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        user = new User();
+        user.setId(1);
+        user.setEmail("test@yandex.ru");
+        user.setPassword("<PASSWORD>");
+        userDTOResponse = new UserDTOResponse();
+        userDTOResponse.setId(1);
+        userDTOResponse.setEmail("test@yandex.ru");
+        userRegisterDto = new UserRegisterDto();
+        userRegisterDto.setEmail("test@yandex.ru");
+        userRegisterDto.setPassword("<PASSWORD>");
     }
 
     @Test
     @DisplayName("Отправляем email существующего пользователя и получаем в ответ его id")
     void searchUserByEmail_RequestIsValid_shouldReturnUser() throws Exception {
+        when(userService.searchUserByEmail(user.getEmail())).thenReturn(userDTOResponse);
 
-        String userEmail = "max@yandex.ru";
-
-        UserDTOResponse userDTOResponse = new UserDTOResponse();
-        userDTOResponse.setId(1);
-        userDTOResponse.setEmail(userEmail);
-
-        User user = User.builder()
-                .id(1)
-                .email(userEmail).build();
-
-
-        when(userService.searchUserByEmail(userEmail)).thenReturn(userDTOResponse);
-
-        mockMvc.perform(get("/api/v1/user/search/{email}", userEmail))
+        mockMvc.perform(get("/user/search/{email}", user.getEmail()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
-
-        verify(userService, times(1)).searchUserByEmail(userEmail);
-
+                .andExpect(jsonPath("$.id").value(user.getId()));
     }
 
     @Test

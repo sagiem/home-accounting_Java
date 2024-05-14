@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static ru.sagiem.whattobuy.model.shopping.ShoppingStatus.*;
 import static ru.sagiem.whattobuy.utils.ResponseUtils.*;
 
 @RestController
@@ -185,7 +186,7 @@ public class ShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/work/{id}")
     public ResponseEntity<List<ShoppingDtoResponse>> workShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.workShoppingInProgect(id, userDetails));
+        return ResponseEntity.ok(service.StatusShoppingInProgect(id, userDetails, ASSIGNED));
     }
 
     @Operation(
@@ -199,7 +200,7 @@ public class ShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/finish/{id}")
     public ResponseEntity<List<ShoppingDtoResponse>> FinishShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.FinishShoppingInProgect(id, userDetails));
+        return ResponseEntity.ok(service.StatusShoppingInProgect(id, userDetails, EXECUTED));
     }
 
     @Operation(
@@ -213,6 +214,6 @@ public class ShoppingController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/not_work/{id}")
     public ResponseEntity<List<ShoppingDtoResponse>> notWorkShoppingInProgect(@PathVariable("id") @Min(1) Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(service.notWorkShoppingInProgect(id, userDetails));
+        return ResponseEntity.ok(service.StatusShoppingInProgect(id, userDetails, NOT_EXECUTED));
     }
 }

@@ -1,5 +1,7 @@
 package ru.sagiem.whattobuy.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,16 +26,13 @@ import ru.sagiem.whattobuy.repository.poroduct.ShoppingProjectRepository;
 import ru.sagiem.whattobuy.repository.poroduct.ShoppingRepository;
 import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static ru.sagiem.whattobuy.model.shopping.ShoppingStatus.*;
 
 @Service
 @RequiredArgsConstructor
 public class ShoppingService {
 
-    public final ShoppingRepository shoppingRepository;
+    private final ShoppingRepository shoppingRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PointShoppingRepository pointShoppingRepository;
@@ -41,7 +40,6 @@ public class ShoppingService {
     private final ShoppingMapper shoppingMapper;
     private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
     private final ShoppingProjectRepository shoppingProjectRepository;
-
 
     // получить все покупки пользователя из всех групп и всех проектов
     public List<ShoppingDtoResponse> showAllMyExecutor(UserDetails userDetails) {
@@ -51,61 +49,70 @@ public class ShoppingService {
             return shoppings.stream()
                     .map(shoppingMapper::convertToDto)
                     .toList();
-        } else
+        } else {
             return null;
+        }
     }
 
     // получить все покупки из проекта покупок для пользователя
     public List<ShoppingDtoResponse> showMyExecutorinShoppingProgect(Integer shoppingProjectId, UserDetails userDetails) {
         User user = familyGroupAndUserUtils.getUser(userDetails);
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(shoppingProjectId).orElse(null);
-        if (shoppingProject == null)
+
+        if (shoppingProject == null) {
             throw new ShoppingProjectNotFoundException();
+        }
 
         List<Shopping> shoppings = shoppingRepository.findAllByShoppingProjectAndUserExecutor(shoppingProject, user).orElse(null);
         if (shoppings != null) {
             return shoppings.stream()
                     .map(shoppingMapper::convertToDto)
                     .toList();
-        } else
+        } else {
             return null;
+        }
     }
 
     //Возвращает все покупки в проекте покупок
     public List<ShoppingDtoResponse> showAllInShoppingProgect(Integer shoppingProgectId, UserDetails userDetails) {
         User user = familyGroupAndUserUtils.getUser(userDetails);
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(shoppingProgectId).orElse(null);
-        if (shoppingProject == null)
+        if (shoppingProject == null) {
             throw new ShoppingProjectNotFoundException();
+        }
 
-        if (!familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId()))
+        if (!familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
             throw new FamilyGroupNotUserException();
+        }
 
         List<Shopping> shoppings = shoppingRepository.findAllByShoppingProjectAndUserExecutor(shoppingProject, user).orElse(null);
         if (shoppings != null) {
             return shoppings.stream()
                     .map(shoppingMapper::convertToDto)
                     .toList();
-        } else
+        } else {
             return null;
+        }
     }
 
-
+    //TODO разбить, упростить метод addSet
     public Integer addSet(ShoppingDtoRequest shoppingSetDtoRequest, UserDetails userDetails) {
 
         FamilyGroup familyGroup = familyGroupRepository.findById(shoppingSetDtoRequest.getFamilyGroupId()).orElse(null);
-        if (familyGroup == null && shoppingSetDtoRequest.getFamilyGroupId() != null)
+        if (familyGroup == null && shoppingSetDtoRequest.getFamilyGroupId() != null) {
             throw new FamilyGroupNotUserException();
+        }
 
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(shoppingSetDtoRequest.getShoppingProjectId()).orElse(null);
         User userExecutor = userRepository.findById(shoppingSetDtoRequest.getUserExecutorId()).orElse(null);
-        if (userExecutor == null && shoppingSetDtoRequest.getUserExecutorId() != null)
-            throw new UsernameNotFoundException("неверно указан пользователь исполнитель");
+        if (userExecutor == null && shoppingSetDtoRequest.getUserExecutorId() != null) {
+            throw new UsernameNotFoundException("Неверно указан пользователь исполнитель");
+        }
 
         if (shoppingProject != null) {
             FamilyGroup shopingProjectFamilyGroup = shoppingProject.getFamilyGroup();
-            if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor != null &&
-                    userExecutor.getFamilyGroups() == shopingProjectFamilyGroup) {
+            if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopingProjectFamilyGroup.getId()) && userExecutor != null
+                    && userExecutor.getFamilyGroups() == shopingProjectFamilyGroup) {
                 Shopping shopping = Shopping.builder()
                         .product(productRepository.findById(shoppingSetDtoRequest.getProductId()).orElse(null))
                         .volume(shoppingSetDtoRequest.getVolume())
@@ -130,8 +137,9 @@ public class ShoppingService {
 
                 Shopping entityShopping = shoppingRepository.save(shopping);
                 return entityShopping.getId();
-            } else
+            } else {
                 throw new FamilyGroupNotUserException();
+            }
         }
 
         if (userExecutor != null && familyGroup != null && familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup.getId())) {
@@ -159,20 +167,19 @@ public class ShoppingService {
 
             Shopping entityShopping = shoppingRepository.save(shopping);
             return entityShopping.getId();
-        } else
+        } else {
             throw new FamilyGroupNotUserException();
-
+        }
     }
-
 
     public Void update(Integer id, ShoppingDtoRequest request, UserDetails userDetails) {
         User user = familyGroupAndUserUtils.getUser(userDetails);
 
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
-        if (shopping == null)
+        if (shopping == null) {
             throw new ShoppingNotFoundException();
+        }
         FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
-        assert shoppingFamilyGroup != null;
         if (shoppingFamilyGroup.getUserCreator() == user || familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId())) {
             shopping.setProduct(productRepository.findById(request.getProductId()).orElse(null));
             shopping.setVolume(request.getVolume());
@@ -189,110 +196,67 @@ public class ShoppingService {
         User user = familyGroupAndUserUtils.getUser(userDetails);
 
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
-        if (shopping == null)
+        if (shopping == null) {
             throw new ShoppingNotFoundException();
+        }
         FamilyGroup shoppingFamilyGroup = shopping.getFamilyGroup();
-        assert shoppingFamilyGroup != null;
-        if (shoppingFamilyGroup.getUserCreator() == user || familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId()))
+        if (shoppingFamilyGroup.getUserCreator() == user || familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingFamilyGroup.getId())) {
             shoppingRepository.deleteById(id);
-        else
+        } else {
             throw new FamilyGroupNotUserNotCreatorException();
+        }
     }
-
-
-
 
     public void executedShopping(Integer id, UserDetails userDetails) {
 
-        User user = familyGroupAndUserUtils.getUser(userDetails);
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
-        if (shopping == null)
+        if (shopping == null) {
             throw new ShoppingNotFoundException();
+        }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopping.getFamilyGroup().getId())) {
             shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.EXECUTED);
             shoppingRepository.save(shopping);
-        }
-        else
+        } else {
             throw new FamilyGroupNotUserNotCreatorException();
+        }
     }
 
     public void notExecutedShopping(Integer id, UserDetails userDetails) {
 
-        User user = familyGroupAndUserUtils.getUser(userDetails);
         Shopping shopping = shoppingRepository.findById(id).orElse(null);
-        if (shopping == null)
+        if (shopping == null) {
             throw new ShoppingNotFoundException();
+        }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shopping.getFamilyGroup().getId())) {
             shopping.setExecutorDate(LocalDateTime.now());
             shopping.setShoppingStatus(ShoppingStatus.NOT_EXECUTED);
             shoppingRepository.save(shopping);
-        }
-        else
+        } else {
             throw new FamilyGroupNotUserNotCreatorException();
+        }
     }
 
-     public List<ShoppingDtoResponse> workShoppingInProgect(Integer id, UserDetails userDetails) {
+    public List<ShoppingDtoResponse> StatusShoppingInProgect(Integer id, UserDetails userDetails, ShoppingStatus status) {
 
         ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
 
-        if (shoppingProject == null)
+        if (shoppingProject == null) {
             throw new ShoppingProjectNotFoundException();
+        }
 
-        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, ASSIGNED).orElse(null);
+        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, status).orElse(null);
 
-        if (shoppings == null)
+        if (shoppings == null) {
             throw new ShoppingNotFoundException();
+        }
 
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
             return shoppings.stream()
                     .map(shoppingMapper::convertToDto)
                     .toList();
-        }
-        else
+        } else {
             throw new FamilyGroupNotUserException();
-    }
-
-    public List<ShoppingDtoResponse> FinishShoppingInProgect(Integer id, UserDetails userDetails) {
-
-         ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
-
-        if (shoppingProject == null)
-            throw new ShoppingProjectNotFoundException();
-
-        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, EXECUTED).orElse(null);
-
-        if (shoppings == null)
-            throw new ShoppingNotFoundException();
-
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
-            return shoppings.stream()
-                    .map(shoppingMapper::convertToDto)
-                    .toList();
         }
-        else
-            throw new FamilyGroupNotUserException();
-
-    }
-
-    public List<ShoppingDtoResponse> notWorkShoppingInProgect(Integer id, UserDetails userDetails) {
-
-         ShoppingProject shoppingProject = shoppingProjectRepository.findById(id).orElse(null);
-
-        if (shoppingProject == null)
-            throw new ShoppingProjectNotFoundException();
-
-        List<Shopping> shoppings = shoppingRepository.findByShoppingProjectAndShoppingStatus(shoppingProject, NOT_EXECUTED).orElse(null);
-
-        if (shoppings == null)
-            throw new ShoppingNotFoundException();
-
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, shoppingProject.getFamilyGroup().getId())) {
-            return shoppings.stream()
-                    .map(shoppingMapper::convertToDto)
-                    .toList();
-        }
-        else
-            throw new FamilyGroupNotUserException();
     }
 }
