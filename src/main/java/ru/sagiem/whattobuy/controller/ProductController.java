@@ -40,10 +40,10 @@ public class ProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/show_all/{id}")
-    public ResponseEntity<List<ProductDtoResponse>> showAll(@PathVariable("id") @Min(1) Integer familyGroupId,
+    public ResponseEntity<List<ProductDtoResponse>> showAllInGroup(@PathVariable("id") @Min(1) Integer familyGroupId,
                                                             @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.ok(service.showAll(userDetails, familyGroupId));
+        return ResponseEntity.ok(service.showAllInGroup(userDetails, familyGroupId));
     }
 
     @Operation(

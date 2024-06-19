@@ -2,7 +2,6 @@ package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ProductDtoRequest;
@@ -38,65 +37,70 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
-
-    public List<ProductDtoResponse> showAll(UserDetails userDetails, Integer familyGroupId) {
+    public List<ProductDtoResponse> showAllInGroup(UserDetails userDetails, Integer familyGroupId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
-        if (familyGroup != null)
+        if (familyGroup != null) {
             throw new FamilyGroupNotFoundException();
+        }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
-            if (products == null)
+            if (products == null) {
                 return null;
-            else {
+            } else {
                 return products.stream()
                         .map(productMapper::convertToDTO)
                         .toList();
             }
-        } else
+        } else {
             throw new FamilyGroupNotUserException();
-
+        }
     }
 
-        public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
+    public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         CategoryProduct category = categoryProductRepository.findById(categoryId).orElse(null);
-        if (familyGroup != null && category!= null)
+        if (familyGroup != null && category != null) {
             throw new FamilyGroupNotFoundException();
+        }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             List<Product> products = productRepository.findAllByFamilyGroupAndCategory(familyGroup, category).orElse(null);
-            if (products == null)
+            if (products == null) {
                 return null;
-            else {
+            } else {
                 return products.stream()
                         .map(productMapper::convertToDTO)
                         .toList();
             }
-        } else
+        } else {
             throw new FamilyGroupNotUserException();
+        }
     }
 
     public List<ProductDtoResponse> showAllInSubcategory(UserDetails userDetails, Integer familyGroupId, Integer subcategoryId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         SubcategoryProduct subcategory = subcategoryProductRepository.findById(subcategoryId).orElse(null);
-        if (familyGroup != null && subcategory!= null)
+        if (familyGroup != null && subcategory != null) {
             throw new FamilyGroupNotFoundException();
+        }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             List<Product> products = productRepository.findAllByFamilyGroupAndSubcategory(familyGroup, subcategory).orElse(null);
-            if (products == null)
+            if (products == null) {
                 return null;
-            else {
+            } else {
                 return products.stream()
                         .map(productMapper::convertToDTO)
                         .toList();
             }
-        } else
+        } else {
             throw new FamilyGroupNotUserException();
+        }
     }
 
     public ResponseEntity<?> add(ProductDtoRequest request, UserDetails userDetails) {
         FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
-        if (familyGroup != null)
+        if (familyGroup == null) {
             throw new FamilyGroupNotFoundException();
+        }
 
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             var product = Product.builder()
@@ -108,29 +112,32 @@ public class ProductService {
                     .build();
             var saveProduct = productRepository.save(product);
             return ResponseEntity.ok(saveProduct.getId());
-        } else
+        } else {
             throw new FamilyGroupNotUserException();
+        }
 
     }
 
     public ProductDtoResponse searchId(Integer id, UserDetails userDetails) {
 
         Product product = productRepository.findById(id).orElse(null);
-        if (product == null)
+        if (product == null) {
             return null;
+        }
 
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup()))
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, product.getFamilyGroup())) {
             return productMapper.convertToDTO(product);
-
-        else
+        } else {
             throw new FamilyGroupNotUserException();
+        }
 
     }
 
     public String update(Integer id, ProductDtoRequest productDto, UserDetails userDetails) {
         Product product = productRepository.findById(id).orElse(null);
-        if (product == null)
+        if (product == null) {
             throw new ProductNotFoundException();
+        }
 
         User user = familyGroupAndUserUtils.getUser(userDetails);
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
@@ -141,29 +148,26 @@ public class ProductService {
             product.setUnitOfMeasurement(UnitOfMeasurementProduct.valueOf(productDto.getUnitOfMeasurement()));
             productRepository.save(product);
             return productDto.getName();
-        }
-        else
+        } else {
             throw new FamilyGroupNotUserException();
-
+        }
     }
-
 
     public String delete(Integer id, UserDetails userDetails) {
 
         Product product = productRepository.findById(id).orElse(null);
-        if (product == null)
+        if (product == null) {
             throw new ProductNotFoundException();
+        }
 
         User user = familyGroupAndUserUtils.getUser(userDetails);
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
                 || (product.getUserCreator().equals(user))) {
             productRepository.deleteById(id);
             return product.getName();
-        }
-        else
+        } else {
             throw new FamilyGroupNotUserException();
+        }
     }
-
-
 
 }
