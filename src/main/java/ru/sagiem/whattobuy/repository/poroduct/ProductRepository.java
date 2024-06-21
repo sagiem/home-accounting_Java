@@ -16,8 +16,11 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<List<Product>> findAllByUserCreator(User user);
+
     Optional<List<Product>> findAllByFamilyGroup(FamilyGroup familyGroup);
+
     Optional<List<Product>> findAllByFamilyGroupAndCategory(FamilyGroup familyGroup, CategoryProduct category);
+
     Optional<List<Product>> findAllByFamilyGroupAndSubcategory(FamilyGroup familyGroup, SubcategoryProduct subcategory);
 
 }

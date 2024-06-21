@@ -39,21 +39,21 @@ public class ProductService {
 
     public List<ProductDtoResponse> showAllInGroup(UserDetails userDetails, Integer familyGroupId) {
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
-        if (familyGroup != null) {
+        if (familyGroup == null) {
             throw new FamilyGroupNotFoundException();
         }
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
-            List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
-            if (products == null) {
-                return null;
-            } else {
-                return products.stream()
-                        .map(productMapper::convertToDTO)
-                        .toList();
-            }
+//        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+        List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
+        if (products == null) {
+            return null;
         } else {
-            throw new FamilyGroupNotUserException();
+            return products.stream()
+                    .map(productMapper::convertToDTO)
+                    .toList();
         }
+//        } else {
+//            throw new FamilyGroupNotUserException();
+//        }
     }
 
     public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
@@ -169,5 +169,6 @@ public class ProductService {
             throw new FamilyGroupNotUserException();
         }
     }
+
 
 }
