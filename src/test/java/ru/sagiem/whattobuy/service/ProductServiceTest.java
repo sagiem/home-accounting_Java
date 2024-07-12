@@ -61,10 +61,8 @@ public class ProductServiceTest {
     @Test
     public void testShowAllInGroup() {
         // Arrange
-//        FamilyGroup familyGroup = new FamilyGroup();
-//        familyGroup.setId(1);
         when(familyGroupRepository.findById(any())).thenReturn(java.util.Optional.of(new FamilyGroup()));
-        when(productRepository.findAllByFamilyGroup(any())).thenReturn(Optional.of(java.util.List.of(new Product())));
+        when(productRepository.findAllByFamilyGroup(any())).thenReturn(java.util.List.of(new Product()));
 
         // Act
         List<ProductDtoResponse> products = productService.showAllInGroup(null, 1);
@@ -72,7 +70,6 @@ public class ProductServiceTest {
         // Assert
         assertThat(products).isNotNull();
         assertThat(products.size()).isEqualTo(1);
-        assertThat(products.get)
     }
 
     @Test
@@ -80,9 +77,7 @@ public class ProductServiceTest {
         // Arrange
         when(familyGroupRepository.findById(any())).thenReturn(java.util.Optional.of(new FamilyGroup()));
         when(categoryProductRepository.findById(any())).thenReturn(java.util.Optional.of(new CategoryProduct()));
-        when(productRepository.findAllByFamilyGroupAndCategory(any(), any())).thenReturn(Optional.of(java.util.List.of(new Product())));
-
-        List<Product> productList = java.util.List.of(new Product());
+        when(productRepository.findAllByFamilyGroupAndCategory(any(), any())).thenReturn(java.util.List.of(new Product()));
 
         // Act
         List<ProductDtoResponse> products = productService.showAllInCategory(null, 1, 2);

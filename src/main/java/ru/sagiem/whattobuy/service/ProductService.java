@@ -42,18 +42,18 @@ public class ProductService {
         if (familyGroup == null) {
             throw new FamilyGroupNotFoundException();
         }
-//        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
-        List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
-        if (products == null) {
-            return null;
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+            List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
+            if (products == null) {
+                return null;
+            } else {
+                return products.stream()
+                        .map(productMapper::convertToDTO)
+                        .toList();
+            }
         } else {
-            return products.stream()
-                    .map(productMapper::convertToDTO)
-                    .toList();
+            throw new FamilyGroupNotUserException();
         }
-//        } else {
-//            throw new FamilyGroupNotUserException();
-//        }
     }
 
     public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
