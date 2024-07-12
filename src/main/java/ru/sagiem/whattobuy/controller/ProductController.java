@@ -95,10 +95,9 @@ public class ProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody ProductDtoRequest request,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> add(@RequestBody ProductDtoRequest request) {
 
-        return service.add(request, userDetails);
+        return service.add(request);
     }
 
     @Operation(

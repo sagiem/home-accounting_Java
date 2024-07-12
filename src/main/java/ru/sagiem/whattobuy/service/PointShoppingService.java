@@ -81,7 +81,6 @@ public class PointShoppingService {
 
     public PointShoppingDtoResponse searchId(Integer id, UserDetails userDetails) {
 
-
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, id))
             return pointShoppingMapper.convertToDTO(pointShoppingRepository.findById(id).orElse(null));
         else

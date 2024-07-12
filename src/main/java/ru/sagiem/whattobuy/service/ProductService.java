@@ -2,6 +2,7 @@ package ru.sagiem.whattobuy.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.sagiem.whattobuy.dto.ProductDtoRequest;
@@ -96,23 +97,34 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> add(ProductDtoRequest request, UserDetails userDetails) {
+    public ResponseEntity<?> add(ProductDtoRequest request) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FamilyGroup familyGroup = familyGroupRepository.findById(request.getFamilyGroupId()).orElse(null);
+        User user = familyGroupAndUserUtils.getUser(userDetails);
+
         if (familyGroup == null) {
+            System.out.println("*****************************");
+            System.out.println("первая проверка");
+            System.out.println(userDetails.getUsername());
+            System.out.println(user.getUsername());
+            System.out.println("******************************");
             throw new FamilyGroupNotFoundException();
+
         }
 
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
             var product = Product.builder()
                     .name(request.getName())
-                    .category(categoryProductRepository.findById(request.getCategoryId()).orElseThrow())
-                    .subcategory(subcategoryProductRepository.findById(request.getSubcategoryId()).orElseThrow())
+                    .userCreator(user)
+                    .category(categoryProductRepository.findById(request.getCategoryId()).orElse(null))
+                    .subcategory(subcategoryProductRepository.findById(request.getSubcategoryId()).orElse(null))
                     .unitOfMeasurement(UnitOfMeasurementProduct.valueOf(request.getUnitOfMeasurement()))
                     .familyGroup(familyGroup)
                     .build();
             var saveProduct = productRepository.save(product);
             return ResponseEntity.ok(saveProduct.getId());
         } else {
+            System.out.println("вторая проверка");
             throw new FamilyGroupNotUserException();
         }
 
