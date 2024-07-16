@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -68,12 +69,15 @@ public class ProductControllerIT {
     @Test
     @DisplayName("Test search id")
     public void searchIdTest() throws Exception {
-        String id = "5";
+        String id = "7";
 
         mockMvc.perform(get("/api/v1/product/search/{id}", id)
                         .with(user("max@yandex.ru")))
-                .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andExpectAll(status().isOk(),
+                        jsonPath("$.id").value(id)
+                        );
+
     }
 
     @Test
