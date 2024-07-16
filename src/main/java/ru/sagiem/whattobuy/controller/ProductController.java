@@ -111,10 +111,9 @@ public class ProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @GetMapping("/search/{id}")
-    public ResponseEntity<ProductDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id,
-                                                       @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ProductDtoResponse> searchId(@PathVariable("id") @Min(1) Integer id) {
 
-        return ResponseEntity.ok(service.searchId(id, userDetails));
+        return ResponseEntity.ok(service.searchId(id));
     }
 
     @Operation(
@@ -129,10 +128,9 @@ public class ProductController {
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @PatchMapping("/update/{id}")
     public ResponseEntity<SuccessResponse> update(@PathVariable("id") @Min(1) Integer id,
-                                                  ProductDtoRequest productDtoRequest,
-                                                  @AuthenticationPrincipal UserDetails userDetails) {
+                                                  ProductDtoRequest productDtoRequest) {
 
-        String productName = service.update(id, productDtoRequest, userDetails);
+        String productName = service.update(id, productDtoRequest);
         return ResponseEntity.ok(getSuccessResponse(PRODUCT_UPDATE_MESSAGE, productName));
     }
 

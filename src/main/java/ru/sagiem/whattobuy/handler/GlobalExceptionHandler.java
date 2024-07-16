@@ -14,7 +14,6 @@ import ru.sagiem.whattobuy.dto.ExceptionResponse;
 import ru.sagiem.whattobuy.exception.*;
 import ru.sagiem.whattobuy.utils.ResponseUtils;
 
-
 @Component
 @RestControllerAdvice
 public class GlobalExceptionHandler {

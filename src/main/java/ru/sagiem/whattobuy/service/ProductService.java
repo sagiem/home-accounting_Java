@@ -103,11 +103,6 @@ public class ProductService {
         User user = familyGroupAndUserUtils.getUser(userDetails);
 
         if (familyGroup == null) {
-            System.out.println("*****************************");
-            System.out.println("первая проверка");
-            System.out.println(userDetails.getUsername());
-            System.out.println(user.getUsername());
-            System.out.println("******************************");
             throw new FamilyGroupNotFoundException();
 
         }
@@ -124,13 +119,14 @@ public class ProductService {
             var saveProduct = productRepository.save(product);
             return ResponseEntity.ok(saveProduct.getId());
         } else {
-            System.out.println("вторая проверка");
             throw new FamilyGroupNotUserException();
         }
 
     }
 
-    public ProductDtoResponse searchId(Integer id, UserDetails userDetails) {
+    public ProductDtoResponse searchId(Integer id) {
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
@@ -145,18 +141,18 @@ public class ProductService {
 
     }
 
-    public String update(Integer id, ProductDtoRequest productDto, UserDetails userDetails) {
+    public String update(Integer id, ProductDtoRequest productDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
             throw new ProductNotFoundException();
         }
 
-        User user = familyGroupAndUserUtils.getUser(userDetails);
         if (familyGroupAndUserUtils.isUserCreatedInFamilyGroup(userDetails, product.getFamilyGroup().getId())
-                || (product.getUserCreator().equals(user))) {
+                || (product.getUserCreator().equals(familyGroupAndUserUtils.getUser(userDetails)))) {
             product.setName(productDto.getName());
-            product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElseThrow());
-            product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElseThrow());
+            product.setCategory(categoryProductRepository.findById(productDto.getCategoryId()).orElse(null));
+            product.setSubcategory(subcategoryProductRepository.findById(productDto.getSubcategoryId()).orElse(null));
             product.setUnitOfMeasurement(UnitOfMeasurementProduct.valueOf(productDto.getUnitOfMeasurement()));
             productRepository.save(product);
             return productDto.getName();

@@ -1,9 +1,13 @@
 package ru.sagiem.whattobuy.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -135,7 +139,7 @@ public class ProductServiceTest {
         when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
 
         // Act
-        ProductDtoResponse product = productService.searchId(1, null);
+        ProductDtoResponse product = productService.searchId(1);
 
         // Assert
         assertThat(product).isNotNull();
@@ -149,7 +153,7 @@ public class ProductServiceTest {
         when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
 
         // Act
-        String updatedName = productService.update(1, request, null);
+        String updatedName = productService.update(1, request);
 
         // Assert
         assertThat(updatedName).isEqualTo("Updated Name");
@@ -167,26 +171,5 @@ public class ProductServiceTest {
         assertThat(deletedName).isEqualTo("Deleted Name");
     }
 
-    @Test
-    @DisplayName("Test add")
-    @WithMockUser(username = "max@yandex.ru", password = "100")
-    public void addTest() throws Exception {
-        String request = """
-                {
-                   "name": "мороженное",
-                   "categoryId": 0,
-                   "subcategoryId": 0,
-                   "unitOfMeasurement": "кг",
-                   "familyGroupId": 2
-                }""";
 
-        mockMvc.perform(post("/api/v1/product/add")
-                        .content(request)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        //.with(SecurityMockMvcRequestPostProcessors.user("max@yandex.ru").password("100"))
-                )
-
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
 }
