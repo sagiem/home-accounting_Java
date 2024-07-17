@@ -39,11 +39,10 @@ public class ProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show_all/{id}")
-    public ResponseEntity<List<ProductDtoResponse>> showAllInGroup(@PathVariable("id") @Min(1) Integer familyGroupId,
-                                                            @AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/show-all-in-group/{id}")
+    public ResponseEntity<List<ProductDtoResponse>> showAllInGroup(@PathVariable("id") @Min(1) Integer familyGroupId) {
 
-        return ResponseEntity.ok(service.showAllInGroup(userDetails, familyGroupId));
+        return ResponseEntity.ok(service.showAllInGroup(familyGroupId));
     }
 
     @Operation(
@@ -56,12 +55,11 @@ public class ProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show_all/{idGroup}/{idCategory}")
+    @GetMapping("/show-all-in-category/{idGroup}/{idCategory}")
     public ResponseEntity<List<ProductDtoResponse>> showAllInCategory(@PathVariable("idGroup") @Min(1) Integer familyGroupId,
-                                               @PathVariable("idCategory") @Min(1) Integer categoryId,
-                                               @AuthenticationPrincipal UserDetails userDetails) {
+                                               @PathVariable("idCategory") @Min(1) Integer categoryId) {
 
-        return ResponseEntity.ok(service.showAllInCategory(userDetails, familyGroupId, categoryId));
+        return ResponseEntity.ok(service.showAllInCategory(familyGroupId, categoryId));
     }
 
         @Operation(
@@ -74,15 +72,12 @@ public class ProductController {
             @ApiResponse(responseCode = "403", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
-    @GetMapping("/show_all/{idGroup}/{idSubcategory}")
+    @GetMapping("/show-all-in-subcategory/{idGroup}/{idSubcategory}")
     public ResponseEntity<List<ProductDtoResponse>> showAllInSubcategory(@PathVariable("idGroup") @Min(1) Integer familyGroupId,
-                                                  @PathVariable("idSubcategory") @Min(1) Integer subcategoryId,
-                                                  @AuthenticationPrincipal UserDetails userDetails) {
+                                                  @PathVariable("idSubcategory") @Min(1) Integer subcategoryId) {
 
-        return ResponseEntity.ok(service.showAllInSubcategory(userDetails, familyGroupId, subcategoryId));
+        return ResponseEntity.ok(service.showAllInSubcategory(familyGroupId, subcategoryId));
     }
-
-
 
     @Operation(
             summary = "Добавление продукта",
@@ -145,9 +140,8 @@ public class ProductController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = APPLICATION_JSON_VALUE)})})
     @DeleteMapping("/{Id}")
-    public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id,
-                                                       @AuthenticationPrincipal UserDetails userDetails) {
-        String productName = service.delete(Id, userDetails);
+    public ResponseEntity<SuccessResponse> deleteGroup(@PathVariable("Id") @Min(1) Integer Id) {
+        String productName = service.delete(Id);
         return ResponseEntity.ok(getSuccessResponse(PRODUCT_DELETE_MESSAGE, productName));
     }
 }

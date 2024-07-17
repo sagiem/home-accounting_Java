@@ -38,7 +38,8 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
-    public List<ProductDtoResponse> showAllInGroup(UserDetails userDetails, Integer familyGroupId) {
+    public List<ProductDtoResponse> showAllInGroup(Integer familyGroupId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         if (familyGroup == null) {
             throw new FamilyGroupNotFoundException();
@@ -57,10 +58,11 @@ public class ProductService {
         }
     }
 
-    public List<ProductDtoResponse> showAllInCategory(UserDetails userDetails, Integer familyGroupId, Integer categoryId) {
+    public List<ProductDtoResponse> showAllInCategory(Integer familyGroupId, Integer categoryId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         CategoryProduct category = categoryProductRepository.findById(categoryId).orElse(null);
-        if (familyGroup != null && category != null) {
+        if (familyGroup == null && category == null) {
             throw new FamilyGroupNotFoundException();
         }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
@@ -77,10 +79,11 @@ public class ProductService {
         }
     }
 
-    public List<ProductDtoResponse> showAllInSubcategory(UserDetails userDetails, Integer familyGroupId, Integer subcategoryId) {
+    public List<ProductDtoResponse> showAllInSubcategory(Integer familyGroupId, Integer subcategoryId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         SubcategoryProduct subcategory = subcategoryProductRepository.findById(subcategoryId).orElse(null);
-        if (familyGroup != null && subcategory != null) {
+        if (familyGroup == null && subcategory == null) {
             throw new FamilyGroupNotFoundException();
         }
         if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
@@ -161,7 +164,8 @@ public class ProductService {
         }
     }
 
-    public String delete(Integer id, UserDetails userDetails) {
+    public String delete(Integer id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {

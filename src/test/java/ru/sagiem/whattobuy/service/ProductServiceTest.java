@@ -13,7 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.sagiem.whattobuy.dto.ProductDtoRequest;
@@ -23,6 +26,7 @@ import ru.sagiem.whattobuy.model.product.CategoryProduct;
 import ru.sagiem.whattobuy.model.product.Product;
 import ru.sagiem.whattobuy.model.product.SubcategoryProduct;
 import ru.sagiem.whattobuy.model.user.FamilyGroup;
+import ru.sagiem.whattobuy.model.user.User;
 import ru.sagiem.whattobuy.repository.FamilyGroupRepository;
 import ru.sagiem.whattobuy.repository.UserRepository;
 import ru.sagiem.whattobuy.repository.poroduct.CategoryProductRepository;
@@ -30,6 +34,8 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,34 +77,102 @@ public class ProductServiceTest {
     @Autowired
     private MockMvc mockMvc;
 
-//    @Test
-//    public void testShowAllInGroup() {
-//        // Arrange
-//        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
-//        when(productRepository.findAllByFamilyGroup(any())).thenReturn(List.of(new Product()));
-//
-//        // Act
-//        List<ProductDtoResponse> products = productService.showAllInGroup(null, 1);
-//
-//        // Assert
-//        assertThat(products).isNotNull();
-//        assertThat(products.size()).isEqualTo(1);
-//    }
+    @BeforeEach
+    public void setup() {
 
-//    @Test
-//    public void testShowAllInCategory() {
-//        // Arrange
-//        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
-//        when(categoryProductRepository.findById(any())).thenReturn(Optional.of(new CategoryProduct()));
-//        when(productRepository.findAllByFamilyGroupAndCategory(any(), any())).thenReturn(List.of(new Product()));
-//
-//        // Act
-//        List<ProductDtoResponse> products = productService.showAllInCategory(null, 1, 2);
-//
-//        // Assert
-//        assertThat(products).isNotNull();
-//        assertThat(products.size()).isEqualTo(1);
-//    }
+    }
+
+    @Test
+    //@WithUserDetails(value = "max@yandex.ru")
+    public void testShowAllInGroup() {
+
+
+        FamilyGroup familyGroup = FamilyGroup.builder()
+                .id(1)
+                .name("шопоголики")
+                .build();
+
+        User user = User.builder()
+                .id(1)
+                .email("max@yandex.ru")
+                .familyGroups(List.of(familyGroup))
+                .build();
+        familyGroup.setUsers(List.of(user));
+
+
+        Product product = Product.builder()
+                .id(1)
+                .name("Мороженное")
+                .userCreator(user)
+                .familyGroup(familyGroup)
+                .build();
+
+        UserDetails userDetails = new UserDetails(){
+
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return List.of();
+            }
+
+            @Override
+            public String getPassword() {
+                return "100";
+            }
+
+            @Override
+            public String getUsername() {
+                return "sagiem@yandex.ru";
+            }
+
+            @Override
+            public boolean isAccountNonExpired() {
+                return false;
+            }
+
+            @Override
+            public boolean isAccountNonLocked() {
+                return false;
+            }
+
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return false;
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
+        };
+
+
+        // Arrange
+        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(familyGroup));
+        when(productRepository.findAllByFamilyGroup(any())).thenReturn(Optional.of(List.of(product)));
+        when(familyGroupAndUserUtils.getUser(any())).thenReturn(user);
+
+        // Act
+        List<ProductDtoResponse> products = productService.showAllInGroup(1);
+
+        // Assert
+        assertThat(products).isNotNull();
+        assertThat(products.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testShowAllInCategory() {
+        // Arrange
+        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
+        when(categoryProductRepository.findById(any())).thenReturn(Optional.of(new CategoryProduct()));
+        when(productRepository.findAllByFamilyGroupAndCategory(any(), any())).thenReturn(Optional.of(List.of(new Product())));
+
+        // Act
+        List<ProductDtoResponse> products = productService.showAllInCategory(1, 2);
+
+        // Assert
+        assertThat(products).isNotNull();
+        assertThat(products.size()).isEqualTo(1);
+    }
 
     @Test
     public void testShowAllInSubcategory() {
@@ -108,7 +182,7 @@ public class ProductServiceTest {
         when(productRepository.findAllByFamilyGroupAndSubcategory(any(), any())).thenReturn(Optional.of(List.of(new Product())));
 
         // Act
-        List<ProductDtoResponse> products = productService.showAllInSubcategory(null, 1, 2);
+        List<ProductDtoResponse> products = productService.showAllInSubcategory(1, 2);
 
         // Assert
         assertThat(products).isNotNull();
@@ -165,7 +239,7 @@ public class ProductServiceTest {
         when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
 
         // Act
-        String deletedName = productService.delete(1, null);
+        String deletedName = productService.delete(1);
 
         // Assert
         assertThat(deletedName).isEqualTo("Deleted Name");
