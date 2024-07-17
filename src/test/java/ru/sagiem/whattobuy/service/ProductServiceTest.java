@@ -83,7 +83,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    //@WithUserDetails(value = "max@yandex.ru")
+    @WithUserDetails(value = "sagiem@yandex.ru")
     public void testShowAllInGroup() {
 
 
@@ -106,44 +106,6 @@ public class ProductServiceTest {
                 .userCreator(user)
                 .familyGroup(familyGroup)
                 .build();
-
-        UserDetails userDetails = new UserDetails(){
-
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return List.of();
-            }
-
-            @Override
-            public String getPassword() {
-                return "100";
-            }
-
-            @Override
-            public String getUsername() {
-                return "sagiem@yandex.ru";
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return false;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return false;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return false;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return false;
-            }
-        };
 
 
         // Arrange
