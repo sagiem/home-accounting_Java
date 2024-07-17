@@ -83,18 +83,18 @@ public class ProductServiceTest {
     }
 
     @Test
-    @WithUserDetails(value = "sagiem@yandex.ru")
+    @WithMockUser(username = "max1@yandex.ru")
     public void testShowAllInGroup() {
 
 
         FamilyGroup familyGroup = FamilyGroup.builder()
                 .id(1)
-                .name("шопоголики")
+                .name("тестовая группа")
                 .build();
 
         User user = User.builder()
                 .id(1)
-                .email("max@yandex.ru")
+                .email("test@yandex.ru")
                 .familyGroups(List.of(familyGroup))
                 .build();
         familyGroup.setUsers(List.of(user));
@@ -112,6 +112,7 @@ public class ProductServiceTest {
         when(familyGroupRepository.findById(any())).thenReturn(Optional.of(familyGroup));
         when(productRepository.findAllByFamilyGroup(any())).thenReturn(Optional.of(List.of(product)));
         when(familyGroupAndUserUtils.getUser(any())).thenReturn(user);
+        when(familyGroupAndUserUtils.isUserInFamilyGroup(any(), 1)).thenReturn(true);
 
         // Act
         List<ProductDtoResponse> products = productService.showAllInGroup(1);

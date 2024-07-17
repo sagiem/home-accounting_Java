@@ -42,9 +42,11 @@ public class ProductService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         FamilyGroup familyGroup = familyGroupRepository.findById(familyGroupId).orElse(null);
         if (familyGroup == null) {
+            System.out.println("************************************");
+            System.out.println("первый");
             throw new FamilyGroupNotFoundException();
         }
-        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroup)) {
+        if (familyGroupAndUserUtils.isUserInFamilyGroup(userDetails, familyGroupId)) {
             List<Product> products = productRepository.findAllByFamilyGroup(familyGroup).orElse(null);
             if (products == null) {
                 return null;
@@ -54,6 +56,12 @@ public class ProductService {
                         .toList();
             }
         } else {
+            User user = familyGroupAndUserUtils.getUser(userDetails);
+             System.out.println("************************************");
+            System.out.println(userDetails.getUsername());
+            System.out.println(user.getId());
+            System.out.println(user.getUsername());
+            System.out.println(familyGroup.getName());
             throw new FamilyGroupNotUserException();
         }
     }

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:JavadocStyle"})
 @SpringBootTest
-@AutoConfigureMockMvc(printOnlyOnFailure = false)
+@AutoConfigureMockMvc
 public class ProductControllerIT {
 
     @Autowired
