@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -40,6 +41,7 @@ public class ProductRepositoryIT {
         // Assert
         assertThat(products).isNotNull();
         assertThat(products.size()).isEqualTo(1);
+        assertEquals(user, products.get(0).getUser());
     }
 
     @Test
