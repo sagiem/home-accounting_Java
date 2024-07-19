@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -19,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:JavadocStyle"})
 @SpringBootTest
 @AutoConfigureMockMvc
+//@Sql("/sql/wat_to_buy_test.sql")
+@Transactional
 public class ProductControllerIT {
 
     @Autowired
@@ -98,7 +102,7 @@ public class ProductControllerIT {
     @Test
     @DisplayName("Тест удаления товара")
     public void deleteTest() throws Exception {
-        String Id = "4";
+        String Id = "3";
 
         mockMvc.perform(delete("/api/v1/product/{Id}", Id)
                         .with(user("max@yandex.ru").password("100")))
@@ -173,7 +177,7 @@ public class ProductControllerIT {
     @Test
     @DisplayName("Тест обновления товара")
     public void updateTest() throws Exception {
-        String id = "4";
+        String id = "7";
         String productDtoRequest = """
                 {
                   "name": "новое мороженное",

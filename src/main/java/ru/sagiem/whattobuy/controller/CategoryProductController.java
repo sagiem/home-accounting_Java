@@ -48,7 +48,7 @@ public class CategoryProductController {
     @Operation(
             summary = "Добавление категории",
             description = "Добавление происходит в группу"
-            //tags = "get"
+
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)), mediaType = APPLICATION_JSON_VALUE)}),
