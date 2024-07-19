@@ -1,24 +1,13 @@
 package ru.sagiem.whattobuy.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
 import ru.sagiem.whattobuy.dto.ProductDtoRequest;
 import ru.sagiem.whattobuy.dto.ProductDtoResponse;
 import ru.sagiem.whattobuy.mapper.ProductMapper;
@@ -34,20 +23,15 @@ import ru.sagiem.whattobuy.repository.poroduct.ProductRepository;
 import ru.sagiem.whattobuy.repository.poroduct.SubcategoryProductRepository;
 import ru.sagiem.whattobuy.utils.FamilyGroupAndUserUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 public class ProductServiceTest {
 
     @Autowired
@@ -74,16 +58,22 @@ public class ProductServiceTest {
     @MockBean
     private FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-
-    }
+//    @Test
+//    public void testShowAllInGroup() {
+//        // Arrange
+//        when(familyGroupRepository.findById(1)).thenReturn(Optional.of(new FamilyGroup()));
+//        when(productRepository.findAllByFamilyGroup(new FamilyGroup())).thenReturn(Optional.of(List.of(new Product())));
+//
+//        // Act
+//        List<ProductDtoResponse> products = productService.showAllInGroup(1);
+//
+//        // Assert
+//        assertThat(products).isNotNull();
+//        assertThat(products.size()).isEqualTo(1);
+//    }
 
     @Test
-    @WithMockUser(username = "max1@yandex.ru")
+    @WithMockUser(username = "test@yandex.ru")
     public void testShowAllInGroup() {
 
 
@@ -112,7 +102,8 @@ public class ProductServiceTest {
         when(familyGroupRepository.findById(any())).thenReturn(Optional.of(familyGroup));
         when(productRepository.findAllByFamilyGroup(any())).thenReturn(Optional.of(List.of(product)));
         when(familyGroupAndUserUtils.getUser(any())).thenReturn(user);
-        when(familyGroupAndUserUtils.isUserInFamilyGroup(any(), 1)).thenReturn(true);
+        when(familyGroupAndUserUtils.isUserInFamilyGroup(any(), eq(1))).thenReturn(true);
+
 
         // Act
         List<ProductDtoResponse> products = productService.showAllInGroup(1);
@@ -125,12 +116,12 @@ public class ProductServiceTest {
     @Test
     public void testShowAllInCategory() {
         // Arrange
-        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
-        when(categoryProductRepository.findById(any())).thenReturn(Optional.of(new CategoryProduct()));
-        when(productRepository.findAllByFamilyGroupAndCategory(any(), any())).thenReturn(Optional.of(List.of(new Product())));
+        when(familyGroupRepository.findById(1)).thenReturn(Optional.of(new FamilyGroup()));
+        when(categoryProductRepository.findById(1)).thenReturn(Optional.of(new CategoryProduct()));
+        when(productRepository.findAllByFamilyGroupAndCategory(new FamilyGroup(), new CategoryProduct())).thenReturn(Optional.of(List.of(new Product())));
 
         // Act
-        List<ProductDtoResponse> products = productService.showAllInCategory(1, 2);
+        List<ProductDtoResponse> products = productService.showAllInCategory(1, 1);
 
         // Assert
         assertThat(products).isNotNull();
@@ -140,12 +131,12 @@ public class ProductServiceTest {
     @Test
     public void testShowAllInSubcategory() {
         // Arrange
-        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
-        when(subcategoryProductRepository.findById(any())).thenReturn(Optional.of(new SubcategoryProduct()));
-        when(productRepository.findAllByFamilyGroupAndSubcategory(any(), any())).thenReturn(Optional.of(List.of(new Product())));
+        when(familyGroupRepository.findById(1)).thenReturn(Optional.of(new FamilyGroup()));
+        when(subcategoryProductRepository.findById(1)).thenReturn(Optional.of(new SubcategoryProduct()));
+        when(productRepository.findAllByFamilyGroupAndSubcategory(new FamilyGroup(), new SubcategoryProduct())).thenReturn(Optional.of(List.of(new Product())));
 
         // Act
-        List<ProductDtoResponse> products = productService.showAllInSubcategory(1, 2);
+        List<ProductDtoResponse> products = productService.showAllInSubcategory(1, 1);
 
         // Assert
         assertThat(products).isNotNull();
@@ -155,15 +146,13 @@ public class ProductServiceTest {
     @Test
     public void testAdd() {
         // Arrange
-        ProductDtoRequest request = new ProductDtoRequest();
-        request.setName("Product Name");
-        request.setCategoryId(1);
-        request.setSubcategoryId(2);
-        request.setUnitOfMeasurement("unit");
-        when(familyGroupRepository.findById(any())).thenReturn(Optional.of(new FamilyGroup()));
+        when(familyGroupRepository.findById(1)).thenReturn(Optional.of(new FamilyGroup()));
+        when(categoryProductRepository.findById(1)).thenReturn(Optional.of(new CategoryProduct()));
+        when(subcategoryProductRepository.findById(1)).thenReturn(Optional.of(new SubcategoryProduct()));
+        when(productRepository.save(new Product())).thenReturn(new Product());
 
         // Act
-        ResponseEntity<?> response = productService.add(request);
+        ResponseEntity<?> response = productService.add(new ProductDtoRequest());
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -173,7 +162,7 @@ public class ProductServiceTest {
     @Test
     public void testSearchId() {
         // Arrange
-        when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
+        when(productRepository.findById(1)).thenReturn(Optional.of(new Product()));
 
         // Act
         ProductDtoResponse product = productService.searchId(1);
@@ -185,12 +174,12 @@ public class ProductServiceTest {
     @Test
     public void testUpdate() {
         // Arrange
-        ProductDtoRequest request = new ProductDtoRequest();
-        request.setName("Updated Name");
-        when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
+        when(productRepository.findById(1)).thenReturn(Optional.of(new Product()));
+        when(categoryProductRepository.findById(1)).thenReturn(Optional.of(new CategoryProduct()));
+        when(subcategoryProductRepository.findById(1)).thenReturn(Optional.of(new SubcategoryProduct()));
 
         // Act
-        String updatedName = productService.update(1, request);
+        String updatedName = productService.update(1, new ProductDtoRequest());
 
         // Assert
         assertThat(updatedName).isEqualTo("Updated Name");
@@ -199,7 +188,7 @@ public class ProductServiceTest {
     @Test
     public void testDelete() {
         // Arrange
-        when(productRepository.findById(any())).thenReturn(Optional.of(new Product()));
+        when(productRepository.findById(1)).thenReturn(Optional.of(new Product()));
 
         // Act
         String deletedName = productService.delete(1);
@@ -207,6 +196,4 @@ public class ProductServiceTest {
         // Assert
         assertThat(deletedName).isEqualTo("Deleted Name");
     }
-
-
 }
