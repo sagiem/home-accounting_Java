@@ -58,19 +58,7 @@ public class ProductServiceTest {
     @MockBean
     private FamilyGroupAndUserUtils familyGroupAndUserUtils;
 
-//    @Test
-//    public void testShowAllInGroup() {
-//        // Arrange
-//        when(familyGroupRepository.findById(1)).thenReturn(Optional.of(new FamilyGroup()));
-//        when(productRepository.findAllByFamilyGroup(new FamilyGroup())).thenReturn(Optional.of(List.of(new Product())));
-//
-//        // Act
-//        List<ProductDtoResponse> products = productService.showAllInGroup(1);
-//
-//        // Assert
-//        assertThat(products).isNotNull();
-//        assertThat(products.size()).isEqualTo(1);
-//    }
+
 
     @Test
     @WithMockUser(username = "test@yandex.ru")

@@ -105,8 +105,21 @@ public class ProductControllerIT {
         String Id = "3";
 
         mockMvc.perform(delete("/api/v1/product/{Id}", Id)
-                        .with(user("max@yandex.ru").password("100")))
+                        .with(user("max@yandex.ru")))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+        @Test
+    @DisplayName("Тест удаления товара когда продукт не найден")
+    public void deleteNotSearchProductTest() throws Exception {
+        String Id = "3";
+
+        mockMvc.perform(delete("/api/v1/product/{Id}", Id)
+                        .with(user("max@yandex.ru")))
+                .andExpectAll(status().isNotFound(),
+                        jsonPath("$.type").value("ProductNotFoundException")
+                        )
                 .andDo(print());
     }
 
