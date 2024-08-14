@@ -8,8 +8,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres_secret
-      POSTGRES_DB: mydb
+      POSTGRES_PASSWORD: 1217
+      POSTGRES_DB: what_to_by
     healthcheck:
       test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
       interval: 10s
@@ -17,7 +17,7 @@ services:
       start_period: 10s
       retries: 5
   pgadmin:
-    image: dpage/pgadmin4:8.9
+    image: dpage/pgadmin4:latest
     restart: "no"
     ports:
       - "5050:80"

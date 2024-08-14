@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableJpaAuditing
 public class WhatToBuyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WhatToBuyApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WhatToBuyApplication.class, args);
+    }
 
 }

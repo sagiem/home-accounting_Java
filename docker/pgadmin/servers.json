@@ -5,7 +5,7 @@
       "Name" : "postgres",
       "Host" : "postgres",
       "Port" : 5432,
-      "MaintenanceDB" : "mydb",
+      "MaintenanceDB" : "what_to_by",
       "Username" : "postgres",
       "PassFile" : "/pgadmin4/pgpass",
       "SSLMode" : "prefer"
